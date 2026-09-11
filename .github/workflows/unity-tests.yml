@@ -1,0 +1,54 @@
+name: Unity tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - feature/characters
+
+concurrency:
+  group: unity-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  editmode:
+    name: EditMode tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: SmashThePast/Library
+          key: Library-SmashThePast-${{ hashFiles('SmashThePast/Assets/**', 'SmashThePast/Packages/**', 'SmashThePast/ProjectSettings/**') }}
+          restore-keys: |
+            Library-SmashThePast-
+
+      - name: Run EditMode tests
+        id: tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: SmashThePast
+          testMode: editmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Unity EditMode tests
+          artifactsPath: editmode-artifacts
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unity-editmode-results
+          path: ${{ steps.tests.outputs.artifactsPath }}

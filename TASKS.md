@@ -7,7 +7,7 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 - [ ] Diego: `git clone`, leer `AGENTS.md`, empezar Character pipeline (1 `CharacterData` de prueba + su special)
 - [ ] Configurar UnityYAMLMerge como merge driver (pendiente, ruta del binario depende de la instalación local de cada uno)
 - [x] Escena de prueba real: `Assets/Stages/PrototypeArena.unity`, 2 Fighters con CharacterController y PlayerInputController, teclado y 2 mandos, pausa, timer, KO y revancha.
-- [ ] Configurar GameCI (GitHub Actions) para correr tests en cada PR automáticamente
+- [x] Configurar GameCI (GitHub Actions) para correr EditMode tests en cada PR automáticamente. Workflow: `.github/workflows/unity-tests.yml`. Requiere el secreto `UNITY_LICENSE`.
 
 ## En curso
 
