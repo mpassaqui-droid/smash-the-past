@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: >-
           /Applications/Unity/Hub/Editor/6000.0.83f1/Unity.app/Contents/MacOS/Unity
-          -batchmode -nographics -quit
+          -batchmode -nographics
           -projectPath SmashThePast
           -runTests -testPlatform EditMode
           -testResults "$GITHUB_WORKSPACE/editmode-results.xml"
