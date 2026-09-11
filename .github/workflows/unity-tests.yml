@@ -17,7 +17,7 @@ permissions:
 jobs:
   editmode:
     name: EditMode tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, unity, arm64]
     timeout-minutes: 30
 
     steps:
@@ -26,29 +26,22 @@ jobs:
         with:
           lfs: true
 
-      - name: Cache Unity Library
-        uses: actions/cache@v4
-        with:
-          path: SmashThePast/Library
-          key: Library-SmashThePast-${{ hashFiles('SmashThePast/Assets/**', 'SmashThePast/Packages/**', 'SmashThePast/ProjectSettings/**') }}
-          restore-keys: |
-            Library-SmashThePast-
-
       - name: Run EditMode tests
         id: tests
-        uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          projectPath: SmashThePast
-          testMode: editmode
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Unity EditMode tests
-          artifactsPath: editmode-artifacts
+        shell: bash
+        run: >-
+          /Applications/Unity/Hub/Editor/6000.0.83f1/Unity.app/Contents/MacOS/Unity
+          -batchmode -nographics -quit
+          -projectPath SmashThePast
+          -runTests -testPlatform EditMode
+          -testResults "$GITHUB_WORKSPACE/editmode-results.xml"
+          -logFile "$GITHUB_WORKSPACE/editmode.log"
 
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unity-editmode-results
-          path: ${{ steps.tests.outputs.artifactsPath }}
+          path: |
+            editmode-results.xml
+            editmode.log
