@@ -203,6 +203,7 @@ GameObject:
   - component: {fileID: 600003930}
   - component: {fileID: 600003932}
   - component: {fileID: 600003933}
+  - component: {fileID: 600003934}
   m_Layer: 0
   m_Name: CombateLocal
   m_TagString: Untagged
@@ -366,6 +367,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &600003934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600003929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b84553b2caa9f452a8fbb31d9708bdc1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  match: {fileID: 600003930}
 --- !u!4 &600003931
 Transform:
   m_ObjectHideFlags: 0
