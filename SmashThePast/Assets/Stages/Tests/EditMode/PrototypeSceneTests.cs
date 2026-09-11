@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SmashThePast.Audio;
 using SmashThePast.Characters;
 using SmashThePast.Core;
 using SmashThePast.UI;
@@ -55,6 +56,20 @@ namespace SmashThePast.Stages.Tests
                     Assert.That(prefab.GetComponent<SpecialVisual>(), Is.Not.Null, name + " effect");
                 }
             Assert.That(AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/Characters/Portraits" }), Has.Length.EqualTo(9));
+        }
+
+        [Test]
+        public void PrototypeSceneHasCombatAudioAndImpactFeedback()
+        {
+            var scene = EditorSceneManager.OpenScene("Assets/Stages/PrototypeArena.unity", OpenSceneMode.Single);
+            var audio = Object.FindFirstObjectByType<PrototypeAudio>();
+            var feedback = Object.FindFirstObjectByType<CombatFeedback>();
+            Assert.That(scene.IsValid, Is.True);
+            Assert.That(audio, Is.Not.Null);
+            Assert.That(audio.GetComponent<AudioSource>(), Is.Not.Null);
+            Assert.That(feedback, Is.Not.Null);
+            Assert.That(Object.FindFirstObjectByType<CameraShake>(), Is.Null);
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         }
     }
 }
