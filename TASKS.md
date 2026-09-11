@@ -8,6 +8,7 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 - [x] Configurar UnityYAMLMerge como merge driver en este worktree (Unity 6000.0.83f1).
 - [x] Escena de prueba real: `Assets/Stages/PrototypeArena.unity`, 2 Fighters con CharacterController y PlayerInputController, teclado y 2 mandos, pausa, timer, KO y revancha.
 - [x] Configurar CI (GitHub Actions + runner privado de este Mac) para correr EditMode tests en cada PR automáticamente. Workflow: `.github/workflows/unity-tests.yml`. Runner: `munay-smash-the-past`, etiqueta `unity`.
+- [x] CI de build macOS añadido después de EditMode: genera y publica el player standalone como artefacto.
 - [x] Codex: feedback de audio procedural para golpes, impactos, specials y K.O., conectado desde fuera de Core. Suite EditMode aislada: **41/41**.
 - [x] Codex: impacto visual y camera shake para golpes confirmados, sin cambios en Core. Suite EditMode aislada: **41/41**.
 - [x] Codex: entry point de build macOS y validación de app standalone: **103581376 bytes**, suite EditMode posterior **41/41**.

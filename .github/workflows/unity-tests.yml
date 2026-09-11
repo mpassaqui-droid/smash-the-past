@@ -59,3 +59,34 @@ jobs:
         with:
           name: unity-editmode-results
           path: ci-artifacts
+
+  build-macos:
+    name: macOS build
+    needs: editmode
+    runs-on: [self-hosted, unity, arm64]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Build macOS player
+        shell: bash
+        run: >-
+          /Applications/Unity/Hub/Editor/6000.0.83f1/Unity.app/Contents/MacOS/Unity
+          -batchmode -nographics
+          -projectPath SmashThePast
+          -executeMethod SmashThePast.Characters.Editor.PrototypeBuild.BuildMacOS
+          -quit
+          -logFile "$GITHUB_WORKSPACE/build.log"
+
+      - name: Upload macOS player
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smash-the-past-macos
+          path: |
+            SmashThePast/Builds/SmashThePast.app
+            build.log
