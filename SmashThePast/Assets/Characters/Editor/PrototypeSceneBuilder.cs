@@ -23,6 +23,10 @@ namespace SmashThePast.Characters.Editor
             var audioData = new SerializedObject(audio);
             audioData.FindProperty("match").objectReferenceValue = match;
             audioData.ApplyModifiedPropertiesWithoutUndo();
+            var feedback = match.gameObject.AddComponent<CombatFeedback>();
+            var feedbackData = new SerializedObject(feedback);
+            feedbackData.FindProperty("match").objectReferenceValue = match;
+            feedbackData.ApplyModifiedPropertiesWithoutUndo();
             var data = new SerializedObject(match);
             data.FindProperty("startWithSelection").boolValue = true;
             FillArray(data, "roster", PrototypePrefabBuilder.Names.Select(name => (Object)AssetDatabase.LoadAssetAtPath<CharacterData>($"Assets/Characters/{name}.asset")).ToArray());
