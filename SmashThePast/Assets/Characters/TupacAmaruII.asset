@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TupacAmaruII
   m_EditorClassIdentifier: 
   characterName: "T\xFApac Amaru II"
-  bio: 
+  bio: "L\u00edder de la gran rebeli\u00f3n andina de 1780 contra el dominio colonial espa\u00f1ol. En la arena, su voz tambi\u00e9n mueve monta\u00f1as."
   maxHealth: 100
   moveSpeed: 5
   jumpForce: 8
@@ -22,6 +22,12 @@ MonoBehaviour:
   specialName: Grito de Libertad
   specialDescription: Emite una ola expansiva que aturde brevemente al rival.
   specialEffectPrefab: {fileID: 0}
-  winQuotes: []
-  loseQuotes: []
+  winQuotes:
+  - "La libertad no se bloquea con los brazos."
+  - "Mi grito lleg\u00f3 antes que tu guardia."
+  - "Esta victoria no paga tributo."
+  loseQuotes:
+  - "Una ca\u00edda no acaba una rebeli\u00f3n."
+  - "Me falt\u00f3 aire, no causa."
+  - "La revancha ya tiene convocatoria."
   isPaidDLC: 0

@@ -12,7 +12,12 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 
 ## En curso
 
+- [ ] Codex (`feature/characters`): roster base, golpes externos a Core, escena de prueba, escenario reutilizable y seleccion/HUD. Core queda sin cambios.
+- [ ] Codex: nueva escena `Assets/Stages/PrototypeArena.unity` y prefabs nuevos en `Assets/Characters/Prefabs/`; no editar otras escenas o prefabs.
+
 ## Hecho
+
+- [x] Codex: 9 CharacterData base con stats universales, bio, special del GDD y 3 frases originales de victoria/derrota por personaje. EditMode: 23/23 (13 Core + 10 roster), ejecutados en copia aislada con Unity 6000.0.83f1.
 - [x] GDD completo (`GDD.md`)
 - [x] Repo git, `.gitignore`, `.gitattributes` (LFS), `AGENTS.md`, `CLAUDE.md`
 - [x] Unity Hub + Unity 6 LTS (6000.0.83f1) instalado y licenciado (Munay)
