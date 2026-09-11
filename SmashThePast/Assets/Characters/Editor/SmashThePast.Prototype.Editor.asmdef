@@ -1,0 +1,5 @@
+{
+  "name": "SmashThePast.Prototype.Editor",
+  "references": ["SmashThePast.Core", "SmashThePast.Characters", "SmashThePast.Stages", "SmashThePast.UI"],
+  "includePlatforms": ["Editor"]
+}

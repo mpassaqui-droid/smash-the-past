@@ -1,0 +1,4 @@
+{
+  "name": "SmashThePast.Stages",
+  "references": ["SmashThePast.Core", "SmashThePast.Characters", "Unity.InputSystem"]
+}
