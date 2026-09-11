@@ -22,7 +22,7 @@ Juego de pelea 1v1 de personajes históricos. Munay Passaqui + Diego Satori.
 9. Sócrates
 10. Hitler
 
-Decisión del equipo: incluir a Hitler pese al riesgo señalado de restricciones/edad en Steam. Confirmado explícitamente, no revisar de nuevo salvo que el equipo lo pida.
+Decisión final del equipo: los 9 primeros vienen en el juego base ($6.99). **Hitler es un unlock de pago aparte** (no incluido en el precio base), con verificación de edad (+15 recomendado) al comprarlo/activarlo en Steam. Confirmado explícitamente, no revisar de nuevo salvo que el equipo lo pida.
 
 ## Controles
 - Movimiento (stick/flechas), Salto, Bloqueo, Puñete (golpe ligero), Patada (golpe fuerte), Special (botón aparte, se activa con una barra que se llena al dar/recibir daño)
@@ -54,7 +54,8 @@ Kit base universal: todos saltan igual, mismo movimiento, mismo puñete/patada, 
 
 ## Plataforma y precio
 - Steam primero. Móvil a evaluar para v2 (versus local en móvil es raro, revisar factibilidad)
-- $6.99 USD, pago único, sin ads ni suscripción
+- $6.99 USD, pago único, sin ads ni suscripción — incluye 9 personajes
+- Hitler: unlock de pago aparte (precio bajo, ej. ~$1), con verificación de edad en Steam
 
 ## Multijugador
 - Solo local. Sin servidores ni netcode.
@@ -96,6 +97,11 @@ Windows/Mac/Linux vía Steam para v1. Android/iOS se evalúa en v2 — el modo v
 
 **Diferenciador frente a "History Warriors":** 3D low-poly (ellos son 2D) + roster propio sin solape real (Túpac Amaru II, Genghis Khan, Musashi, Gandhi, Rasputín, Sócrates no están en el suyo) + el sistema de frase histórica post-combate como gancho de marketing/redes (la gente comparte la frase que le tocó).
 
+## Ideas futuras (no bloquean v1, guardadas para después)
+- Expansión de roster: decidir entre update gratis (modelo Hollow Knight, refuerza el juego sin cobrar) o DLC barato (~$1 por personaje) — todavía sin decidir
+- "Pack de presidentes" como DLC temático futuro (surgió al descartar a Fujimori del roster base por ser demasiado actual/políticamente sensible)
+
 ## Pendiente / abierto
 - Redactar el set de frases post-combate (varias por personaje, gana/pierde)
 - Balance fino de daño/velocidad entre los 10 una vez estén jugables
+- Implementación técnica del unlock de pago de Hitler (Steam DLC o in-app) + verificación de edad
