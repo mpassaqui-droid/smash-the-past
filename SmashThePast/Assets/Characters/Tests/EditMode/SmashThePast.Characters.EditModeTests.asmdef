@@ -1,6 +1,6 @@
 {
   "name": "SmashThePast.Characters.EditModeTests",
-  "references": ["SmashThePast.Core"],
+  "references": ["SmashThePast.Core", "SmashThePast.Characters"],
   "includePlatforms": ["Editor"],
   "optionalUnityReferences": ["TestAssemblies"],
   "autoReferenced": false
