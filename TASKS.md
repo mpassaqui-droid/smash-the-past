@@ -8,6 +8,7 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 - [ ] Configurar UnityYAMLMerge como merge driver (pendiente, ruta del binario depende de la instalación local de cada uno)
 - [x] Escena de prueba real: `Assets/Stages/PrototypeArena.unity`, 2 Fighters con CharacterController y PlayerInputController, teclado y 2 mandos, pausa, timer, KO y revancha.
 - [x] Configurar CI (GitHub Actions + runner privado de este Mac) para correr EditMode tests en cada PR automáticamente. Workflow: `.github/workflows/unity-tests.yml`. Runner: `munay-smash-the-past`, etiqueta `unity`.
+- [x] Codex: feedback de audio procedural para golpes, impactos, specials y K.O., conectado desde fuera de Core. Suite EditMode aislada: **41/41**.
 
 ## En curso
 

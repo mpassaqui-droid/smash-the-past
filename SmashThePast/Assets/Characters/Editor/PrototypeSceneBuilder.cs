@@ -19,6 +19,10 @@ namespace SmashThePast.Characters.Editor
             PrototypePrefabBuilder.Build();
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var match = new GameObject("CombateLocal").AddComponent<MatchController>();
+            var audio = match.gameObject.AddComponent<SmashThePast.Audio.PrototypeAudio>();
+            var audioData = new SerializedObject(audio);
+            audioData.FindProperty("match").objectReferenceValue = match;
+            audioData.ApplyModifiedPropertiesWithoutUndo();
             var data = new SerializedObject(match);
             data.FindProperty("startWithSelection").boolValue = true;
             FillArray(data, "roster", PrototypePrefabBuilder.Names.Select(name => (Object)AssetDatabase.LoadAssetAtPath<CharacterData>($"Assets/Characters/{name}.asset")).ToArray());
