@@ -37,11 +37,25 @@ jobs:
           -testResults "$GITHUB_WORKSPACE/editmode-results.xml"
           -logFile "$GITHUB_WORKSPACE/editmode.log"
 
+      - name: Collect test artifacts
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/ci-artifacts"
+          result_file="$GITHUB_WORKSPACE/editmode-results.xml"
+          if [ ! -f "$result_file" ]; then
+            result_file="$(find "$GITHUB_WORKSPACE/SmashThePast" -name 'editmode-results.xml' -type f -print -quit)"
+          fi
+          if [ -z "$result_file" ] || [ ! -f "$result_file" ]; then
+            echo "Unity did not produce editmode-results.xml"
+            exit 1
+          fi
+          cp "$result_file" "$GITHUB_WORKSPACE/ci-artifacts/editmode-results.xml"
+          cp "$GITHUB_WORKSPACE/editmode.log" "$GITHUB_WORKSPACE/ci-artifacts/editmode.log"
+
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unity-editmode-results
-          path: |
-            editmode-results.xml
-            editmode.log
+          path: ci-artifacts
