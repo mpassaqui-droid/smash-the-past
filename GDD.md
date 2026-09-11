@@ -24,9 +24,26 @@ Juego de pelea 1v1 de personajes históricos. Munay Passaqui + Diego Satori.
 
 Decisión del equipo: incluir a Hitler pese al riesgo señalado de restricciones/edad en Steam. Confirmado explícitamente, no revisar de nuevo salvo que el equipo lo pida.
 
+## Controles
+- Movimiento (stick/flechas), Salto, Bloqueo, Puñete (golpe ligero), Patada (golpe fuerte), Special (botón aparte, se activa con una barra que se llena al dar/recibir daño)
+- Esquema clásico de 4 botones + movimiento, igual en teclado y mando
+
 ## Moveset
-- Kit base universal: todos saltan igual, mismo movimiento, mismo golpe ligero/fuerte, mismo bloqueo
-- 1 special/poder único por personaje (por definir, uno por uno)
+
+Kit base universal: todos saltan igual, mismo movimiento, mismo puñete/patada, mismo bloqueo. El special es lo único distinto por personaje, ligado a por qué esa figura es conocida:
+
+| Personaje | Special | Por qué |
+|---|---|---|
+| Túpac Amaru II | **Grito de Libertad** — ola expansiva que aturde brevemente | líder de una rebelión, convoca a la gente |
+| Genghis Khan | **Carga Mongola** — volea de flechas cruzando la pantalla | arquería a caballo, su arma icónica |
+| Miyamoto Musashi | **Niten Ichi-ryū** — dash con doble espada, multi-hit | esgrima a dos espadas, su técnica real |
+| Gandhi | **Ayuno** — se vuelve invulnerable unos segundos y contraataca | resistencia no violenta; ironía: el más pacífico tiene el contraataque más fuerte |
+| Rasputín | **Indestructible** — sobrevive con 1 de vida la primera vez que llegaría a 0 | sobrevivió veneno, disparos y ahogamiento en la vida real |
+| Napoleón | **Artillería** — cañonazo desde fuera de pantalla | estratega de artillería |
+| Cleopatra | **Áspid** — mordida que envenena (daño en el tiempo) | la serpiente con la que se suicidó, ya es su símbolo |
+| Abraham Lincoln | **Hat Trick** — lanza su galera como bumerán | su sombrero de copa es su silueta icónica |
+| Sócrates | **Mayéutica** — pregunta retórica que invierte los controles del rival un momento | su método de confundir con preguntas |
+| Hitler | **Berlin Tantrum** — berrinche que aturde a su alrededor | tono cómico/ridiculizante, no glorificante, coherente con cómo ya se trata al personaje en internet |
 
 ## Escenarios
 - 1 escenario por personaje (10 total), temático a su país/época
@@ -73,8 +90,12 @@ Windows/Mac/Linux vía Steam para v1. Android/iOS se evalúa en v2 — el modo v
 4. **Pulido**: UI final, sonido, opciones/rebind, logros de Steam, página de Steam
 5. **Lanzamiento**
 
-## Pendiente / abierto (bloquea empezar a programar)
-- Special move de cada uno de los 10 personajes
-- Esquema de controles exacto (cuántos botones por jugador)
-- Progresión: el "desbloqueo entre rondas" pensado antes (roguelite/co-op) no aplica igual a un fighting 1v1 clásico. Definir qué se desbloquea: ¿skins, escenarios alternos, movimientos alternativos, moneda del juego?
-- Diferenciador final frente a "History Warriors" para la página de Steam
+## Progresión y diferenciador (decidido)
+
+**Progresión v1: frase histórica al final del combate**, no atuendos. Al ganar/perder aparece una línea de texto (real o irónica) ligada al personaje — ej. gana Napoleón contra alguien: *"Esta vez no hubo Waterloo."* Es prácticamente gratis (solo texto, cero arte extra) y le da personalidad al juego partida tras partida. **Atuendos extra quedan como stretch goal de v2** — cuestan arte real y no bloquean el lanzamiento.
+
+**Diferenciador frente a "History Warriors":** 3D low-poly (ellos son 2D) + roster propio sin solape real (Túpac Amaru II, Genghis Khan, Musashi, Gandhi, Rasputín, Sócrates no están en el suyo) + el sistema de frase histórica post-combate como gancho de marketing/redes (la gente comparte la frase que le tocó).
+
+## Pendiente / abierto
+- Redactar el set de frases post-combate (varias por personaje, gana/pierde)
+- Balance fino de daño/velocidad entre los 10 una vez estén jugables
