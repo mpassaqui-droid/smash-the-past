@@ -1003,7 +1003,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1087845355}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1604892494}
+  m_Script: {fileID: 11500000, guid: 8c3ab920fca74a579e11ce31d2ef9ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   offers:
@@ -1754,15 +1754,15 @@ MonoBehaviour:
   match: {fileID: 1458433262}
   styleSheet: {fileID: 7433441132597879392, guid: 61ef6d1350c5d4be58e336b63198041d, type: 3}
   portraits:
-  - {fileID: 2800000, guid: 45fbb40d79a434f5480b6aa83dffbcfd, type: 2}
-  - {fileID: 2800000, guid: 79a077118d0954ceaad92dca51e5e745, type: 2}
-  - {fileID: 2800000, guid: 9b4c4dd89c5724d969fad626677c8dff, type: 2}
-  - {fileID: 2800000, guid: c123a0d8b2adc43bea0ce99b0db9313e, type: 2}
-  - {fileID: 2800000, guid: bad3cacb9edb443f0adeb9423f0f93f1, type: 2}
-  - {fileID: 2800000, guid: dbb8abd8b8b5443fd8d320d13849de2f, type: 2}
-  - {fileID: 2800000, guid: d34f3ae1becb24ef48ebeb9027e48c22, type: 2}
-  - {fileID: 2800000, guid: bf3599dc656f940e28b44e1cd1df7223, type: 2}
-  - {fileID: 2800000, guid: 1d0b63024601e4e2ba557e1a361ebc37, type: 2}
+  - {fileID: 2800000, guid: d68b28d75c9bc4b0d9068b4d90f64145, type: 3}
+  - {fileID: 2800000, guid: a1c79956ba5b147679a20f0ff9f9b834, type: 3}
+  - {fileID: 2800000, guid: 40bbe58b2d82f42f1a56ca4888875e7f, type: 3}
+  - {fileID: 2800000, guid: 484a7a52dc10e483e8871e0314d3333e, type: 3}
+  - {fileID: 2800000, guid: c22f541d5a7f54791893e6c3a9c9da48, type: 3}
+  - {fileID: 2800000, guid: d1c7fcca549a643319ce3c3b3bf0cd09, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1593165470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1797,21 +1797,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!115 &1604892494
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 7
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_Type: 0
-  m_ExecutionOrder: 0
-  m_ClassName: DlcEntitlementService
-  m_Namespace: SmashThePast.Characters
-  m_AssemblyName: SmashThePast.Characters
 --- !u!1 &1613508097
 GameObject:
   m_ObjectHideFlags: 0
