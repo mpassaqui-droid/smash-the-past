@@ -223,6 +223,15 @@ namespace SmashThePast.Characters
                     if (ValidTarget(target, round, 10) && !target.IsInvulnerable)
                         target.invertedUntil = Time.time + 2;
                     break;
+                case SpecialKind.Hitler:
+                    if (Hit(target, round, 10, 3) > 0 && target.Alive)
+                    {
+                        target.StopAllCoroutines();
+                        target.specialRunning = false;
+                        target.stunnedUntil = Time.time + 0.8f;
+                        target.UpdateInput();
+                    }
+                    break;
             }
             specialRunning = false;
             UpdateInput();

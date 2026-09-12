@@ -43,7 +43,10 @@ namespace SmashThePast.Characters.Tests
         [Test]
         public void BaseRosterContainsExactlyNineCharacters()
         {
-            Assert.That(AssetDatabase.FindAssets("t:CharacterData", new[] { "Assets/Characters" }), Has.Length.EqualTo(9));
+            int baseCount = AssetDatabase.FindAssets("t:CharacterData", new[] { "Assets/Characters" })
+                .Select(guid => AssetDatabase.LoadAssetAtPath<CharacterData>(AssetDatabase.GUIDToAssetPath(guid)))
+                .Count(data => data != null && !data.isPaidDLC);
+            Assert.That(baseCount, Is.EqualTo(9));
         }
     }
 }

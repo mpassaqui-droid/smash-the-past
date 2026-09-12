@@ -20,6 +20,8 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 - [x] Codex: patio andino reutilizable con terrazas de piedra, cordillera y estandartes. Cambios en PrototypeArena y nuevo prefab de arte; suelo fisico y Core sin cambios. EditMode: **44/44**. Build macOS: **104368704 bytes**. Player verificado visualmente.
 - [x] Codex: capa de animacion externa para los 9 personajes, conectada a eventos publicos de Fighter. Prefabs regenerados y player macOS validado.
 - [x] Codex: nueve variantes visuales de escenario, seleccionadas por el personaje P1 en la escena reutilizable. EditMode: **45/45**. Build macOS: **105211660 bytes**. Player validado.
+- [x] Codex: contenido DLC de Hitler aislado del roster base, oferta con edad minima y proveedor Steam fail-closed. EditMode: **47/47**. Build macOS: **105213052 bytes**.
+- [ ] Release: configurar Steamworks, SKU real, precios, compra y verificacion de edad con credenciales del publisher.
 
 - [x] Codex (`feature/characters`): roster base, golpes externos a Core, escena de prueba, escenario reutilizable y selección/HUD. Core queda sin cambios.
 - [x] Codex: nueva escena `Assets/Stages/PrototypeArena.unity` y prefabs nuevos en `Assets/Characters/Prefabs/`; no editar otras escenas o prefabs.
