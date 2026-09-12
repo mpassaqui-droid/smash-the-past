@@ -38,28 +38,36 @@ namespace SmashThePast.EditorTools
         // sea arena y no un borde gris.
         private static void Suelo()
         {
+            // El suelo de fisica no se toca: hay un test que vigila que siga en su sitio.
+            // El primer plano se cubre con una placa aparte, sin collider, un poco mas
+            // abajo para que no pelee en z con el suelo real.
             var suelo = GameObject.Find("SueloPrototipo");
-            if (suelo == null) return;
-            suelo.transform.position = new Vector3(0f, -2.1f, -2.6f);
-            suelo.transform.localScale = new Vector3(26f, 4.2f, 13f);
-
-            // El suelo compartia material con el muro: todo el cuadro salia del mismo gris.
-            // Un material propio de tierra batida separa primer plano y fondo.
-            var renderizador = suelo.GetComponent<Renderer>();
-            if (renderizador != null)
+            if (suelo != null)
             {
-                var material = AssetDatabase.LoadAssetAtPath<Material>(RutaSuelo);
-                if (material == null)
-                {
-                    material = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-                    AssetDatabase.CreateAsset(material, RutaSuelo);
-                }
-                material.SetColor("_BaseColor", new Color(0.31f, 0.24f, 0.19f));
-                material.SetColor("_Color", new Color(0.31f, 0.24f, 0.19f));
-                material.SetFloat("_Smoothness", 0.08f);
-                EditorUtility.SetDirty(material);
-                renderizador.sharedMaterial = material;
+                suelo.transform.position = new Vector3(0f, -0.3f, 0f);
+                suelo.transform.localScale = new Vector3(20f, 0.6f, 7f);
             }
+
+            var visual = GameObject.Find("SueloVisual");
+            if (visual != null) Object.DestroyImmediate(visual);
+
+            visual = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            visual.name = "SueloVisual";
+            visual.transform.position = new Vector3(0f, -2.15f, -1.5f);
+            visual.transform.localScale = new Vector3(30f, 4.2f, 14f);
+            Object.DestroyImmediate(visual.GetComponent<Collider>());
+
+            var material = AssetDatabase.LoadAssetAtPath<Material>(RutaSuelo);
+            if (material == null)
+            {
+                material = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                AssetDatabase.CreateAsset(material, RutaSuelo);
+            }
+            material.SetColor("_BaseColor", new Color(0.31f, 0.24f, 0.19f));
+            material.SetColor("_Color", new Color(0.31f, 0.24f, 0.19f));
+            material.SetFloat("_Smoothness", 0.08f);
+            EditorUtility.SetDirty(material);
+            visual.GetComponent<Renderer>().sharedMaterial = material;
         }
 
         private static Light CrearLuz(string nombre, LightType tipo, Color color, float intensidad, Vector3 euler)
