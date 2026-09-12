@@ -6,6 +6,7 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 - [ ] Diego: instalar Unity Hub + Unity 6 LTS (6000.0.83f1, misma version que Munay) y activar licencia Personal
 - [ ] Diego: `git clone`, leer `AGENTS.md`, empezar Character pipeline (1 `CharacterData` de prueba + su special)
 - [ ] Munay: probar teclado y dos mandos fisicos en el player construido por CI desde un clon limpio: `~/Dev/Juego0-builds/ci-34683041174/SmashThePast/Builds/SmashThePast.app`. Es lo unico que la maquina no puede demostrar sola.
+- [ ] Generar los 3 retratos que faltan (Cleopatra, Abraham Lincoln, Socrates) cuando haya creditos en Higgsfield. Mismo prompt que los otros seis para que el estilo no se separe.
 - [ ] Munay: mirar el player URP construido por CI y decir si el aspecto va por buen camino. Es lo unico que falta para cerrar la PR #5 (en la captura headless hay que apagar el SRP Batcher o sale todo dorado; hace falta ver el player real para saber si eso pasa tambien ahi).
 - [ ] Siguiente pasada visual: contorno tipo toon, camara Cinemachine que siga a los dos luchadores con zoom al impacto, particulas de golpe y parada de fotograma.
 - [ ] Release: configurar Steamworks, SKU real, precios, compra y verificacion de edad con credenciales del publisher.
@@ -25,6 +26,9 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 
 ## Hecho
 
+- [x] Claude: seis retratos de seleccion generados y enchufados en `PrototypeUI` (faltan 3).
+- [x] Claude: arreglado el crash del player. `DlcEntitlementService` vivia en un archivo con otro nombre, Unity no resolvia su MonoScript y el build escribia un `level0` invalido. Player local arrancado y vivo con el log limpio.
+- [x] Claude: la prueba del servicio DLC comprueba el componente cargado en vez de buscar en el YAML la cadena que solo aparece cuando el script esta roto.
 - [x] Claude: paso a URP 17.0.4 + Cinemachine 3.1.7, 74 materiales reescritos, luces de tres puntos con acento por jugador, post proceso (ACES, contraste, saturacion, bloom, vineta) y encuadre nuevo. PR #5, CI en clon limpio **70/70** y build macOS.
 - [x] Claude: herramientas de render en `Assets/Editor` para trabajar sin abrir el editor: instalar paquetes, configurar pipeline y capturar la escena a PNG.
 - [x] Claude: rama `feature/characters` mergeada en `main` (PR #3). CI verde en clon limpio: EditMode **70/70** y build macOS.
