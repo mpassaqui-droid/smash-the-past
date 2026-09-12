@@ -150,12 +150,24 @@ namespace SmashThePast.Stages.Tests
             var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
             try
             {
-                string serializedScene = File.ReadAllText(scenePath);
-                string offerGuid = AssetDatabase.AssetPathToGUID("Assets/Characters/HitlerDlc.asset");
                 Assert.That(scene.IsValid, Is.True);
-                Assert.That(serializedScene, Does.Contain("m_Name: ContenidoDLC"));
-                Assert.That(serializedScene, Does.Contain("m_ClassName: DlcEntitlementService"));
-                Assert.That(serializedScene, Does.Contain(offerGuid));
+
+                // Antes esta prueba buscaba el texto "m_ClassName: DlcEntitlementService" en el
+                // YAML. Ese texto solo aparece cuando Unity NO resuelve el script, asi que la
+                // prueba estaba certificando el fallo: el componente no existia en ejecucion y
+                // el player moria con "level0 is corrupted". Ahora se comprueba el objeto real.
+                var contenido = GameObject.Find("ContenidoDLC");
+                Assert.That(contenido, Is.Not.Null, "falta el objeto ContenidoDLC");
+
+                foreach (var objeto in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                    foreach (var componente in objeto.GetComponents<Component>())
+                        Assert.That(componente, Is.Not.Null, $"{objeto.name} tiene un componente sin script");
+
+                var servicio = contenido.GetComponent<SmashThePast.Characters.DlcEntitlementService>();
+                Assert.That(servicio, Is.Not.Null, "ContenidoDLC no lleva DlcEntitlementService");
+                Assert.That(servicio.Offers, Is.Not.Null.And.Length.EqualTo(1));
+                Assert.That(servicio.Offers[0], Is.EqualTo(AssetDatabase.LoadAssetAtPath<SmashThePast.Characters.DlcOffer>("Assets/Characters/HitlerDlc.asset")));
+                Assert.That(servicio.IsUnlocked(servicio.Offers[0]), Is.False, "sin Steamworks el DLC debe quedar bloqueado");
             }
             finally
             {
