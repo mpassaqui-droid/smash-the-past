@@ -81,7 +81,12 @@ namespace SmashThePast.Characters.Editor
                 panelAsset.referenceResolution = new Vector2Int(1600, 900);
                 AssetDatabase.CreateAsset(panelAsset, "Assets/UI/PrototypePanelSettings.asset");
             }
+            var panelData = new SerializedObject(panelAsset);
+            panelData.FindProperty("themeUss").objectReferenceValue = null;
+            panelData.FindProperty("m_DisableNoThemeWarning").boolValue = true;
+            panelData.ApplyModifiedPropertiesWithoutUndo();
             var uiObject = new GameObject("Interfaz", typeof(UIDocument), typeof(SmashThePast.UI.PrototypeUI));
+            var fallback = uiObject.AddComponent<SmashThePast.UI.PrototypeUIFallback>();
             var document = uiObject.GetComponent<UIDocument>();
             document.panelSettings = panelAsset;
             var ui = uiObject.GetComponent<SmashThePast.UI.PrototypeUI>();
@@ -94,6 +99,9 @@ namespace SmashThePast.Characters.Editor
             for (int index = 0; index < portraits.Length; index++)
                 portraitArray.GetArrayElementAtIndex(index).objectReferenceValue = portraits[index];
             uiData.ApplyModifiedPropertiesWithoutUndo();
+            var fallbackData = new SerializedObject(fallback);
+            fallbackData.FindProperty("match").objectReferenceValue = match;
+            fallbackData.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static Texture2D[] CreatePortraits()

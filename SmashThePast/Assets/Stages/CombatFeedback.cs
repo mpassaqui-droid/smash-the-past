@@ -21,10 +21,10 @@ namespace SmashThePast.Stages
 
         private void Awake()
         {
-            impactMaterial = new Material(Shader.Find("Particles/Standard Unlit"))
-            {
-                color = new Color(1f, 0.7f, 0.18f, 1f)
-            };
+            Shader shader = Shader.Find("Particles/Standard Unlit");
+            if (shader == null) shader = Shader.Find("Sprites/Default");
+            if (shader != null)
+                impactMaterial = new Material(shader) { color = new Color(1f, 0.7f, 0.18f, 1f) };
         }
 
         private void Start()
@@ -109,7 +109,7 @@ namespace SmashThePast.Stages
             shape.shapeType = ParticleSystemShapeType.Sphere;
             shape.radius = 0.04f;
             var renderer = effect.GetComponent<ParticleSystemRenderer>();
-            renderer.material = impactMaterial;
+            if (impactMaterial != null) renderer.material = impactMaterial;
             particles.Play();
             Destroy(effect, 0.8f);
         }

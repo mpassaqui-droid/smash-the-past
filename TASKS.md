@@ -13,6 +13,7 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 - [x] Codex: impacto visual y camera shake para golpes confirmados, sin cambios en Core. Suite EditMode aislada: **41/41**.
 - [x] Codex: entry point de build macOS y validación de app standalone: **103581376 bytes**, suite EditMode posterior **41/41**.
 - [x] Codex: prueba de QA de audio e impactos presentes en la escena. Suite EditMode: **42/42**.
+- [x] Codex: corregido arranque macOS por shader faltante y añadido fallback UI runtime para selección/HUD. Build final: **103585312 bytes**, suite EditMode: **42/42**, transición `J` + `Enter` verificada en player.
 
 ## En curso
 

@@ -19,6 +19,7 @@ namespace SmashThePast.Stages.Tests
             var match = Object.FindFirstObjectByType<MatchController>();
             var camera = Object.FindFirstObjectByType<ArenaCamera>();
             var ui = Object.FindFirstObjectByType<PrototypeUI>();
+            var fallback = Object.FindFirstObjectByType<PrototypeUIFallback>();
             var floor = GameObject.Find("SueloPrototipo");
             Assert.That(scene.IsValid, Is.True);
             Assert.That(match, Is.Not.Null);
@@ -36,6 +37,7 @@ namespace SmashThePast.Stages.Tests
             Assert.That(camera, Is.Not.Null);
             Assert.That(camera.GetComponent<Camera>().orthographic, Is.True);
             Assert.That(ui, Is.Not.Null);
+            Assert.That(fallback, Is.Not.Null);
             Assert.That(ui.GetComponent<UIDocument>().panelSettings, Is.Not.Null);
             Assert.That(floor, Is.Not.Null);
             Assert.That(floor.GetComponent<Collider>(), Is.Not.Null);
