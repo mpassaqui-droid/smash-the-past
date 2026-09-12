@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using SmashThePast.Characters;
 using SmashThePast.Core;
 using UnityEngine;
@@ -18,6 +20,9 @@ namespace SmashThePast.Stages
         private Action<int> hitTwo;
         private CameraShake cameraShake;
         private Material impactMaterial;
+        private Coroutine pausaDeImpacto;
+        private readonly Dictionary<Renderer, Color> coloresOriginales = new Dictionary<Renderer, Color>();
+        private static readonly int IdColorBase = Shader.PropertyToID("_BaseColor");
 
         private void Awake()
         {
@@ -45,7 +50,18 @@ namespace SmashThePast.Stages
                 BindCurrentFighters();
         }
 
-        private void OnDisable() => Unbind();
+        private void OnDisable()
+        {
+            // Si el objeto se apaga en plena parada de fotograma, el juego se quedaria
+            // congelado para siempre.
+            if (pausaDeImpacto != null)
+            {
+                StopCoroutine(pausaDeImpacto);
+                pausaDeImpacto = null;
+                if (match != null && match.Phase == MatchPhase.Fighting) Time.timeScale = 1f;
+            }
+            Unbind();
+        }
 
         private void OnDestroy()
         {
@@ -87,6 +103,62 @@ namespace SmashThePast.Stages
             bool heavy = damage >= 10;
             SpawnImpact(detector.Opponent.transform.position + Vector3.up * 1.1f, heavy);
             if (cameraShake != null) cameraShake.AddShake(heavy ? 0.22f : 0.1f);
+            Congelar(heavy ? 0.09f : 0.05f);
+            Destellar(detector.Opponent, heavy);
+        }
+
+
+        // Parada de fotograma. En un juego de pelea es lo que hace que un golpe
+        // "duela" en pantalla: el tiempo se detiene unas centesimas en el impacto.
+        // Nunca pisa la pausa del jugador: si el combate deja de estar en marcha,
+        // no toca timeScale al terminar.
+        private void Congelar(float duracion)
+        {
+            if (match == null || match.Phase != MatchPhase.Fighting) return;
+            if (pausaDeImpacto != null) StopCoroutine(pausaDeImpacto);
+            pausaDeImpacto = StartCoroutine(Congelacion(duracion));
+        }
+
+        private IEnumerator Congelacion(float duracion)
+        {
+            Time.timeScale = 0f;
+            yield return new WaitForSecondsRealtime(duracion);
+            if (match != null && match.Phase == MatchPhase.Fighting) Time.timeScale = 1f;
+            pausaDeImpacto = null;
+        }
+
+        // Destello blanco sobre el que encaja. Se hace con MaterialPropertyBlock para
+        // no crear copias de material ni romper el SRP Batcher.
+        private void Destellar(Fighter victima, bool fuerte)
+        {
+            if (victima == null) return;
+            StartCoroutine(Destello(victima.GetComponentsInChildren<Renderer>(true), fuerte ? 0.12f : 0.07f));
+        }
+
+        private IEnumerator Destello(Renderer[] piezas, float duracion)
+        {
+            var bloque = new MaterialPropertyBlock();
+            foreach (var pieza in piezas)
+            {
+                if (pieza == null || pieza.sharedMaterial == null) continue;
+                if (!coloresOriginales.ContainsKey(pieza))
+                    coloresOriginales[pieza] = pieza.sharedMaterial.HasProperty(IdColorBase)
+                        ? pieza.sharedMaterial.GetColor(IdColorBase)
+                        : Color.white;
+                pieza.GetPropertyBlock(bloque);
+                bloque.SetColor(IdColorBase, Color.white);
+                pieza.SetPropertyBlock(bloque);
+            }
+
+            yield return new WaitForSecondsRealtime(duracion);
+
+            foreach (var pieza in piezas)
+            {
+                if (pieza == null) continue;
+                pieza.GetPropertyBlock(bloque);
+                bloque.SetColor(IdColorBase, coloresOriginales.TryGetValue(pieza, out var color) ? color : Color.white);
+                pieza.SetPropertyBlock(bloque);
+            }
         }
 
         private void SpawnImpact(Vector3 position, bool heavy)

@@ -12,6 +12,7 @@ namespace SmashThePast.Diagnostics
     public static class ArranqueDeHumo
     {
         private const string Bandera = "-humo";
+        private const string BanderaEscenario = "-escenario";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Arrancar()
@@ -29,7 +30,9 @@ namespace SmashThePast.Diagnostics
 
             var objeto = new GameObject("PruebaDeHumo");
             UnityEngine.Object.DontDestroyOnLoad(objeto);
-            objeto.AddComponent<PruebaDeHumo>().Destino = destino;
+            var prueba = objeto.AddComponent<PruebaDeHumo>();
+            prueba.Destino = destino;
+            prueba.Escenario = LeerEntero(BanderaEscenario);
         }
 
         private static string LeerArgumento()
@@ -39,15 +42,39 @@ namespace SmashThePast.Diagnostics
                 if (argumentos[i] == Bandera) return argumentos[i + 1];
             return null;
         }
+
+        private static int LeerEntero(string bandera)
+        {
+            string[] argumentos = Environment.GetCommandLineArgs();
+            for (int i = 0; i < argumentos.Length - 1; i++)
+                if (argumentos[i] == bandera && int.TryParse(argumentos[i + 1], out int valor)) return valor;
+            return -1;
+        }
     }
 
     public sealed class PruebaDeHumo : MonoBehaviour
     {
         public string Destino;
+        public int Escenario = -1;
 
         private IEnumerator Start()
         {
-            for (int i = 0; i < 120; i++) yield return null;
+            for (int i = 0; i < 30; i++) yield return null;
+
+            // Con -escenario N se elige ese personaje para P1, que es lo que cambia de
+            // arena. Asi la captura puede recorrer los nueve ambientes sin tocar teclas.
+            if (Escenario >= 0)
+            {
+                var combate = UnityEngine.Object.FindFirstObjectByType<SmashThePast.Stages.MatchController>();
+                if (combate != null && combate.Roster != null && Escenario < combate.Roster.Length)
+                {
+                    combate.Preview(Escenario, (Escenario + 1) % combate.Roster.Length);
+                    Debug.Log($"HUMO_ESCENARIO: {Escenario}");
+                }
+                else Debug.LogWarning("HUMO_ESCENARIO: no se pudo cambiar de arena");
+            }
+
+            for (int i = 0; i < 90; i++) yield return null;
 
             string carpeta = Path.GetDirectoryName(Destino);
             if (!string.IsNullOrEmpty(carpeta)) Directory.CreateDirectory(carpeta);
