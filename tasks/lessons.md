@@ -12,3 +12,7 @@
 - Una escena reutilizable puede cubrir varios escenarios tematicos si la seleccion activa un set visual verificable, sin duplicar la logica de combate ni el suelo fisico.
 - Las pruebas EditMode no deben llamar flujos de runtime que usan Destroy; probar el controlador con referencias serializadas evita warnings y mantiene la comprobacion del comportamiento.
 - Un entitlement de tienda debe fallar cerrado cuando falta Steamworks o el SKU, nunca habilitar un DLC desde un fallback local en el build de release.
+
+- Los tests EditMode corren dentro del editor, donde un ajuste de ProjectSettings puede estar arreglado solo en la copia local sin commitear. `activeInputHandler` estuvo en 0 en el repo desde el primer commit mientras cinco scripts usaban el nuevo Input System: suite en verde y builds de CI sin input. Cualquier ajuste del proyecto del que dependa el runtime necesita un test que lea el valor persistido en `ProjectSettings.asset`, no el estado del editor.
+- Un test guardian no vale nada hasta verlo fallar. Para probarlo: rama temporal desde el commit roto con solo el test encima, PR en draft para disparar CI, comprobar el fallo (68/70) y cerrar. Sin eso es una afirmacion, no una prueba.
+- Un asset seguido por git sin su `.meta` commiteado recibe un GUID nuevo en cada clon. Se detecta en el log de checkout de CI ("Removing ... .meta") y rompe referencias serializadas en la maquina de otro.

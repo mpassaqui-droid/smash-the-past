@@ -3,8 +3,10 @@
 Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qué se ve en el build). Actualizar antes/después de cada sesión de trabajo.
 
 ## Por hacer
-- [ ] Diego: instalar Unity Hub + Unity 6 LTS (6000.0.83f1, misma versión que Munay) y activar licencia Personal
+- [ ] Diego: instalar Unity Hub + Unity 6 LTS (6000.0.83f1, misma version que Munay) y activar licencia Personal
 - [ ] Diego: `git clone`, leer `AGENTS.md`, empezar Character pipeline (1 `CharacterData` de prueba + su special)
+- [ ] Munay: probar teclado y dos mandos fisicos en el player construido por CI desde un clon limpio: `~/Dev/Juego0-builds/ci-34683041174/SmashThePast/Builds/SmashThePast.app`. Es lo unico que la maquina no puede demostrar sola.
+- [ ] Release: configurar Steamworks, SKU real, precios, compra y verificacion de edad con credenciales del publisher.
 - [x] Configurar UnityYAMLMerge como merge driver en este worktree (Unity 6000.0.83f1).
 - [x] Escena de prueba real: `Assets/Stages/PrototypeArena.unity`, 2 Fighters con CharacterController y PlayerInputController, teclado y 2 mandos, pausa, timer, KO y revancha.
 - [x] Configurar CI (GitHub Actions + runner privado de este Mac) para correr EditMode tests en cada PR automáticamente. Workflow: `.github/workflows/unity-tests.yml`. Runner: `munay-smash-the-past`, etiqueta `unity`.
@@ -17,20 +19,24 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 
 ## En curso
 
-- [x] Codex: corregir ruta de golpes contra defensas especiales, carga antes del KO, input simultaneo teclado/mando y audio con muestras CC0. EditMode completo: **68/68**. Build macOS: **105976940 bytes**. Sin cambios en Core.
+(nada en curso)
 
+## Hecho
+
+- [x] Claude: rama `feature/characters` mergeada en `main` (PR #3). CI verde en clon limpio: EditMode **70/70** y build macOS.
+- [x] Claude: `activeInputHandler` pasa a 2. Estaba en 0 (solo Input Manager antiguo) desde el primer commit con cinco scripts usando el nuevo Input System, asi que todo build hecho fuera de este Mac salia sin input.
+- [x] Claude: commiteados los cinco `.meta` que faltaban; Unity ya no regenera GUID en cada clon.
+- [x] Claude: dos tests guardian sobre el ajuste de input, probados al reves en una rama temporal con el valor roto: **68/70** con el fallo, **70/70** con el arreglo.
+
+- [x] Codex: corregir ruta de golpes contra defensas especiales, carga antes del KO, input simultaneo teclado/mando y audio con muestras CC0. EditMode completo: **68/68**. Build macOS: **105976940 bytes**. Sin cambios en Core.
 - [x] Codex: patio andino reutilizable con terrazas de piedra, cordillera y estandartes. Cambios en PrototypeArena y nuevo prefab de arte; suelo fisico y Core sin cambios. EditMode: **44/44**. Build macOS: **104368704 bytes**. Player verificado visualmente.
 - [x] Codex: capa de animacion externa para los 9 personajes, conectada a eventos publicos de Fighter. Prefabs regenerados y player macOS validado.
 - [x] Codex: nueve variantes visuales de escenario, seleccionadas por el personaje P1 en la escena reutilizable. EditMode: **45/45**. Build macOS: **105211660 bytes**. Player validado.
 - [x] Codex: contenido DLC de Hitler aislado del roster base, oferta con edad minima y proveedor Steam fail-closed. EditMode: **47/47**. Build macOS: **105213052 bytes**.
 - [x] Codex: QA runtime del special DLC y validacion de mallas/colliders en las 9 variantes. EditMode: **48/48**. Build macOS: **105213052 bytes**.
 - [x] Codex: servicio de entitlement DLC cableado en la escena y fail-closed verificado. EditMode: **49/49**. Build macOS: **105214236 bytes**.
-- [ ] Release: configurar Steamworks, SKU real, precios, compra y verificacion de edad con credenciales del publisher.
-
 - [x] Codex (`feature/characters`): roster base, golpes externos a Core, escena de prueba, escenario reutilizable y selección/HUD. Core queda sin cambios.
 - [x] Codex: nueva escena `Assets/Stages/PrototypeArena.unity` y prefabs nuevos en `Assets/Characters/Prefabs/`; no editar otras escenas o prefabs.
-
-## Hecho
 
 - [x] Codex: restaurada la interfaz UI Toolkit con referencia TSS importada correcta; eliminado el fallback con seleccion independiente. Seleccion y pausa verificadas visualmente en player macOS. Suite EditMode: **43/43** (Core **13/13**), incluido ciclo de seleccion, dano, pausa/reanudar, KO, revancha y nueva seleccion. Build macOS: **104258736 bytes**. Prueba automatizada de comandos; teclado verificado en player, dos mandos fisicos pendientes de comprobacion.
 
