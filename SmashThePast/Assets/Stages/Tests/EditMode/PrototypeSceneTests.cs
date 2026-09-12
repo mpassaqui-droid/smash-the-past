@@ -28,6 +28,12 @@ namespace SmashThePast.Stages.Tests
                 Assert.That(scenery.GetComponentsInChildren<Collider>(), Is.Empty);
                 var renderers = scenery.GetComponentsInChildren<MeshRenderer>(true);
                 Assert.That(renderers.Length, Is.GreaterThan(0));
+                foreach (var stage in stageSet.Stages)
+                {
+                    Assert.That(stage, Is.Not.Null);
+                    Assert.That(stage.GetComponentsInChildren<MeshRenderer>(true).Length, Is.GreaterThan(0), stage.name);
+                    Assert.That(stage.GetComponentsInChildren<Collider>(true), Is.Empty, stage.name);
+                }
                 foreach (var renderer in renderers)
                 {
                     Assert.That(renderer.sharedMaterial, Is.Not.Null, renderer.name);

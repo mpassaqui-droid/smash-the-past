@@ -101,6 +101,16 @@ namespace SmashThePast.Characters.Tests
         }
 
         [UnityTest]
+        public IEnumerator HitlerTantrumDealsDamageAndStunsNearbyTarget()
+        {
+            Activate(SpecialKind.Hitler);
+            Assert.AreEqual(90, defender.Fighter.Health.CurrentHealth);
+            Assert.IsTrue(defender.IsStunned);
+            yield return WaitFrames(0.9f);
+            Assert.IsFalse(defender.IsStunned);
+        }
+
+        [UnityTest]
         public IEnumerator PoisonTicksButCannotCrossTargetDisable()
         {
             Activate(SpecialKind.Cleopatra);
