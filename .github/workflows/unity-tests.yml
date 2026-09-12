@@ -82,6 +82,33 @@ jobs:
           -quit
           -logFile "$GITHUB_WORKSPACE/build.log"
 
+      - name: Prueba de humo del player
+        shell: bash
+        run: |
+          set -euo pipefail
+          CAPTURA="$GITHUB_WORKSPACE/humo.png"
+          rm -f "$CAPTURA" "$GITHUB_WORKSPACE/humo.log"
+          chmod -R +x SmashThePast/Builds/SmashThePast.app/Contents/MacOS
+          xattr -dr com.apple.quarantine SmashThePast/Builds/SmashThePast.app || true
+          ./SmashThePast/Builds/SmashThePast.app/Contents/MacOS/SmashThePast \
+            -humo "$CAPTURA" -screen-width 1280 -screen-height 720 -screen-fullscreen 0 \
+            -logfile "$GITHUB_WORKSPACE/humo.log" &
+          PID=$!
+          for _ in $(seq 1 60); do
+            if ! kill -0 "$PID" 2>/dev/null; then break; fi
+            if [ -f "$CAPTURA" ]; then break; fi
+            sleep 1
+          done
+          sleep 2
+          kill "$PID" 2>/dev/null || true
+          if grep -q "HUMO_OK" "$GITHUB_WORKSPACE/humo.log"; then
+            grep "HUMO_OK" "$GITHUB_WORKSPACE/humo.log"
+          else
+            echo "El player no arranco. Un build que compila no demuestra que el juego abra."
+            tail -40 "$GITHUB_WORKSPACE/humo.log" || true
+            exit 1
+          fi
+
       - name: Upload macOS player
         if: always()
         uses: actions/upload-artifact@v4
@@ -90,3 +117,5 @@ jobs:
           path: |
             SmashThePast/Builds/SmashThePast.app
             build.log
+            humo.png
+            humo.log
