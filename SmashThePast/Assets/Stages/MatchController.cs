@@ -120,7 +120,8 @@ namespace SmashThePast.Stages
                 if (fighter == null) continue;
                 fighter.GetComponent<HitDetector>().CombatEnabled = active;
                 fighter.GetComponent<Combatant>().CombatEnabled = active;
-                fighter.GetComponent<PlayerInputController>().enabled = active;
+                // Combatant centraliza el polling combinado de teclado y mandos.
+                fighter.GetComponent<PlayerInputController>().enabled = false;
                 if (!active) fighter.SetBlocking(false);
             }
         }
@@ -140,7 +141,12 @@ namespace SmashThePast.Stages
             bool paused = Phase == MatchPhase.Fighting;
             Phase = paused ? MatchPhase.Paused : MatchPhase.Fighting;
             Time.timeScale = paused ? 0 : 1;
-            SetCombat(!paused);
+            // La pausa congela el tiempo; desactivar combate cancelaria los specials en curso.
+            if (paused)
+            {
+                playerOne.SetBlocking(false);
+                playerTwo.SetBlocking(false);
+            }
             Changed?.Invoke();
         }
 

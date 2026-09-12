@@ -41,7 +41,10 @@ namespace SmashThePast.Characters
 
         private void Attack(bool heavy)
         {
-            if (!CombatEnabled || fighter.Health == null || fighter.Health.IsDead
+            var combatant = GetComponent<Combatant>();
+            if (!CombatEnabled || Time.timeScale <= 0 || fighter.IsBlocking
+                || (combatant != null && !combatant.CanAct)
+                || fighter.Health == null || fighter.Health.IsDead
                 || opponent == null || opponent.Health == null || opponent.Health.IsDead
                 || Time.time < nextAttack) return;
 
@@ -50,10 +53,11 @@ namespace SmashThePast.Characters
             if (!IsInRange(transform.position, opponent.transform.position,
                     heavy ? heavyRange : lightRange, verticalRange)) return;
 
-            int before = opponent.Health.CurrentHealth;
-            opponent.ReceiveHit(heavy ? fighter.HeavyAttackDamage : fighter.LightAttackDamage);
-            int damage = before - opponent.Health.CurrentHealth;
-            fighter.Special.Fill(damage);
+            var target = opponent.GetComponent<Combatant>();
+            int raw = heavy ? fighter.HeavyAttackDamage : fighter.LightAttackDamage;
+            int damage = target != null ? target.ReceiveDamage(raw) : opponent.ReceiveHit(raw);
+            if (combatant != null) combatant.ChargeFromDamage(damage);
+            else fighter.Special.Fill(damage);
             HitLanded?.Invoke(damage);
         }
 

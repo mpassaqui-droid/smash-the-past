@@ -29,6 +29,8 @@ Decisión final del equipo: los 9 primeros vienen en el juego base ($6.99). **Hi
 ## Controles
 - Movimiento (stick/flechas), Salto, Bloqueo, Puñete (golpe ligero), Patada (golpe fuerte), Special (botón aparte, se activa con una barra que se llena al dar/recibir daño)
 - Esquema clásico de 4 botones + movimiento, igual en teclado y mando
+- Balance de carga (12/09/2026): la capa de combate externa duplica la carga por dano efectivo dado/recibido. Con 50 puntos de dano sin bloqueo se llena la barra de 100, antes del KO. El minimo de carga al recibir bloqueo sigue siendo el de Core.
+- Teclado y mando pueden usarse simultaneamente. P2 admite 1/2/3/0 de la fila superior o del teclado numerico. Rasputin activa su supervivencia automaticamente una sola vez por combate.
 
 ## Moveset
 

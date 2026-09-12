@@ -39,6 +39,64 @@ namespace SmashThePast.Characters.Tests
             attacker.Fighter.TryUseSpecial();
         }
 
+        private HitDetector NormalAttackDetector()
+        {
+            defender.transform.position = Vector3.right;
+            var detector = attacker.gameObject.AddComponent<HitDetector>();
+            detector.SetOpponent(defender.Fighter);
+            return detector;
+        }
+
+        [UnityTest]
+        public IEnumerator NormalAttacksRespectGandhiInvulnerability()
+        {
+            NormalAttackDetector();
+            defender.Kind = SpecialKind.Gandhi;
+            defender.Fighter.Special.Fill(100);
+            defender.Fighter.TryUseSpecial();
+            attacker.Fighter.PerformHeavyAttack();
+            Assert.AreEqual(100, defender.Fighter.Health.CurrentHealth);
+            Assert.AreEqual(0, attacker.Fighter.Special.CurrentValue);
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator NormalAttacksTriggerRasputinSurvivalBeforeKnockout()
+        {
+            var detector = NormalAttackDetector();
+            defender.Kind = SpecialKind.Rasputin;
+            defender.ReceiveDamage(95);
+            int knockouts = 0;
+            defender.Fighter.OnKnockedOut += () => knockouts++;
+            attacker.Fighter.PerformHeavyAttack();
+            Assert.AreEqual(1, defender.Fighter.Health.CurrentHealth);
+            Assert.AreEqual(0, knockouts);
+            detector.ResetAttack();
+            attacker.Fighter.PerformLightAttack();
+            Assert.AreEqual(1, knockouts);
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator SpecialsChargeBeforeEitherFighterIsKnockedOut()
+        {
+            var detector = NormalAttackDetector();
+            for (int hit = 0; hit < 5; hit++)
+            {
+                detector.ResetAttack();
+                attacker.Fighter.PerformHeavyAttack();
+            }
+            Assert.AreEqual(50, defender.Fighter.Health.CurrentHealth);
+            Assert.IsTrue(attacker.Fighter.Special.IsReady);
+            Assert.IsTrue(defender.Fighter.Special.IsReady);
+            int activations = 0;
+            attacker.SpecialActivated += _ => activations++;
+            attacker.Fighter.TryUseSpecial();
+            Assert.AreEqual(1, activations);
+            Assert.AreEqual(38, defender.Fighter.Health.CurrentHealth);
+            yield return null;
+        }
+
         [UnityTest]
         public IEnumerator GandhiPreventsDamageThenCounters()
         {
@@ -86,7 +144,7 @@ namespace SmashThePast.Characters.Tests
         }
 
         [UnityTest]
-        public IEnumerator TupacStunsAndRestoresNativeInput()
+        public IEnumerator TupacStunsAndRestoresExternalInput()
         {
             var input = defender.gameObject.AddComponent<PlayerInputController>();
             Activate(SpecialKind.Tupac);
@@ -95,7 +153,8 @@ namespace SmashThePast.Characters.Tests
             Assert.IsFalse(input.enabled);
             yield return WaitFrames(0.9f);
             Assert.IsFalse(defender.IsStunned);
-            Assert.IsTrue(input.enabled);
+            Assert.IsTrue(defender.CanAct);
+            Assert.IsFalse(input.enabled);
             defender.ReceiveDamage(100);
             Assert.IsFalse(input.enabled);
         }
@@ -158,6 +217,66 @@ namespace SmashThePast.Characters.Tests
             {
                 elapsed += Time.unscaledDeltaTime;
                 yield return null;
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator CannonAndBoomerangResolveTheirDelayedHits()
+        {
+            Activate(SpecialKind.Napoleon);
+            Assert.AreEqual(100, defender.Fighter.Health.CurrentHealth);
+            yield return WaitFrames(0.75f);
+            Assert.AreEqual(72, defender.Fighter.Health.CurrentHealth);
+            Activate(SpecialKind.Lincoln);
+            yield return WaitFrames(0.3f);
+            Assert.AreEqual(62, defender.Fighter.Health.CurrentHealth);
+            yield return WaitFrames(0.45f);
+            Assert.AreEqual(52, defender.Fighter.Health.CurrentHealth);
+        }
+
+        [UnityTest]
+        public IEnumerator MusashiDashesAndSocratesInversionExpires()
+        {
+            float before = attacker.transform.position.x;
+            Activate(SpecialKind.Musashi);
+            yield return WaitFrames(0.5f);
+            Assert.Greater(attacker.transform.position.x, before);
+            Assert.Less(defender.Fighter.Health.CurrentHealth, 100);
+            Activate(SpecialKind.Socrates);
+            Assert.IsTrue(defender.ControlsInverted);
+            yield return WaitFrames(2.1f);
+            Assert.IsFalse(defender.ControlsInverted);
+        }
+
+        [UnityTest]
+        public IEnumerator EveryBaseSpecialHasVisibleGeometryAndDisableCleansItUp()
+        {
+            for (int index = 0; index < 9; index++)
+            {
+                var source = new GameObject("VFX " + index).AddComponent<Combatant>();
+                source.Opponent = defender;
+                source.Kind = (SpecialKind)index;
+                var visual = source.gameObject.AddComponent<SpecialVisual>();
+                if (source.Kind == SpecialKind.Rasputin) source.ReceiveDamage(100);
+                else
+                {
+                    source.Fighter.Special.Fill(100);
+                    Assert.IsTrue(source.TrySpecial());
+                }
+                yield return null;
+                Assert.AreEqual(1, visual.ActiveEffectCount, source.Kind.ToString());
+                var line = source.GetComponentInChildren<LineRenderer>();
+                Assert.IsNotNull(line);
+                Assert.Greater(line.positionCount, 1);
+                Assert.IsNotNull(line.sharedMaterial.shader);
+                Assert.Greater(Vector3.Distance(line.GetPosition(0), line.GetPosition(1)), 0);
+                foreach (var collider in source.GetComponentsInChildren<Collider>())
+                    if (!(collider is CharacterController)) Assert.IsFalse(collider.enabled);
+                visual.enabled = false;
+                Assert.AreEqual(0, visual.ActiveEffectCount);
+                yield return null;
+                Assert.IsNull(source.GetComponentInChildren<LineRenderer>());
+                Object.Destroy(source.gameObject);
             }
         }
     }

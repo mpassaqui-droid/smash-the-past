@@ -1,4 +1,5 @@
 using System;
+using SmashThePast.Characters;
 using SmashThePast.Core;
 using SmashThePast.Stages;
 using UnityEngine;
@@ -346,7 +347,13 @@ namespace SmashThePast.UI
             healthFill[p].style.width = Length.Percent(100f * health / Mathf.Max(1, max));
             specialFill[p].style.width = Length.Percent(100f * (fighter?.Special?.CurrentValue ?? 0) / SpecialMeter.MaxValue);
             bool charged = fighter?.Special?.IsReady ?? false;
-            specialText[p].text = (fighter != null && fighter.Data != null ? fighter.Data.specialName : "") + (charged ? "  /  LISTO" : "");
+            var combatant = fighter != null ? fighter.GetComponent<Combatant>() : null;
+            bool passive = combatant != null && combatant.Kind == SpecialKind.Rasputin;
+            string status = passive ? combatant.SurvivalAvailable ? "AUTOMATICO" : "USADO"
+                : charged ? (p == 0 ? "LISTO: I / RT" : "LISTO: 0 / RT")
+                : (fighter?.Special?.CurrentValue ?? 0) + " / 100";
+            specialText[p].text = (fighter != null && fighter.Data != null ? fighter.Data.specialName : "") + "  /  " + status;
+            if (passive) specialFill[p].style.width = Length.Percent(combatant.SurvivalAvailable ? 100 : 0);
             specialText[p].EnableInClassList("special-ready", charged);
         }
 

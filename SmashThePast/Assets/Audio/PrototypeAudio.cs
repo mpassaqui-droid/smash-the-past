@@ -17,6 +17,7 @@ namespace SmashThePast.Audio
         private AudioClip lightClip;
         private AudioClip heavyClip;
         private AudioClip hitClip;
+        private AudioClip heavyHitClip;
         private AudioClip specialClip;
         private AudioClip knockoutClip;
 
@@ -26,23 +27,28 @@ namespace SmashThePast.Audio
             if (source == null) return;
             source.playOnAwake = false;
             source.spatialBlend = 0;
-            lightClip = Tone("Golpe ligero", 680, 420, 0.08f, 0.28f);
-            heavyClip = Tone("Golpe fuerte", 250, 110, 0.14f, 0.36f);
-            hitClip = Tone("Impacto", 150, 65, 0.1f, 0.42f);
-            specialClip = Tone("Special", 300, 900, 0.34f, 0.3f);
-            knockoutClip = Tone("K.O.", 180, 48, 0.48f, 0.38f);
+            lightClip = LoadClip("knifeSlice");
+            heavyClip = LoadClip("knifeSlice2");
+            hitClip = LoadClip("impactPunch_medium_000");
+            heavyHitClip = LoadClip("impactPunch_heavy_000");
+            specialClip = LoadClip("impactBell_heavy_000");
+            knockoutClip = LoadClip("impactPunch_heavy_002");
         }
 
-        private void Start() => BindCurrentFighters();
+        private void OnEnable() => BindCurrentFighters();
 
         private void Update()
         {
-            if (match == null) return;
-            if (match.PlayerOne != boundOne || match.PlayerTwo != boundTwo)
+            if ((match == null ? null : match.PlayerOne) != boundOne
+                || (match == null ? null : match.PlayerTwo) != boundTwo)
                 BindCurrentFighters();
         }
 
-        private void OnDisable() => Unbind();
+        private void OnDisable()
+        {
+            Unbind();
+            if (source != null) source.Stop();
+        }
 
         private void BindCurrentFighters()
         {
@@ -56,12 +62,15 @@ namespace SmashThePast.Audio
         private void Bind(Fighter fighter)
         {
             if (fighter == null) return;
-            fighter.OnLightAttackPerformed += PlayLight;
-            fighter.OnHeavyAttackPerformed += PlayHeavy;
-            fighter.OnSpecialUsed += PlaySpecial;
             fighter.OnKnockedOut += PlayKnockout;
             var detector = fighter.GetComponent<HitDetector>();
-            if (detector != null) detector.HitLanded += PlayHit;
+            if (detector != null)
+            {
+                detector.AttackPerformed += PlayAttack;
+                detector.HitLanded += PlayHit;
+            }
+            var combatant = fighter.GetComponent<Combatant>();
+            if (combatant != null) combatant.SpecialActivated += PlaySpecial;
         }
 
         private void Unbind()
@@ -75,21 +84,24 @@ namespace SmashThePast.Audio
         private void Unbind(Fighter fighter)
         {
             if (fighter == null) return;
-            fighter.OnLightAttackPerformed -= PlayLight;
-            fighter.OnHeavyAttackPerformed -= PlayHeavy;
-            fighter.OnSpecialUsed -= PlaySpecial;
             fighter.OnKnockedOut -= PlayKnockout;
             var detector = fighter.GetComponent<HitDetector>();
-            if (detector != null) detector.HitLanded -= PlayHit;
+            if (detector != null)
+            {
+                detector.AttackPerformed -= PlayAttack;
+                detector.HitLanded -= PlayHit;
+            }
+            var combatant = fighter.GetComponent<Combatant>();
+            if (combatant != null) combatant.SpecialActivated -= PlaySpecial;
         }
 
-        private void PlayLight() => Play(lightClip, 0.7f);
-        private void PlayHeavy() => Play(heavyClip, 0.9f);
-        private void PlaySpecial() => Play(specialClip, 1f);
+        private void PlayAttack(bool heavy) => Play(heavy ? heavyClip : lightClip, heavy ? 0.8f : 0.6f);
+        private void PlaySpecial(SpecialKind kind) => Play(specialClip, 0.7f);
         private void PlayKnockout() => Play(knockoutClip, 1f);
         private void PlayHit(int damage)
         {
-            if (damage > 0) Play(hitClip, Mathf.Clamp01(0.75f + damage / 80f));
+            if (damage > 0)
+                Play(damage >= 10 ? heavyHitClip : hitClip, Mathf.Clamp01(0.65f + damage / 80f));
         }
 
         private void Play(AudioClip clip, float multiplier)
@@ -97,22 +109,10 @@ namespace SmashThePast.Audio
             if (source != null && clip != null) source.PlayOneShot(clip, volume * multiplier);
         }
 
-        private static AudioClip Tone(string name, float startFrequency, float endFrequency, float duration, float amplitude)
+        private AudioClip LoadClip(string name)
         {
-            const int sampleRate = 44100;
-            int sampleCount = Mathf.CeilToInt(duration * sampleRate);
-            var clip = AudioClip.Create(name, sampleCount, 1, sampleRate, false);
-            var samples = new float[sampleCount];
-            for (int index = 0; index < sampleCount; index++)
-            {
-                float time = index / (float)sampleRate;
-                float progress = time / duration;
-                float phase = 2 * Mathf.PI * (startFrequency * time
-                    + (endFrequency - startFrequency) * time * time / (2 * duration));
-                float envelope = Mathf.Min(1, time * 90) * Mathf.Clamp01((duration - time) * 28);
-                samples[index] = Mathf.Sin(phase) * envelope * amplitude;
-            }
-            clip.SetData(samples, 0);
+            var clip = Resources.Load<AudioClip>("CombatAudio/" + name);
+            if (clip == null) Debug.LogError("Falta el audio de combate: " + name, this);
             return clip;
         }
     }

@@ -11,7 +11,8 @@ namespace SmashThePast.Stages
         {
             if (!controller.enabled) return;
             float x = Mathf.Clamp(transform.position.x, -8, 8);
-            controller.Move(new Vector3(x - transform.position.x, 0, -transform.position.z));
+            Vector3 correction = new Vector3(x - transform.position.x, 0, -transform.position.z);
+            if (correction.sqrMagnitude > 0.000001f) controller.Move(correction);
         }
     }
 }

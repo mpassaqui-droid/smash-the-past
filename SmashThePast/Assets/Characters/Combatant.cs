@@ -37,8 +37,9 @@ namespace SmashThePast.Characters
         public bool IsStunned => Alive && Time.time < stunnedUntil;
         public bool IsInvulnerable => Alive && Time.time < invulnerableUntil;
         public bool ControlsInverted => Alive && Time.time < invertedUntil;
+        public bool SurvivalAvailable => Kind == SpecialKind.Rasputin && !survived;
         public bool CanAct => Alive && Time.timeScale > 0 && !IsStunned && Time.time >= lockedUntil;
-        private bool TopRowBlock => PlayerIndex == 1 && Gamepad.all.Count <= PlayerIndex
+        private bool TopRowBlock => PlayerIndex == 1
             && Keyboard.current != null && Keyboard.current.digit3Key.isPressed;
         public event Action<SpecialKind> SpecialActivated;
 
@@ -75,7 +76,8 @@ namespace SmashThePast.Characters
         private void UpdateInput()
         {
             if (input == null) input = GetComponent<PlayerInputController>();
-            if (input != null) input.enabled = CanAct;
+            // La capa externa resuelve teclado y mando juntos, sin duplicar comandos de Core.
+            if (input != null) input.enabled = false;
             if (!CanAct) Fighter.SetBlocking(false);
         }
 
@@ -83,29 +85,49 @@ namespace SmashThePast.Characters
         {
             if (!Alive && specialRunning) CancelRuntime();
             UpdateInput();
-            if (CanAct && TopRowBlock) Fighter.SetBlocking(true);
+            if (CanAct) ReadInput();
         }
 
-        private void LateUpdate()
+        private void ReadInput()
         {
-            if (!CanAct) return;
             var pad = Gamepad.all.Count > PlayerIndex ? Gamepad.all[PlayerIndex] : null;
             var kb = Keyboard.current;
-            if (ControlsInverted && input != null && input.isActiveAndEnabled)
+            bool first = PlayerIndex == 0;
+            bool block = (pad != null && pad.buttonWest.isPressed) || (kb != null &&
+                (first ? kb.lKey.isPressed : kb.digit3Key.isPressed || kb.numpad3Key.isPressed));
+            Fighter.SetBlocking(block);
+            float horizontal = kb == null ? 0 :
+                ((first ? kb.dKey : kb.rightArrowKey).isPressed ? 1 : 0)
+                - ((first ? kb.aKey : kb.leftArrowKey).isPressed ? 1 : 0);
+            if (pad != null)
             {
-                float horizontal = pad != null ? pad.leftStick.x.ReadValue() : kb == null ? 0 :
-                    ((PlayerIndex == 0 ? kb.dKey : kb.rightArrowKey).isPressed ? 1 : 0)
-                    - ((PlayerIndex == 0 ? kb.aKey : kb.leftArrowKey).isPressed ? 1 : 0);
-                Fighter.Move(-2 * horizontal);
+                float stick = pad.leftStick.x.ReadValue();
+                horizontal += Mathf.Abs(stick) > 0.1f ? stick : pad.dpad.x.ReadValue();
             }
-            if (PlayerIndex != 1 || pad != null || kb == null) return;
-            Fighter.SetBlocking(kb.digit3Key.isPressed || kb.numpad3Key.isPressed);
-            if (kb.digit1Key.wasPressedThisFrame && !kb.numpad1Key.wasPressedThisFrame)
+            if ((pad != null && pad.buttonSouth.wasPressedThisFrame) || (kb != null &&
+                (first ? kb.wKey.wasPressedThisFrame : kb.upArrowKey.wasPressedThisFrame))) Fighter.Jump();
+            Fighter.Move(Mathf.Clamp(horizontal, -1, 1) * (ControlsInverted ? -1 : 1));
+            if ((pad != null && pad.buttonNorth.wasPressedThisFrame) || (kb != null &&
+                (first ? kb.jKey.wasPressedThisFrame : kb.digit1Key.wasPressedThisFrame || kb.numpad1Key.wasPressedThisFrame)))
                 Fighter.PerformLightAttack();
-            if (kb.digit2Key.wasPressedThisFrame && !kb.numpad2Key.wasPressedThisFrame)
+            if ((pad != null && pad.buttonEast.wasPressedThisFrame) || (kb != null &&
+                (first ? kb.kKey.wasPressedThisFrame : kb.digit2Key.wasPressedThisFrame || kb.numpad2Key.wasPressedThisFrame)))
                 Fighter.PerformHeavyAttack();
-            if (kb.digit0Key.wasPressedThisFrame && !kb.numpad0Key.wasPressedThisFrame)
-                Fighter.TryUseSpecial();
+            if ((pad != null && pad.rightTrigger.wasPressedThisFrame) || (kb != null &&
+                (first ? kb.iKey.wasPressedThisFrame : kb.digit0Key.wasPressedThisFrame || kb.numpad0Key.wasPressedThisFrame)))
+                TrySpecial();
+        }
+
+        public bool TrySpecial()
+        {
+            if (!CanAct || specialRunning || Kind == SpecialKind.Rasputin || !Fighter.Special.IsReady) return false;
+            Fighter.TryUseSpecial();
+            return true;
+        }
+
+        public void ChargeFromDamage(int damage)
+        {
+            if (damage > 0) Fighter.Special.Fill((int)Math.Min((long)damage * 2, SpecialMeter.MaxValue));
         }
 
         public int ReceiveDamage(int rawDamage)
@@ -127,13 +149,18 @@ namespace SmashThePast.Characters
             }
             Fighter.ReceiveHit(rawDamage);
             int actual = before - Fighter.Health.CurrentHealth;
+            if (actual > 0) Fighter.Special.Fill(actual);
             if (survival) SpecialActivated?.Invoke(SpecialKind.Rasputin);
             return actual;
         }
 
         private void UseSpecial()
         {
-            if (!CanAct || specialRunning || Kind == SpecialKind.Rasputin) return;
+            if (!CanAct || specialRunning || Kind == SpecialKind.Rasputin)
+            {
+                Fighter.Special.Fill(SpecialMeter.MaxValue);
+                return;
+            }
             specialRunning = true;
             SpecialKind activated = Kind;
             StartCoroutine(RunSpecial(activated, Opponent, Opponent != null ? Opponent.generation : -1));
@@ -151,7 +178,7 @@ namespace SmashThePast.Characters
         {
             if (!ValidTarget(target, round, range)) return 0;
             int actual = target.ReceiveDamage(damage);
-            if (actual > 0) Fighter.Special.Fill(actual);
+            ChargeFromDamage(actual);
             return actual;
         }
 
