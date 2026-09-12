@@ -1,0 +1,121 @@
+.prototype-ui {
+    position: absolute;
+    left: 0; right: 0; top: 0; bottom: 0;
+    color: rgb(245, 245, 242);
+    font-size: 14px;
+    letter-spacing: 0;
+}
+.prototype-ui Label { margin: 0; padding: 0; white-space: normal; }
+.prototype-ui Button {
+    margin: 0; padding: 8px;
+    color: rgb(245, 245, 242);
+    background-color: rgb(35, 37, 40);
+    border-width: 1px;
+    border-color: rgb(89, 92, 96);
+    border-radius: 4px;
+    font-size: 13px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+.prototype-ui Button:hover { background-color: rgb(57, 59, 63); border-color: white; }
+.prototype-ui Button:active { background-color: rgb(74, 76, 79); }
+.selection { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.selection-header {
+    padding: 18px 28px 14px;
+    background-color: rgba(19, 20, 22, 0.90);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.brand { font-size: 30px; -unity-font-style: bold; }
+.eyebrow { font-size: 13px; color: rgb(198, 201, 203); }
+.selection-dock {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 12px 24px 18px;
+    background-color: rgba(19, 20, 22, 0.94);
+}
+.players { flex-direction: row; margin-bottom: 12px; }
+.player-choice { flex-direction: row; flex-grow: 1; flex-basis: 0; min-width: 0; align-items: center; }
+.player-choice.p1 { margin-right: 24px; }
+.pick-details { flex-grow: 1; flex-basis: 0; min-width: 0; padding: 0 12px; }
+.pick-name { font-size: 19px; -unity-font-style: bold; }
+.pick-special { font-size: 12px; color: rgb(223, 193, 111); margin-top: 4px; }
+.prototype-ui .player-tab { width: 44px; height: 44px; flex-shrink: 0; -unity-font-style: bold; }
+.prototype-ui .ready-button { width: 130px; min-height: 42px; flex-shrink: 0; }
+.p1 .player-tab, .p1 .pick-name { color: rgb(255, 126, 111); }
+.p2 .player-tab, .p2 .pick-name { color: rgb(95, 222, 205); }
+.p1 .active-player, .p1 .is-ready { border-color: rgb(255, 126, 111); background-color: rgb(75, 42, 41); }
+.p2 .active-player, .p2 .is-ready { border-color: rgb(95, 222, 205); background-color: rgb(29, 66, 62); }
+.roster { flex-direction: row; flex-wrap: wrap; }
+.prototype-ui .portrait-tile {
+    width: 10.6%; height: 182px; margin: 0.25%;
+    flex-shrink: 0; padding: 0;
+    border-width: 2px;
+    overflow: hidden;
+    background-color: rgb(39, 41, 44);
+}
+.portrait { width: 100%; height: 118px; flex-shrink: 0; }
+.tile-caption { flex-grow: 1; min-width: 0; padding: 3px 5px; justify-content: center; }
+.tile-name { font-size: 12px; -unity-font-style: bold; -unity-text-align: middle-center; }
+.pick-marker { height: 16px; font-size: 11px; -unity-font-style: bold; -unity-text-align: middle-center; }
+.prototype-ui .picked-p1 { border-color: rgb(255, 126, 111); }
+.prototype-ui .picked-p2 { border-color: rgb(95, 222, 205); }
+.picked-p1 .pick-marker { color: rgb(255, 126, 111); }
+.picked-p2 .pick-marker { color: rgb(95, 222, 205); }
+.prototype-ui .picked-p1.picked-p2 {
+    border-left-color: rgb(255, 126, 111); border-top-color: rgb(255, 126, 111);
+    border-right-color: rgb(95, 222, 205); border-bottom-color: rgb(95, 222, 205);
+}
+.picked-p1.picked-p2 .pick-marker { color: white; }
+.hud {
+    position: absolute; left: 0; right: 0; top: 0;
+    padding: 18px 28px 12px;
+    flex-direction: row; align-items: flex-start;
+    background-color: rgba(19, 20, 22, 0.86);
+}
+.hud-side { flex-grow: 1; flex-basis: 0; min-width: 0; }
+.hud-line { flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+.hud-name { font-size: 18px; -unity-font-style: bold; flex-grow: 1; flex-shrink: 1; min-width: 0; margin-right: 8px; }
+.health-text { font-size: 13px; width: 86px; flex-shrink: 0; -unity-text-align: middle-right; }
+.health-track { height: 14px; background-color: rgb(65, 66, 69); overflow: hidden; }
+.health-fill { height: 100%; }
+.p1 .health-fill { background-color: rgb(255, 126, 111); }
+.p2 .health-fill { background-color: rgb(95, 222, 205); }
+.p2 .health-track, .p2 .special-track { align-items: flex-end; }
+.special-track { height: 5px; background-color: rgb(65, 66, 69); margin-top: 5px; overflow: hidden; }
+.special-fill { height: 100%; background-color: rgb(223, 193, 111); }
+.special-status { font-size: 12px; color: rgb(195, 198, 199); margin-top: 5px; }
+.special-ready { color: rgb(255, 217, 111); -unity-font-style: bold; }
+.p2 .special-status { -unity-text-align: middle-right; }
+.timer { width: 94px; flex-shrink: 0; font-size: 36px; -unity-font-style: bold; -unity-text-align: middle-center; }
+.urgent { color: rgb(255, 126, 111); }
+.overlay {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    justify-content: center; align-items: center;
+    padding: 24px;
+    background-color: rgba(10, 11, 12, 0.40);
+}
+.result-panel { width: 580px; max-width: 100%; max-height: 90%; padding: 24px; background-color: rgba(25, 27, 29, 0.97); }
+.result-scroll { flex-shrink: 1; min-height: 0; }
+.result-title { font-size: 28px; -unity-font-style: bold; margin-bottom: 20px; }
+.quote { font-size: 17px; margin-bottom: 18px; }
+.winner-quote { color: rgb(245, 221, 153); }
+.loser-quote { color: rgb(200, 203, 205); }
+.result-actions { flex-direction: row; flex-wrap: wrap; margin-top: 8px; flex-shrink: 0; }
+.prototype-ui .menu-button { flex-grow: 1; flex-basis: 0; min-width: 170px; min-height: 46px; margin: 4px; }
+.prototype-ui .menu-selected { border-color: rgb(245, 221, 153); background-color: rgb(63, 59, 44); }
+.compact .selection-header { padding: 12px 18px; }
+.compact .brand { font-size: 24px; }
+.compact .selection-dock { padding: 8px 14px 10px; }
+.compact .players { margin-bottom: 6px; }
+.compact .player-choice.p1 { margin-right: 14px; }
+.compact .pick-details { padding: 0 8px; }
+.compact .pick-name { font-size: 16px; }
+.compact .ready-button { width: 102px; font-size: 12px; }
+.compact .portrait-tile { width: 32.8%; height: 82px; flex-direction: row; }
+.compact .portrait { width: 90px; height: 78px; }
+.compact .tile-name { -unity-text-align: middle-left; }
+.compact .pick-marker { -unity-text-align: middle-left; }
+.compact .hud { padding: 12px 18px 10px; }
+.compact .hud-name { font-size: 16px; }
+.compact .timer { width: 76px; font-size: 30px; }

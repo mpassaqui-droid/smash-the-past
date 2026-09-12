@@ -1,0 +1,92 @@
+name: Unity tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - feature/characters
+
+concurrency:
+  group: unity-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  editmode:
+    name: EditMode tests
+    runs-on: [self-hosted, unity, arm64]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Run EditMode tests
+        id: tests
+        shell: bash
+        run: >-
+          /Applications/Unity/Hub/Editor/6000.0.83f1/Unity.app/Contents/MacOS/Unity
+          -batchmode -nographics
+          -projectPath SmashThePast
+          -runTests -testPlatform EditMode
+          -testResults "$GITHUB_WORKSPACE/editmode-results.xml"
+          -logFile "$GITHUB_WORKSPACE/editmode.log"
+
+      - name: Collect test artifacts
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/ci-artifacts"
+          result_file="$GITHUB_WORKSPACE/editmode-results.xml"
+          if [ ! -f "$result_file" ]; then
+            result_file="$(find "$GITHUB_WORKSPACE/SmashThePast" -name 'editmode-results.xml' -type f -print -quit)"
+          fi
+          if [ -z "$result_file" ] || [ ! -f "$result_file" ]; then
+            echo "Unity did not produce editmode-results.xml"
+            exit 1
+          fi
+          cp "$result_file" "$GITHUB_WORKSPACE/ci-artifacts/editmode-results.xml"
+          cp "$GITHUB_WORKSPACE/editmode.log" "$GITHUB_WORKSPACE/ci-artifacts/editmode.log"
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unity-editmode-results
+          path: ci-artifacts
+
+  build-macos:
+    name: macOS build
+    needs: editmode
+    runs-on: [self-hosted, unity, arm64]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Build macOS player
+        shell: bash
+        run: >-
+          /Applications/Unity/Hub/Editor/6000.0.83f1/Unity.app/Contents/MacOS/Unity
+          -batchmode -nographics
+          -projectPath SmashThePast
+          -executeMethod SmashThePast.Characters.Editor.PrototypeBuild.BuildMacOS
+          -quit
+          -logFile "$GITHUB_WORKSPACE/build.log"
+
+      - name: Upload macOS player
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smash-the-past-macos
+          path: |
+            SmashThePast/Builds/SmashThePast.app
+            build.log

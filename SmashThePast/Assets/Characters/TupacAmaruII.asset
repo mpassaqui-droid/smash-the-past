@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3bc30dc5be7a4f8aa13fc9e41df0055, type: 3}
+  m_Name: TupacAmaruII
+  m_EditorClassIdentifier: 
+  characterName: "T\xFApac Amaru II"
+  bio: "L\u00edder de la gran rebeli\u00f3n andina de 1780 contra el dominio colonial espa\u00f1ol. En la arena, su voz tambi\u00e9n mueve monta\u00f1as."
+  maxHealth: 100
+  moveSpeed: 5
+  jumpForce: 8
+  lightAttackDamage: 5
+  heavyAttackDamage: 10
+  specialName: Grito de Libertad
+  specialDescription: Emite una ola expansiva que aturde brevemente al rival.
+  specialEffectPrefab: {fileID: 0}
+  winQuotes:
+  - "La libertad no se bloquea con los brazos."
+  - "Mi grito lleg\u00f3 antes que tu guardia."
+  - "Esta victoria no paga tributo."
+  loseQuotes:
+  - "Una ca\u00edda no acaba una rebeli\u00f3n."
+  - "Me falt\u00f3 aire, no causa."
+  - "La revancha ya tiene convocatoria."
+  isPaidDLC: 0

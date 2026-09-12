@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3bc30dc5be7a4f8aa13fc9e41df0055, type: 3}
+  m_Name: MiyamotoMusashi
+  m_EditorClassIdentifier:
+  characterName: "Miyamoto Musashi"
+  bio: "Espadach\u00edn japon\u00e9s y autor de El libro de los cinco anillos. En la arena, trae dos espadas y ninguna mano para excusas."
+  maxHealth: 100
+  moveSpeed: 5
+  jumpForce: 8
+  lightAttackDamage: 5
+  heavyAttackDamage: 10
+  specialName: "Niten Ichi-ry\u016b"
+  specialDescription: "Se lanza hacia delante con dos espadas y asesta varios golpes durante el avance."
+  specialEffectPrefab: {fileID: 0}
+  winQuotes:
+  - "Dos espadas. Una lecci\u00f3n."
+  - "Tu guardia solo ley\u00f3 el primer cap\u00edtulo."
+  - "La segunda espada tambi\u00e9n quer\u00eda participar."
+  loseQuotes:
+  - "Toca revisar mis apuntes."
+  - "Me sobr\u00f3 una espada y me falt\u00f3 paciencia."
+  - "Esta derrota merece un sexto anillo."
+  isPaidDLC: 0

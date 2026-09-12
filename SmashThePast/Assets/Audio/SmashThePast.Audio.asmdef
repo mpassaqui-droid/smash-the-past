@@ -1,0 +1,4 @@
+{
+  "name": "SmashThePast.Audio",
+  "references": ["SmashThePast.Core", "SmashThePast.Characters", "SmashThePast.Stages"]
+}

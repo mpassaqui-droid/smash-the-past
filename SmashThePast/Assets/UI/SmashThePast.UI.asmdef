@@ -1,0 +1,5 @@
+{
+  "name": "SmashThePast.UI",
+  "rootNamespace": "SmashThePast.UI",
+  "references": ["SmashThePast.Core", "SmashThePast.Stages", "SmashThePast.Characters", "Unity.InputSystem"]
+}

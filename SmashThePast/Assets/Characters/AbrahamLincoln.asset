@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3bc30dc5be7a4f8aa13fc9e41df0055, type: 3}
+  m_Name: AbrahamLincoln
+  m_EditorClassIdentifier:
+  characterName: "Abraham Lincoln"
+  bio: "Presidente de Estados Unidos durante la Guerra de Secesi\u00f3n. En la arena, su galera tiene m\u00e1s recorrido que un discurso."
+  maxHealth: 100
+  moveSpeed: 5
+  jumpForce: 8
+  lightAttackDamage: 5
+  heavyAttackDamage: 10
+  specialName: "Hat Trick"
+  specialDescription: "Lanza su galera como un bumer\u00e1n que golpea al rival y regresa."
+  specialEffectPrefab: {fileID: 0}
+  winQuotes:
+  - "Mi sombrero presenta sus argumentos."
+  - "La sesi\u00f3n queda levantada. T\u00fa puedes esperar."
+  - "Victoria aprobada sin enmiendas."
+  loseQuotes:
+  - "Solicito un recuento de golpes."
+  - "Mi sombrero volvi\u00f3. La victoria no."
+  - "Tendr\u00e9 que preparar un discurso m\u00e1s corto."
+  isPaidDLC: 0

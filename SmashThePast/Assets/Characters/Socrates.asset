@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3bc30dc5be7a4f8aa13fc9e41df0055, type: 3}
+  m_Name: Socrates
+  m_EditorClassIdentifier:
+  characterName: "S\u00f3crates"
+  bio: "Fil\u00f3sofo ateniense que examinaba las ideas mediante preguntas. En la arena, pone en duda hasta la direcci\u00f3n de tus pasos."
+  maxHealth: 100
+  moveSpeed: 5
+  jumpForce: 8
+  lightAttackDamage: 5
+  heavyAttackDamage: 10
+  specialName: "May\u00e9utica"
+  specialDescription: "Una pregunta ret\u00f3rica invierte temporalmente los controles del rival."
+  specialEffectPrefab: {fileID: 0}
+  winQuotes:
+  - "\u00bfPodemos definir ahora lo que es perder?"
+  - "Tu argumento ten\u00eda la guardia baja."
+  - "\u00bfIbas hacia m\u00ed o hacia una contradicci\u00f3n?"
+  loseQuotes:
+  - "Ese golpe exige una respuesta m\u00e1s elaborada."
+  - "\u00bfY si llamamos a esto una investigaci\u00f3n?"
+  - "Tengo otra pregunta. En cuanto me levante."
+  isPaidDLC: 0

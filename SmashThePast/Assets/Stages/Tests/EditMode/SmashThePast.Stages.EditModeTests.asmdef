@@ -1,0 +1,7 @@
+{
+  "name": "SmashThePast.Stages.EditModeTests",
+  "references": ["SmashThePast.Core", "SmashThePast.Characters", "SmashThePast.Stages", "SmashThePast.UI", "SmashThePast.Audio"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

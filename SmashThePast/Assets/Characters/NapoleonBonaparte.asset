@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3bc30dc5be7a4f8aa13fc9e41df0055, type: 3}
+  m_Name: NapoleonBonaparte
+  m_EditorClassIdentifier:
+  characterName: "Napole\u00f3n Bonaparte"
+  bio: "Militar y emperador franc\u00e9s formado en artiller\u00eda. En la arena, su plan de respaldo siempre hace demasiado ruido."
+  maxHealth: 100
+  moveSpeed: 5
+  jumpForce: 8
+  lightAttackDamage: 5
+  heavyAttackDamage: 10
+  specialName: "Artiller\u00eda"
+  specialDescription: "Dispara un ca\u00f1onazo desde fuera de la pantalla."
+  specialEffectPrefab: {fileID: 0}
+  winQuotes:
+  - "El plan ten\u00eda un punto fuerte: el ca\u00f1\u00f3n."
+  - "Mi estrategia se escuch\u00f3 hasta fuera de pantalla."
+  - "Anota otra victoria en el mapa."
+  loseQuotes:
+  - "Ese ca\u00f1\u00f3n lleg\u00f3 tarde."
+  - "El mapa omit\u00eda este pu\u00f1etazo."
+  - "Solicito una isla con sala de entrenamiento."
+  isPaidDLC: 0
