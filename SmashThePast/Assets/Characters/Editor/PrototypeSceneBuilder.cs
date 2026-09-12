@@ -65,6 +65,7 @@ namespace SmashThePast.Characters.Editor
             RenderSettings.ambientLight = new Color(0.62f, 0.66f, 0.69f);
             RenderSettings.sun = sun;
             PrototypePrefabBuilder.Part(null, "SueloPrototipo", PrimitiveType.Cube, new Vector3(0, -0.3f, 0), new Vector3(20, 0.6f, 7), PrototypePrefabBuilder.Material("Piedra", new Color(0.43f, 0.47f, 0.49f)), true);
+            PrototypeStageBuilder.AddScenery();
             EditorSceneManager.SaveScene(scene, ScenePath);
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
             AssetDatabase.SaveAssets();

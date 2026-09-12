@@ -13,6 +13,40 @@ namespace SmashThePast.Stages.Tests
     public class PrototypeSceneTests
     {
         [Test]
+        public void AndeanSceneryHasMeshesAndDoesNotChangeTheCollisionFloor()
+        {
+            EditorSceneManager.OpenScene("Assets/Stages/PrototypeArena.unity", OpenSceneMode.Single);
+            try
+            {
+                var scenery = GameObject.Find("PatioAndino");
+                Assert.That(scenery, Is.Not.Null);
+                Assert.That(PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(scenery),
+                    Is.EqualTo("Assets/Stages/Art/PatioAndino.prefab"));
+                Assert.That(scenery.GetComponentsInChildren<Collider>(), Is.Empty);
+                foreach (string group in new[] { "Pavimento", "Terrazas", "Cordillera", "Estandartes" })
+                    Assert.That(scenery.transform.Find(group), Is.Not.Null, group);
+                var renderers = scenery.GetComponentsInChildren<MeshRenderer>();
+                Assert.That(renderers.Length, Is.GreaterThan(0));
+                foreach (var renderer in renderers)
+                {
+                    Assert.That(renderer.sharedMaterial, Is.Not.Null, renderer.name);
+                    Assert.That(renderer.sharedMaterial.shader, Is.Not.Null, renderer.name);
+                    var mesh = renderer.GetComponent<MeshFilter>().sharedMesh;
+                    Assert.That(mesh, Is.Not.Null, renderer.name);
+                    Assert.That(mesh.vertexCount, Is.GreaterThan(0), renderer.name);
+                }
+                var floor = GameObject.Find("SueloPrototipo");
+                Assert.That(floor.transform.position, Is.EqualTo(new Vector3(0, -0.3f, 0)));
+                Assert.That(floor.transform.localScale, Is.EqualTo(new Vector3(20, 0.6f, 7)));
+                Assert.That(floor.GetComponent<BoxCollider>(), Is.Not.Null);
+            }
+            finally
+            {
+                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            }
+        }
+
+        [Test]
         public void PrototypeSceneHasConfiguredMatchCameraFloorAndUI()
         {
             var scene = EditorSceneManager.OpenScene("Assets/Stages/PrototypeArena.unity", OpenSceneMode.Single);

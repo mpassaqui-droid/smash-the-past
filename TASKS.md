@@ -17,6 +17,8 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 
 ## En curso
 
+- [x] Codex: patio andino reutilizable con terrazas de piedra, cordillera y estandartes. Cambios en PrototypeArena y nuevo prefab de arte; suelo fisico y Core sin cambios. EditMode: **44/44**. Build macOS: **104368704 bytes**. Player verificado visualmente.
+
 - [x] Codex (`feature/characters`): roster base, golpes externos a Core, escena de prueba, escenario reutilizable y selección/HUD. Core queda sin cambios.
 - [x] Codex: nueva escena `Assets/Stages/PrototypeArena.unity` y prefabs nuevos en `Assets/Characters/Prefabs/`; no editar otras escenas o prefabs.
 
