@@ -49,6 +49,7 @@ namespace SmashThePast.Characters.Editor
                     combat.PlayerIndex = slot;
                     root.AddComponent<SpecialVisual>();
                     root.AddComponent<SmashThePast.Stages.LaneConstraint>();
+                    root.AddComponent<FighterAnimation>();
                     var visual = root.AddComponent<FighterVisual>();
                     Transform model = new GameObject("Modelo").transform;
                     model.SetParent(root.transform, false);

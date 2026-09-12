@@ -1,3 +1,4 @@
+using System.Reflection;
 using NUnit.Framework;
 using SmashThePast.Audio;
 using SmashThePast.Characters;
@@ -18,14 +19,14 @@ namespace SmashThePast.Stages.Tests
             EditorSceneManager.OpenScene("Assets/Stages/PrototypeArena.unity", OpenSceneMode.Single);
             try
             {
-                var scenery = GameObject.Find("PatioAndino");
+                var scenery = GameObject.Find("Escenografia");
                 Assert.That(scenery, Is.Not.Null);
-                Assert.That(PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(scenery),
-                    Is.EqualTo("Assets/Stages/Art/PatioAndino.prefab"));
+                var stageSet = scenery.GetComponent<StageSetController>();
+                Assert.That(stageSet, Is.Not.Null);
+                Assert.That(stageSet.Stages, Has.Length.EqualTo(9));
+                Assert.That(scenery.transform.childCount, Is.EqualTo(9));
                 Assert.That(scenery.GetComponentsInChildren<Collider>(), Is.Empty);
-                foreach (string group in new[] { "Pavimento", "Terrazas", "Cordillera", "Estandartes" })
-                    Assert.That(scenery.transform.Find(group), Is.Not.Null, group);
-                var renderers = scenery.GetComponentsInChildren<MeshRenderer>();
+                var renderers = scenery.GetComponentsInChildren<MeshRenderer>(true);
                 Assert.That(renderers.Length, Is.GreaterThan(0));
                 foreach (var renderer in renderers)
                 {
@@ -39,6 +40,30 @@ namespace SmashThePast.Stages.Tests
                 Assert.That(floor.transform.position, Is.EqualTo(new Vector3(0, -0.3f, 0)));
                 Assert.That(floor.transform.localScale, Is.EqualTo(new Vector3(20, 0.6f, 7)));
                 Assert.That(floor.GetComponent<BoxCollider>(), Is.Not.Null);
+            }
+            finally
+            {
+                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            }
+        }
+
+        [Test]
+        public void SelectedCharacterActivatesItsThemedStage()
+        {
+            EditorSceneManager.OpenScene("Assets/Stages/PrototypeArena.unity", OpenSceneMode.Single);
+            try
+            {
+                var match = Object.FindFirstObjectByType<MatchController>();
+                var stageSet = Object.FindFirstObjectByType<StageSetController>();
+                var selectedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Characters/Prefabs/MiyamotoMusashi_P1.prefab");
+                var matchData = new SerializedObject(match);
+                matchData.FindProperty("playerOne").objectReferenceValue = selectedPrefab.GetComponent<Fighter>();
+                matchData.ApplyModifiedPropertiesWithoutUndo();
+                typeof(StageSetController).GetMethod("Refresh", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(stageSet, null);
+                Assert.That(stageSet.Stages[2].activeSelf, Is.True);
+                Assert.That(stageSet.Stages[0].activeSelf, Is.False);
+                Assert.That(stageSet.Stages[1].activeSelf, Is.False);
             }
             finally
             {
@@ -90,6 +115,7 @@ namespace SmashThePast.Stages.Tests
                     var prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Characters/Prefabs/{name}_P{slot}.prefab");
                     Assert.That(prefab, Is.Not.Null, name + " P" + slot);
                     Assert.That(prefab.GetComponent<FighterVisual>(), Is.Not.Null, name + " visual");
+                    Assert.That(prefab.GetComponent<FighterAnimation>(), Is.Not.Null, name + " animation");
                     Assert.That(prefab.GetComponent<Combatant>(), Is.Not.Null, name + " special");
                     Assert.That(prefab.GetComponent<SpecialVisual>(), Is.Not.Null, name + " effect");
                 }
