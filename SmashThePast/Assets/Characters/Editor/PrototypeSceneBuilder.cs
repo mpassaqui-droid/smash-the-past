@@ -56,6 +56,7 @@ namespace SmashThePast.Characters.Editor
             camera.farClipPlane = 100;
             PrototypePrefabBuilder.SetObject(cameraObject.GetComponent<ArenaCamera>(), "match", match);
             AddInterface(match);
+            AddDlcService();
             var sun = new GameObject("LuzPrincipal").AddComponent<Light>();
             sun.type = LightType.Directional;
             sun.intensity = 1.3f;
@@ -138,6 +139,17 @@ namespace SmashThePast.Characters.Editor
                 portraits[index] = texture;
             }
             return portraits;
+        }
+
+        private static void AddDlcService()
+        {
+            var service = new GameObject("ContenidoDLC").AddComponent<DlcEntitlementService>();
+            var data = new SerializedObject(service);
+            var offers = data.FindProperty("offers");
+            var offer = AssetDatabase.LoadAssetAtPath<DlcOffer>("Assets/Characters/HitlerDlc.asset");
+            offers.arraySize = offer == null ? 0 : 1;
+            if (offer != null) offers.GetArrayElementAtIndex(0).objectReferenceValue = offer;
+            data.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public static Fighter LoadFighter(string name, int slot) => AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Characters/Prefabs/{name}_P{slot}.prefab").GetComponent<Fighter>();

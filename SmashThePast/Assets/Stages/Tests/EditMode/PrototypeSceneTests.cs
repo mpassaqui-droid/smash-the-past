@@ -1,3 +1,4 @@
+using System.IO;
 using System.Reflection;
 using NUnit.Framework;
 using SmashThePast.Audio;
@@ -140,6 +141,26 @@ namespace SmashThePast.Stages.Tests
             Assert.That(feedback, Is.Not.Null);
             Assert.That(Object.FindFirstObjectByType<CameraShake>(), Is.Null);
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        }
+
+        [Test]
+        public void PrototypeSceneWiresFailClosedDlcService()
+        {
+            var scenePath = "Assets/Stages/PrototypeArena.unity";
+            var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+            try
+            {
+                string serializedScene = File.ReadAllText(scenePath);
+                string offerGuid = AssetDatabase.AssetPathToGUID("Assets/Characters/HitlerDlc.asset");
+                Assert.That(scene.IsValid, Is.True);
+                Assert.That(serializedScene, Does.Contain("m_Name: ContenidoDLC"));
+                Assert.That(serializedScene, Does.Contain("m_ClassName: DlcEntitlementService"));
+                Assert.That(serializedScene, Does.Contain(offerGuid));
+            }
+            finally
+            {
+                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            }
         }
     }
 }

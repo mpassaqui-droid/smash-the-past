@@ -22,6 +22,7 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 - [x] Codex: nueve variantes visuales de escenario, seleccionadas por el personaje P1 en la escena reutilizable. EditMode: **45/45**. Build macOS: **105211660 bytes**. Player validado.
 - [x] Codex: contenido DLC de Hitler aislado del roster base, oferta con edad minima y proveedor Steam fail-closed. EditMode: **47/47**. Build macOS: **105213052 bytes**.
 - [x] Codex: QA runtime del special DLC y validacion de mallas/colliders en las 9 variantes. EditMode: **48/48**. Build macOS: **105213052 bytes**.
+- [x] Codex: servicio de entitlement DLC cableado en la escena y fail-closed verificado. EditMode: **49/49**. Build macOS: **105214236 bytes**.
 - [ ] Release: configurar Steamworks, SKU real, precios, compra y verificacion de edad con credenciales del publisher.
 
 - [x] Codex (`feature/characters`): roster base, golpes externos a Core, escena de prueba, escenario reutilizable y selección/HUD. Core queda sin cambios.
