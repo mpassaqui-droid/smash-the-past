@@ -29,3 +29,6 @@
 
 - Ajustar la camara en la escena no sirve de nada si un script la reescribe en LateUpdate. `ArenaCamera` fijaba posicion, rotacion y tamano cada fotograma: todo el encuadre ajustado en el editor moria al arrancar el juego. Antes de tocar valores guardados, buscar quien los escribe en ejecucion.
 - El player se congela sin foco. Una prueba automatica que espera fotogramas necesita `Application.runInBackground = true`, si no se queda colgada sin decir por que.
+
+- `AudioSource.PlayOneShot` comparte el tono de su fuente: con una sola fuente, todos los golpes seguidos suenan identicos por mucho que se cambie el volumen. Hacen falta varias voces en rotacion para variar el tono de verdad.
+- En un juego de pelea la sensacion de impacto es tiempo, no detalle: la parada de fotograma y el destello pesan mas que el numero de poligonos. Y cualquier codigo que toque `Time.timeScale` tiene que respetar la pausa del jugador y deshacerse al apagarse, o deja el juego congelado.

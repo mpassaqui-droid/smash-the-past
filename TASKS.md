@@ -8,7 +8,9 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 - [ ] Munay: probar teclado y dos mandos fisicos en el player construido por CI desde un clon limpio: `~/Dev/Juego0-builds/ci-34683041174/SmashThePast/Builds/SmashThePast.app`. Es lo unico que la maquina no puede demostrar sola.
 - [ ] Generar los 3 retratos que faltan (Cleopatra, Abraham Lincoln, Socrates) cuando haya creditos en Higgsfield. Mismo prompt que los otros seis para que el estilo no se separe.
 - [ ] Munay: mirar el player URP construido por CI y decir si el aspecto va por buen camino. Es lo unico que falta para cerrar la PR #5 (en la captura headless hay que apagar el SRP Batcher o sale todo dorado; hace falta ver el player real para saber si eso pasa tambien ahi).
-- [ ] Siguiente pasada visual: contorno tipo toon, camara Cinemachine que siga a los dos luchadores con zoom al impacto, particulas de golpe y parada de fotograma.
+- [ ] Siguiente pasada visual: contorno tipo toon y camara Cinemachine con zoom al impacto.
+- [ ] Musica: Suno o Udio con plan de pago (los derechos comerciales no vienen con el plan gratuito). Mejor cuando el combate este cerrado de punta a punta.
+- [ ] Bruitage: faltan sonidos de guardia, de seleccion de menu y de inicio de asalto. Fuentes CC0: Kenney (ya usado) y los bundles Sonniss GDC.
 - [ ] Release: configurar Steamworks, SKU real, precios, compra y verificacion de edad con credenciales del publisher.
 - [x] Configurar UnityYAMLMerge como merge driver en este worktree (Unity 6000.0.83f1).
 - [x] Escena de prueba real: `Assets/Stages/PrototypeArena.unity`, 2 Fighters con CharacterController y PlayerInputController, teclado y 2 mandos, pausa, timer, KO y revancha.
@@ -26,6 +28,9 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 
 ## Hecho
 
+- [x] Claude: parada de fotograma al impacto (50 ms ligero, 90 ms fuerte), destello blanco sobre el que encaja, y una atmosfera propia por arena (sol, ambiente, niebla y fondo). PR #6.
+- [x] Claude: cuatro voces de audio en rotacion con variacion de tono y capa grave bajo el golpe fuerte. PR #7.
+- [x] Claude: la prueba de humo acepta `-escenario N` y recorre las arenas sin teclado.
 - [x] Claude: seis retratos de seleccion generados y enchufados en `PrototypeUI` (faltan 3).
 - [x] Claude: arreglado el crash del player. `DlcEntitlementService` vivia en un archivo con otro nombre, Unity no resolvia su MonoScript y el build escribia un `level0` invalido. Player local arrancado y vivo con el log limpio.
 - [x] Claude: la prueba del servicio DLC comprueba el componente cargado en vez de buscar en el YAML la cadena que solo aparece cuando el script esta roto.
