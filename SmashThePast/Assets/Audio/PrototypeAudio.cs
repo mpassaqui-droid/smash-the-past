@@ -12,6 +12,10 @@ namespace SmashThePast.Audio
         [SerializeField, Range(0, 1)] private float volume = 0.45f;
 
         private AudioSource source;
+        // Voces adicionales: PlayOneShot comparte el tono de su AudioSource, asi que
+        // sin varias fuentes todos los golpes seguidos suenan exactamente igual.
+        private AudioSource[] voces;
+        private int siguienteVoz;
         private Fighter boundOne;
         private Fighter boundTwo;
         private AudioClip lightClip;
@@ -27,6 +31,15 @@ namespace SmashThePast.Audio
             if (source == null) return;
             source.playOnAwake = false;
             source.spatialBlend = 0;
+            voces = new AudioSource[4];
+            for (int i = 0; i < voces.Length; i++)
+            {
+                var voz = gameObject.AddComponent<AudioSource>();
+                voz.playOnAwake = false;
+                voz.spatialBlend = 0;
+                voz.outputAudioMixerGroup = source.outputAudioMixerGroup;
+                voces[i] = voz;
+            }
             lightClip = LoadClip("knifeSlice");
             heavyClip = LoadClip("knifeSlice2");
             hitClip = LoadClip("impactPunch_medium_000");
@@ -48,6 +61,9 @@ namespace SmashThePast.Audio
         {
             Unbind();
             if (source != null) source.Stop();
+            if (voces != null)
+                foreach (var voz in voces)
+                    if (voz != null) voz.Stop();
         }
 
         private void BindCurrentFighters()
@@ -95,18 +111,36 @@ namespace SmashThePast.Audio
             if (combatant != null) combatant.SpecialActivated -= PlaySpecial;
         }
 
-        private void PlayAttack(bool heavy) => Play(heavy ? heavyClip : lightClip, heavy ? 0.8f : 0.6f);
-        private void PlaySpecial(SpecialKind kind) => Play(specialClip, 0.7f);
-        private void PlayKnockout() => Play(knockoutClip, 1f);
+        private void PlayAttack(bool heavy) => Play(heavy ? heavyClip : lightClip, heavy ? 0.8f : 0.6f, 0.09f);
+        private void PlaySpecial(SpecialKind kind) => Play(specialClip, 0.7f, 0.03f);
+        private void PlayKnockout() => Play(knockoutClip, 1f, 0f);
+
         private void PlayHit(int damage)
         {
-            if (damage > 0)
-                Play(damage >= 10 ? heavyHitClip : hitClip, Mathf.Clamp01(0.65f + damage / 80f));
+            if (damage <= 0) return;
+            bool fuerte = damage >= 10;
+            Play(fuerte ? heavyHitClip : hitClip, Mathf.Clamp01(0.65f + damage / 80f), 0.07f);
+
+            // Capa grave por debajo del golpe fuerte. Un impacto que convence casi nunca
+            // es un solo sonido: es uno seco arriba y un cuerpo grave debajo.
+            if (fuerte) Play(heavyHitClip, 0.45f, 0.04f, 0.62f);
         }
 
-        private void Play(AudioClip clip, float multiplier)
+        private void Play(AudioClip clip, float multiplier, float variacionDeTono = 0f, float tonoBase = 1f)
         {
-            if (source != null && clip != null) source.PlayOneShot(clip, volume * multiplier);
+            if (clip == null) return;
+            var voz = SiguienteVoz();
+            if (voz == null) return;
+            voz.pitch = tonoBase + Random.Range(-variacionDeTono, variacionDeTono);
+            voz.PlayOneShot(clip, volume * multiplier);
+        }
+
+        private AudioSource SiguienteVoz()
+        {
+            if (voces == null || voces.Length == 0) return source;
+            var voz = voces[siguienteVoz];
+            siguienteVoz = (siguienteVoz + 1) % voces.Length;
+            return voz == null ? source : voz;
         }
 
         private AudioClip LoadClip(string name)
