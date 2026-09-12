@@ -32,3 +32,6 @@
 
 - `AudioSource.PlayOneShot` comparte el tono de su fuente: con una sola fuente, todos los golpes seguidos suenan identicos por mucho que se cambie el volumen. Hacen falta varias voces en rotacion para variar el tono de verdad.
 - En un juego de pelea la sensacion de impacto es tiempo, no detalle: la parada de fotograma y el destello pesan mas que el numero de poligonos. Y cualquier codigo que toque `Time.timeScale` tiene que respetar la pausa del jugador y deshacerse al apagarse, o deja el juego congelado.
+
+- Un efecto que no se ve no siempre esta roto. El contorno parecia no dibujarse: subiendo el grosor a 0.2 se vio un halo enorme, lo que probo que la pasada funcionaba y que solo era demasiado fino. Probar con un valor absurdo separa "no funciona" de "no se nota" en un solo intento.
+- En zsh una variable sin comillas NO se parte en palabras como en bash. `$EXTRA` con "-golpe 1" dentro llega al programa como un unico argumento y la bandera se ignora en silencio. Si una bandera no hace nada, imprimir los argumentos recibidos antes de tocar el codigo.
