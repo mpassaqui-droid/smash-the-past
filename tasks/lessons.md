@@ -26,3 +26,6 @@
 - Construir no es arrancar. El job de CI daba verde con un player que no abria. Un build solo demuestra que compila; hace falta lanzarlo y leer su Player.log (`~/Library/Logs/<compania>/<producto>/Player.log`).
 - Una prueba puede certificar el fallo. `PrototypeSceneWiresFailClosedDlcService` buscaba la cadena `m_ClassName: DlcEntitlementService` en el YAML, texto que Unity solo escribe cuando NO resuelve el script. Verde equivalia a "el componente sigue roto". Probar el objeto cargado, nunca el texto serializado.
 - Antes de guardar una escena desde batchmode, comprobar que ningun GameObject tiene componentes nulos. Guardar con un script sin resolver escribe una escena que revienta en el player.
+
+- Ajustar la camara en la escena no sirve de nada si un script la reescribe en LateUpdate. `ArenaCamera` fijaba posicion, rotacion y tamano cada fotograma: todo el encuadre ajustado en el editor moria al arrancar el juego. Antes de tocar valores guardados, buscar quien los escribe en ejecucion.
+- El player se congela sin foco. Una prueba automatica que espera fotogramas necesita `Application.runInBackground = true`, si no se queda colgada sin decir por que.
