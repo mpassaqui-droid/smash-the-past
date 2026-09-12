@@ -82,11 +82,12 @@ namespace SmashThePast.Characters.Editor
                 AssetDatabase.CreateAsset(panelAsset, "Assets/UI/PrototypePanelSettings.asset");
             }
             var panelData = new SerializedObject(panelAsset);
-            panelData.FindProperty("themeUss").objectReferenceValue = null;
-            panelData.FindProperty("m_DisableNoThemeWarning").boolValue = true;
+            var theme = AssetDatabase.LoadAssetAtPath<ThemeStyleSheet>("Assets/UI/PrototypeTheme.tss");
+            if (theme == null) throw new System.InvalidOperationException("Falta el tema de la interfaz.");
+            panelData.FindProperty("themeUss").objectReferenceValue = theme;
+            panelData.FindProperty("m_DisableNoThemeWarning").boolValue = false;
             panelData.ApplyModifiedPropertiesWithoutUndo();
             var uiObject = new GameObject("Interfaz", typeof(UIDocument), typeof(SmashThePast.UI.PrototypeUI));
-            var fallback = uiObject.AddComponent<SmashThePast.UI.PrototypeUIFallback>();
             var document = uiObject.GetComponent<UIDocument>();
             document.panelSettings = panelAsset;
             var ui = uiObject.GetComponent<SmashThePast.UI.PrototypeUI>();
@@ -99,9 +100,6 @@ namespace SmashThePast.Characters.Editor
             for (int index = 0; index < portraits.Length; index++)
                 portraitArray.GetArrayElementAtIndex(index).objectReferenceValue = portraits[index];
             uiData.ApplyModifiedPropertiesWithoutUndo();
-            var fallbackData = new SerializedObject(fallback);
-            fallbackData.FindProperty("match").objectReferenceValue = match;
-            fallbackData.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static Texture2D[] CreatePortraits()

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 19101, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: PrototypePanelSettings
   m_EditorClassIdentifier: 
-  themeUss: {fileID: 0}
-  m_DisableNoThemeWarning: 1
+  themeUss: {fileID: -4733365628477956816, guid: 2af7a8b4dce4044aa85d97cb56dd037e, type: 3}
+  m_DisableNoThemeWarning: 0
   m_TargetTexture: {fileID: 0}
   m_RenderMode: 0
   m_WorldSpaceLayer: 0

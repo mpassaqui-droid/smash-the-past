@@ -22,6 +22,8 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 
 ## Hecho
 
+- [x] Codex: restaurada la interfaz UI Toolkit con referencia TSS importada correcta; eliminado el fallback con seleccion independiente. Seleccion y pausa verificadas visualmente en player macOS. Suite EditMode: **43/43** (Core **13/13**), incluido ciclo de seleccion, dano, pausa/reanudar, KO, revancha y nueva seleccion. Build macOS: **104258736 bytes**. Prueba automatizada de comandos; teclado verificado en player, dos mandos fisicos pendientes de comprobacion.
+
 - [x] Codex: HitDetector externo a Core, conectado a eventos de Fighter; alcance horizontal/vertical, dano ligero/fuerte, carga del atacante y bloqueo/KO respetados. EditMode: 32/32, incluida integracion real de eventos en Play Mode.
 - [x] Codex: specials externos a Core, efectos visuales, prefabs low-poly, escenario reutilizable y UI de selección/HUD. Suite EditMode final: **41/41**, incluidos Core, roster, golpes, specials y escena/prefabs.
 
