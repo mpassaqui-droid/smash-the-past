@@ -13,6 +13,7 @@ namespace SmashThePast.Diagnostics
     {
         private const string Bandera = "-humo";
         private const string BanderaEscenario = "-escenario";
+        private const string BanderaGolpe = "-golpe";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Arrancar()
@@ -33,6 +34,7 @@ namespace SmashThePast.Diagnostics
             var prueba = objeto.AddComponent<PruebaDeHumo>();
             prueba.Destino = destino;
             prueba.Escenario = LeerEntero(BanderaEscenario);
+            prueba.Golpe = LeerEntero(BanderaGolpe) > 0;
         }
 
         private static string LeerArgumento()
@@ -56,6 +58,7 @@ namespace SmashThePast.Diagnostics
     {
         public string Destino;
         public int Escenario = -1;
+        public bool Golpe;
 
         private IEnumerator Start()
         {
@@ -75,6 +78,20 @@ namespace SmashThePast.Diagnostics
             }
 
             for (int i = 0; i < 90; i++) yield return null;
+
+            // Con -golpe 1 se dispara el empujon de camara sin necesidad de pelear,
+            // para poder comprobar en una captura que el zoom de impacto existe.
+            if (Golpe)
+            {
+                var camara = UnityEngine.Object.FindFirstObjectByType<SmashThePast.Stages.ArenaCamera>();
+                if (camara != null)
+                {
+                    camara.Golpe(0.26f);
+                    Debug.Log("HUMO_GOLPE: empujon de camara disparado");
+                    for (int i = 0; i < 3; i++) yield return null;
+                }
+                else Debug.LogWarning("HUMO_GOLPE: no hay ArenaCamera");
+            }
 
             string carpeta = Path.GetDirectoryName(Destino);
             if (!string.IsNullOrEmpty(carpeta)) Directory.CreateDirectory(carpeta);
