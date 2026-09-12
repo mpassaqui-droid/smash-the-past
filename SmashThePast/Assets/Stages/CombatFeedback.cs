@@ -19,6 +19,7 @@ namespace SmashThePast.Stages
         private Action<int> hitOne;
         private Action<int> hitTwo;
         private CameraShake cameraShake;
+        private ArenaCamera arenaCamera;
         private Material impactMaterial;
         private Coroutine pausaDeImpacto;
         private readonly Dictionary<Renderer, Color> coloresOriginales = new Dictionary<Renderer, Color>();
@@ -39,6 +40,7 @@ namespace SmashThePast.Stages
             {
                 cameraShake = camera.GetComponent<CameraShake>();
                 if (cameraShake == null) cameraShake = camera.gameObject.AddComponent<CameraShake>();
+                arenaCamera = camera.GetComponent<ArenaCamera>();
             }
             BindCurrentFighters();
         }
@@ -103,6 +105,7 @@ namespace SmashThePast.Stages
             bool heavy = damage >= 10;
             SpawnImpact(detector.Opponent.transform.position + Vector3.up * 1.1f, heavy);
             if (cameraShake != null) cameraShake.AddShake(heavy ? 0.22f : 0.1f);
+            if (arenaCamera != null) arenaCamera.Golpe(heavy ? 0.26f : 0.12f);
             Congelar(heavy ? 0.09f : 0.05f);
             Destellar(detector.Opponent, heavy);
         }
