@@ -169,7 +169,11 @@ namespace SmashThePast.Stages
             var effect = new GameObject(heavy ? "Impacto fuerte" : "Impacto ligero");
             effect.transform.position = position;
             var particles = effect.AddComponent<ParticleSystem>();
+            // Un ParticleSystem recien anadido arranca solo, y tocar su duracion mientras
+            // corre dispara un assert de Unity que tumba las pruebas. Se para antes.
+            particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             var main = particles.main;
+            main.playOnAwake = false;
             main.duration = 0.18f;
             main.loop = false;
             main.startLifetime = heavy ? 0.32f : 0.22f;

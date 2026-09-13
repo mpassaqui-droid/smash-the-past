@@ -23,6 +23,7 @@ namespace SmashThePast.Stages.Tests
             var match = Object.FindFirstObjectByType<MatchController>();
             Assert.AreEqual(MatchPhase.Selection, match.Phase);
             match.BeginMatch(6, 0);
+            yield return EsperarAlAsalto(match);
             var source = match.PlayerOne.GetComponent<Combatant>();
             var target = match.PlayerTwo;
             target.GetComponent<CharacterController>().enabled = false;
@@ -68,7 +69,8 @@ namespace SmashThePast.Stages.Tests
             Assert.That(match.PlayerOne.Data, Is.EqualTo(match.Roster[1]));
             ui.SendMessage("ToggleReady", (object)0);
             ui.SendMessage("ToggleReady", 1);
-            Assert.That(match.Phase, Is.EqualTo(MatchPhase.Fighting));
+            Assert.That(match.Phase, Is.EqualTo(MatchPhase.RoundIntro), "el combate abre anunciando el asalto");
+            yield return EsperarAlAsalto(match);
             Assert.That(root.Q(className: "hud").style.display.value, Is.EqualTo(DisplayStyle.Flex));
 
             var attacker = match.PlayerOne;
@@ -94,13 +96,25 @@ namespace SmashThePast.Stages.Tests
             Assert.That(match.Phase, Is.EqualTo(MatchPhase.Fighting));
             Assert.That(target.Health.CurrentHealth, Is.EqualTo(health));
 
+            // Un KO ya no termina el combate: gana el asalto. Al mejor de tres hacen
+            // falta dos, y entre medias se repone a los dos y se anuncia el siguiente.
             target.ReceiveHit(1000);
+            yield return null;
+            Assert.That(match.Phase, Is.EqualTo(MatchPhase.RoundIntro), "un KO abre el asalto siguiente");
+            Assert.That(match.AsaltosGanadosP1, Is.EqualTo(1));
+            Assert.That(match.NumeroDeAsalto, Is.EqualTo(2));
+            yield return EsperarAlAsalto(match);
+
+            match.PlayerTwo.ReceiveHit(1000);
             yield return null;
             Assert.That(match.Phase, Is.EqualTo(MatchPhase.Finished));
             Assert.That(match.Winner, Is.EqualTo(0));
+            Assert.That(match.AsaltosGanadosP1, Is.EqualTo(2));
             Assert.That(root.Q<Label>(className: "winner-quote").text, Is.Not.Empty);
             ui.SendMessage("ActivatePrimary");
-            Assert.That(match.Phase, Is.EqualTo(MatchPhase.Fighting));
+            Assert.That(match.Phase, Is.EqualTo(MatchPhase.RoundIntro), "la revancha vuelve a anunciar el asalto 1");
+            Assert.That(match.NumeroDeAsalto, Is.EqualTo(1));
+            yield return EsperarAlAsalto(match);
             Assert.That(match.PlayerTwo.Health.CurrentHealth, Is.EqualTo(match.PlayerTwo.Data.maxHealth));
             Assert.That(match.SecondsRemaining, Is.GreaterThan(85));
 
@@ -109,7 +123,8 @@ namespace SmashThePast.Stages.Tests
             ui.SendMessage("ToggleReady", (object)0);
             Assert.That(match.Phase, Is.EqualTo(MatchPhase.Selection));
             ui.SendMessage("ToggleReady", 1);
-            Assert.That(match.Phase, Is.EqualTo(MatchPhase.Fighting));
+            Assert.That(match.Phase, Is.EqualTo(MatchPhase.RoundIntro), "el combate abre anunciando el asalto");
+            yield return EsperarAlAsalto(match);
             yield return new ExitPlayMode();
         }
 
@@ -118,6 +133,15 @@ namespace SmashThePast.Stages.Tests
         {
             if (Application.isPlaying) yield return new ExitPlayMode();
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        }
+
+        // Desde que hay asaltos, empezar un combate abre con el anuncio "ASALTO 1" y el
+        // combate no arranca hasta que termina. Las pruebas que quieren pegar esperan.
+        private static IEnumerator EsperarAlAsalto(MatchController match)
+        {
+            float limite = Time.realtimeSinceStartup + 5f;
+            while (match.Phase == MatchPhase.RoundIntro && Time.realtimeSinceStartup < limite) yield return null;
+            Assert.That(match.Phase, Is.EqualTo(MatchPhase.Fighting), "el anuncio del asalto no termino");
         }
 
         private static IEnumerator WaitFrames(float duration)

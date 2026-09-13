@@ -119,3 +119,13 @@
 .compact .hud { padding: 12px 18px 10px; }
 .compact .hud-name { font-size: 16px; }
 .compact .timer { width: 76px; font-size: 30px; }
+
+.anuncio {
+  position: absolute;
+  left: 0; right: 0; top: 120px;
+  font-size: 54px;
+  -unity-font-style: bold;
+  -unity-text-align: middle-center;
+  color: rgb(255, 236, 190);
+}
+.marcador { font-size: 15px; letter-spacing: 3px; color: rgb(223, 193, 111); margin-top: 2px; }

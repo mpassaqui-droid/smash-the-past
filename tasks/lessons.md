@@ -40,3 +40,5 @@
 
 - Una regla nueva de combate vuelve aleatorias las pruebas de input si esas pruebas dejan que los golpes conecten: el aturdimiento del que encaja falsea la pulsacion siguiente. Los sondeos de `CombatInputTests` limpian el aturdimiento antes de cada llamada, porque esas pruebas miden a quien obedece cada tecla, no el combate.
 - Tres banderas `wasPressedThisFrame` vivas en el mismo tick del Input System hacen una prueba aleatoria: unas veces se leen todas y otras solo la primera. Una pulsacion por fotograma de input, con su `InputSystem.Update()` y su sondeo.
+
+- Un arreglo sin commitear se pierde al hacer `git checkout <rama> -- archivo` para volver de una prueba: el checkout trae la version COMMITEADA, no la del disco. El mensaje del commit anuncio el arreglo del ParticleSystem y el codigo no lo tenia; solo se vio porque la prueba volvio a fallar. Commitear antes de tocar el arbol para experimentar.
