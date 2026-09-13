@@ -15,13 +15,29 @@ namespace SmashThePast.Characters.Tests
         private Combatant first, second;
         private GameObject floor;
 
-        private static void Poll(Combatant combatant)
-            => typeof(Combatant).GetMethod("Update", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(combatant, null);
+        // Estas pruebas comprueban a quien obedece cada tecla y cada mando, no el
+        // combate. Los luchadores estan a distancia de golpe, asi que un ataque conecta
+        // y aturde: aturdido no se ataca ni se usa el special, y la siguiente pulsacion
+        // medida ya no mide el input sino el aturdimiento. Se limpia antes de cada sondeo.
+        private void LimpiarAturdimiento()
+        {
+            if (first != null && first.Fighter != null) first.Fighter.ClearStun();
+            if (second != null && second.Fighter != null) second.Fighter.ClearStun();
+        }
 
-        private static void PollInput(Combatant combatant)
-            => typeof(Combatant).GetMethod("ReadInput", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+        private void Poll(Combatant combatant)
+        {
+            LimpiarAturdimiento();
+            typeof(Combatant).GetMethod("Update", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
                 .Invoke(combatant, null);
+        }
+
+        private void PollInput(Combatant combatant)
+        {
+            LimpiarAturdimiento();
+            typeof(Combatant).GetMethod("ReadInput", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                .Invoke(combatant, null);
+        }
 
         private void Press(UnityEngine.InputSystem.Controls.ButtonControl key)
         {
@@ -124,9 +140,9 @@ namespace SmashThePast.Characters.Tests
                 Poll(second);
                 Release(key);
             }
-            Assert.AreEqual(2, lights);
-            Assert.AreEqual(2, heavies);
-            Assert.AreEqual(2, specials);
+            Assert.AreEqual(2, lights, "golpes ligeros");
+            Assert.AreEqual(2, heavies, "golpes fuertes");
+            Assert.AreEqual(2, specials, "specials");
             yield return null;
         }
 
@@ -141,15 +157,22 @@ namespace SmashThePast.Characters.Tests
             second.Fighter.Special.Fill(100);
             devices.Press(firstPad.buttonNorth);
             devices.Press(secondPad.buttonEast);
-            devices.Press(secondPad.rightTrigger);
             InputSystem.Update();
             Poll(first);
             Poll(second);
-            Assert.AreEqual(1, firstLight);
-            Assert.AreEqual(1, secondHeavy);
-            Assert.AreEqual(1, specials);
+            Assert.AreEqual(1, firstLight, "golpe ligero de P1");
+            Assert.AreEqual(1, secondHeavy, "golpe fuerte de P2");
             Release(firstPad.buttonNorth);
             Release(secondPad.buttonEast);
+
+            // El special va en su propio fotograma de input. Con tres banderas de
+            // "pulsado este fotograma" vivas en el mismo tick la prueba salia aleatoria:
+            // unas veces las leia las dos pulsaciones y otras solo la primera.
+            second.Fighter.Special.Fill(100);
+            devices.Press(secondPad.rightTrigger);
+            InputSystem.Update();
+            Poll(second);
+            Assert.AreEqual(1, specials, "special de P2");
             Release(secondPad.rightTrigger);
             yield return null;
         }

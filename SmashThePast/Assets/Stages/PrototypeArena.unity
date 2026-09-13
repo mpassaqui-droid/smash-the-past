@@ -1680,7 +1680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 1458433262}
-  activa: 1
+  activa: 0
   nivel: 1
 --- !u!1001 &1548758985
 PrefabInstance:

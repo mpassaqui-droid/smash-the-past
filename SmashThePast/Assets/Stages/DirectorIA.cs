@@ -12,7 +12,10 @@ namespace SmashThePast.Stages
     public sealed class DirectorIA : MonoBehaviour
     {
         [SerializeField] private MatchController match;
-        [SerializeField] private bool activa = true;
+        // Apagada por defecto: el juego nacio para dos en el mismo teclado y encenderla
+        // sola cambiaria esa experiencia sin avisar. Ademas, con la maquina peleando
+        // dentro de las pruebas de escena, los resultados dejan de ser reproducibles.
+        [SerializeField] private bool activa;
         [SerializeField] private NivelIA nivel = NivelIA.Normal;
 
         public bool Activa => activa;

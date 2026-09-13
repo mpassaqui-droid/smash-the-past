@@ -37,3 +37,6 @@
 - En zsh una variable sin comillas NO se parte en palabras como en bash. `$EXTRA` con "-golpe 1" dentro llega al programa como un unico argumento y la bandera se ignora en silencio. Si una bandera no hace nada, imprimir los argumentos recibidos antes de tocar el codigo.
 
 - Suscribirse a un evento con una lambda que captura una variable local DENTRO de un `UnityTest` con `EnterPlayMode` revienta con NullReferenceException: el iterador y su cierre no sobreviven igual al cambio de dominio. Comprobar el comportamiento por sus efectos (vida, aturdimiento) en vez de por un flag capturado.
+
+- Una regla nueva de combate vuelve aleatorias las pruebas de input si esas pruebas dejan que los golpes conecten: el aturdimiento del que encaja falsea la pulsacion siguiente. Los sondeos de `CombatInputTests` limpian el aturdimiento antes de cada llamada, porque esas pruebas miden a quien obedece cada tecla, no el combate.
+- Tres banderas `wasPressedThisFrame` vivas en el mismo tick del Input System hacen una prueba aleatoria: unas veces se leen todas y otras solo la primera. Una pulsacion por fotograma de input, con su `InputSystem.Update()` y su sondeo.

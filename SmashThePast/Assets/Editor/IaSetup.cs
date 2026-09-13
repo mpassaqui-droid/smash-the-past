@@ -18,6 +18,7 @@ namespace SmashThePast.EditorTools
             if (director == null) director = combate.gameObject.AddComponent<DirectorIA>();
             var datos = new SerializedObject(director);
             datos.FindProperty("match").objectReferenceValue = combate;
+            datos.FindProperty("activa").boolValue = false;
             datos.ApplyModifiedPropertiesWithoutUndo();
 
             bool rotos = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None)
