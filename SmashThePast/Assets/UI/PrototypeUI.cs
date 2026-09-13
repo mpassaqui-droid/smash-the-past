@@ -26,6 +26,8 @@ namespace SmashThePast.UI
         private readonly VisualElement[] healthFill = new VisualElement[2], specialFill = new VisualElement[2];
         private MatchController boundMatch;
         private VisualElement root, selection, grid, hud, overlay;
+        private Label anuncio;
+        private readonly Label[] marcador = new Label[2];
         private ScrollView resultScroll;
         private Label timer, resultTitle, winQuote, loseQuote;
         private Button primary, secondary;
@@ -126,7 +128,12 @@ namespace SmashThePast.UI
                 healthFill[p] = Box(Box(side, "health-track"), "health-fill");
                 specialFill[p] = Box(Box(side, "special-track"), "special-fill");
                 specialText[p] = Text(side, "", "special-status");
+                marcador[p] = Text(side, "", "marcador");
             }
+
+            // Anuncio del asalto, centrado sobre el combate.
+            anuncio = Text(hud, "", "anuncio");
+            anuncio.pickingMode = PickingMode.Ignore;
         }
 
         private void BuildOverlay()
@@ -198,7 +205,23 @@ namespace SmashThePast.UI
 
         private void LateUpdate()
         {
-            if (root == null || match == null || match.Phase != MatchPhase.Fighting) return;
+            if (root == null || match == null) return;
+            if (match.Phase != MatchPhase.Fighting && match.Phase != MatchPhase.RoundIntro) return;
+
+            if (anuncio != null)
+            {
+                bool anunciando = match.Phase == MatchPhase.RoundIntro;
+                anuncio.text = anunciando ? $"ASALTO {match.NumeroDeAsalto}" : "";
+                Show(anuncio, anunciando);
+            }
+
+            for (int p = 0; p < 2; p++)
+                if (marcador[p] != null)
+                {
+                    int ganados = p == 0 ? match.AsaltosGanadosP1 : match.AsaltosGanadosP2;
+                    marcador[p].text = new string('\u25CF', ganados) + new string('\u25CB', MatchController.AsaltosParaGanar - ganados);
+                }
+
             timer.text = Mathf.CeilToInt(match.SecondsRemaining).ToString("00");
             timer.EnableInClassList("urgent", match.SecondsRemaining <= 10);
             UpdateFighter(0, match.PlayerOne);
@@ -287,7 +310,9 @@ namespace SmashThePast.UI
             shownPhase = match.Phase;
             if (changedPhase) phaseFrame = Time.frameCount;
             Show(selection, shownPhase == MatchPhase.Selection);
-            Show(hud, shownPhase == MatchPhase.Fighting);
+            // El HUD tambien se ve durante el anuncio del asalto: la vida y el marcador
+            // ya cuentan antes de que suene el primer golpe.
+            Show(hud, shownPhase == MatchPhase.Fighting || shownPhase == MatchPhase.RoundIntro);
             Show(overlay, shownPhase == MatchPhase.Paused || shownPhase == MatchPhase.Finished);
             if (shownPhase == MatchPhase.Selection)
             {

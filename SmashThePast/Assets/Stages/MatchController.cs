@@ -23,6 +23,17 @@ namespace SmashThePast.Stages
         public MatchPhase Phase { get; private set; }
         public float SecondsRemaining { get; private set; } = 90;
         public int Winner { get; private set; } = -1;
+
+        // Asaltos al mejor de tres. Un combate a una sola vida se decide por un
+        // despiste; con asaltos hay remontada, y es lo que espera cualquiera que haya
+        // jugado a un juego de pelea.
+        public const int AsaltosParaGanar = 2;
+        public int AsaltosGanadosP1 { get; private set; }
+        public int AsaltosGanadosP2 { get; private set; }
+        public int NumeroDeAsalto { get; private set; } = 1;
+        public int GanadorDelAsalto { get; private set; } = -1;
+        public float SegundosDeAnuncio { get; private set; }
+        private const float DuracionAnuncio = 1.6f;
         public string WinQuote { get; private set; } = "";
         public string LoseQuote { get; private set; } = "";
         public event Action Changed;
@@ -38,6 +49,14 @@ namespace SmashThePast.Stages
             bool pause = Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame;
             foreach (var pad in Gamepad.all) pause |= pad.startButton.wasPressedThisFrame;
             if (pause && (Phase == MatchPhase.Fighting || Phase == MatchPhase.Paused)) TogglePause();
+
+            if (Phase == MatchPhase.RoundIntro)
+            {
+                SegundosDeAnuncio = Mathf.Max(0, SegundosDeAnuncio - Time.unscaledDeltaTime);
+                if (SegundosDeAnuncio <= 0) EmpezarAsalto();
+                return;
+            }
+
             if (Phase != MatchPhase.Fighting) return;
             SecondsRemaining = Mathf.Max(0, SecondsRemaining - Time.deltaTime);
             if (SecondsRemaining <= 0)
@@ -58,11 +77,27 @@ namespace SmashThePast.Stages
 
         public void BeginMatch(int first, int second)
         {
+            AsaltosGanadosP1 = AsaltosGanadosP2 = 0;
+            NumeroDeAsalto = 1;
+            Winner = -1;
+            WinQuote = LoseQuote = "";
+            PrepararAsalto(first, second);
+        }
+
+        private void PrepararAsalto(int first, int second)
+        {
             Time.timeScale = 1;
             Spawn(first, second);
             SecondsRemaining = 90;
-            Winner = -1;
-            WinQuote = LoseQuote = "";
+            GanadorDelAsalto = -1;
+            SegundosDeAnuncio = DuracionAnuncio;
+            Phase = MatchPhase.RoundIntro;
+            SetCombat(false);
+            Changed?.Invoke();
+        }
+
+        private void EmpezarAsalto()
+        {
             Phase = MatchPhase.Fighting;
             SetCombat(true);
             Changed?.Invoke();
@@ -100,6 +135,25 @@ namespace SmashThePast.Stages
         private void Finish(int winner)
         {
             if (Phase != MatchPhase.Fighting) return;
+
+            GanadorDelAsalto = winner;
+            if (winner == 0) AsaltosGanadosP1++;
+            else if (winner == 1) AsaltosGanadosP2++;
+
+            bool hayCampeon = AsaltosGanadosP1 >= AsaltosParaGanar || AsaltosGanadosP2 >= AsaltosParaGanar;
+            if (!hayCampeon && winner >= 0)
+            {
+                // Queda asalto: se repone a los dos y se anuncia el siguiente.
+                NumeroDeAsalto++;
+                SetCombat(false);
+                PrepararAsalto(firstIndex, secondIndex);
+                return;
+            }
+
+            if (AsaltosGanadosP1 > AsaltosGanadosP2) winner = 0;
+            else if (AsaltosGanadosP2 > AsaltosGanadosP1) winner = 1;
+            else winner = -1;
+
             Winner = winner;
             Phase = MatchPhase.Finished;
             SetCombat(false);
