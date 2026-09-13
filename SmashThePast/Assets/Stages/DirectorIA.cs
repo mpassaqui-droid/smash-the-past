@@ -28,8 +28,11 @@ namespace SmashThePast.Stages
             var teclado = Keyboard.current;
             if (teclado != null)
             {
-                if (teclado.f1Key.wasPressedThisFrame) Alternar();
-                if (teclado.f2Key.wasPressedThisFrame) SubirNivel();
+                // En un Mac las teclas F son brillo y volumen salvo que se mantenga Fn,
+                // asi que la maquina se enciende con M (maquina) y el nivel cambia con N.
+                // Las F se dejan como alternativa para quien las tenga configuradas.
+                if (teclado.mKey.wasPressedThisFrame || teclado.f1Key.wasPressedThisFrame) Alternar();
+                if (teclado.nKey.wasPressedThisFrame || teclado.f2Key.wasPressedThisFrame) SubirNivel();
             }
 
             if (match == null) return;
