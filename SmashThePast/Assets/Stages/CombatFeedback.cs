@@ -106,7 +106,7 @@ namespace SmashThePast.Stages
             SpawnImpact(detector.Opponent.transform.position + Vector3.up * 1.1f, heavy);
             if (cameraShake != null) cameraShake.AddShake(heavy ? 0.22f : 0.1f);
             if (arenaCamera != null) arenaCamera.Golpe(heavy ? 0.26f : 0.12f);
-            Congelar(heavy ? 0.09f : 0.05f);
+            Congelar(heavy ? 0.15f : 0.08f);
             Destellar(detector.Opponent, heavy);
         }
 

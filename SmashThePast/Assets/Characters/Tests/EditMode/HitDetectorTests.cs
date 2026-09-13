@@ -43,6 +43,12 @@ namespace SmashThePast.Characters.Tests
             attacker.PerformHeavyAttack();
             int blockedAttackerHealth = defender.Health.CurrentHealth;
             attacker.SetBlocking(false);
+
+            // El golpe ligero de arriba dejo al defensor aturdido y sin guardia, y dentro
+            // del aturdimiento no se puede volver a tapar. Hay que dejar que pase para
+            // poder comprobar el dano de rozadura al parar.
+            yield return EsperarSinAturdimiento(defender);
+
             defender.SetBlocking(true);
             attacker.PerformHeavyAttack();
             int chipHealth = defender.Health.CurrentHealth;
@@ -77,6 +83,13 @@ namespace SmashThePast.Characters.Tests
             Assert.That(disabledHealth, Is.EqualTo(94));
             Assert.That(reenabledHealth, Is.EqualTo(89));
             Assert.That(deadAttackerHealth, Is.EqualTo(89));
+        }
+
+        private static IEnumerator EsperarSinAturdimiento(Fighter luchador)
+        {
+            float limite = Time.realtimeSinceStartup + 2f;
+            while (luchador.IsStunned && Time.realtimeSinceStartup < limite) yield return null;
+            Assert.That(luchador.IsStunned, Is.False, "el aturdimiento deberia haber terminado");
         }
     }
 }
