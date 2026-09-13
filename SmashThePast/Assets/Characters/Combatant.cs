@@ -14,7 +14,7 @@ namespace SmashThePast.Characters
         [SerializeField, Range(0, 1)] private int playerIndex;
         private PlayerInputController input;
         private bool combatEnabled = true, survived, specialRunning;
-        private float stunnedUntil, invulnerableUntil, invertedUntil, lockedUntil;
+        private float invulnerableUntil, invertedUntil, lockedUntil;
         private int generation;
 
         public SpecialKind Kind { get => kind; set => kind = value; }
@@ -34,7 +34,9 @@ namespace SmashThePast.Characters
         }
         private bool Alive => isActiveAndEnabled && combatEnabled && Fighter.isActiveAndEnabled
             && Fighter.Health != null && !Fighter.Health.IsDead;
-        public bool IsStunned => Alive && Time.time < stunnedUntil;
+        // Una sola fuente de verdad: el aturdimiento vive en Fighter, venga de un golpe
+        // encajado o del special de otro. Dos relojes separados divergen tarde o temprano.
+        public bool IsStunned => Alive && Fighter.IsStunned;
         public bool IsInvulnerable => Alive && Time.time < invulnerableUntil;
         public bool ControlsInverted => Alive && Time.time < invertedUntil;
         public bool SurvivalAvailable => Kind == SpecialKind.Rasputin && !survived;
@@ -69,7 +71,8 @@ namespace SmashThePast.Characters
             generation++;
             StopAllCoroutines();
             specialRunning = false;
-            stunnedUntil = invulnerableUntil = invertedUntil = lockedUntil = 0;
+            invulnerableUntil = invertedUntil = lockedUntil = 0;
+            Fighter.ClearStun();
             Fighter.SetBlocking(false);
         }
 
@@ -116,6 +119,9 @@ namespace SmashThePast.Characters
             if ((pad != null && pad.rightTrigger.wasPressedThisFrame) || (kb != null &&
                 (first ? kb.iKey.wasPressedThisFrame : kb.digit0Key.wasPressedThisFrame || kb.numpad0Key.wasPressedThisFrame)))
                 TrySpecial();
+            if ((pad != null && pad.leftTrigger.wasPressedThisFrame) || (kb != null &&
+                (first ? kb.uKey.wasPressedThisFrame : kb.digit4Key.wasPressedThisFrame || kb.numpad4Key.wasPressedThisFrame)))
+                Fighter.PerformGrab();
         }
 
         public bool TrySpecial()
@@ -128,6 +134,18 @@ namespace SmashThePast.Characters
         public void ChargeFromDamage(int damage)
         {
             if (damage > 0) Fighter.Special.Fill((int)Math.Min((long)damage * 2, SpecialMeter.MaxValue));
+        }
+
+        /// <summary>Dano de presa: ignora la guardia pero respeta invulnerabilidad y la
+        /// supervivencia de Rasputin, porque pasa por el mismo camino de siempre.
+        /// El aturdimiento se aplica ANTES para que el bloqueo automatico de la fila
+        /// superior no vuelva a subir la guardia dentro de la propia presa.</summary>
+        public int ReceiveGrabDamage(int rawDamage)
+        {
+            if (!Alive || Time.timeScale <= 0 || IsInvulnerable) return 0;
+            Fighter.SetBlocking(false);
+            Fighter.ApplyStun(Fighter.GrabStunSeconds);
+            return ReceiveDamage(rawDamage);
         }
 
         public int ReceiveDamage(int rawDamage)
@@ -192,7 +210,7 @@ namespace SmashThePast.Characters
                         target.StopAllCoroutines();
                         target.specialRunning = false;
                         target.lockedUntil = 0;
-                        target.stunnedUntil = Time.time + 0.8f;
+                        target.Fighter.ApplyStun(0.8f);
                         target.UpdateInput();
                     }
                     break;
@@ -255,7 +273,7 @@ namespace SmashThePast.Characters
                     {
                         target.StopAllCoroutines();
                         target.specialRunning = false;
-                        target.stunnedUntil = Time.time + 0.8f;
+                        target.Fighter.ApplyStun(0.8f);
                         target.UpdateInput();
                     }
                     break;

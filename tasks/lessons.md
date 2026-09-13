@@ -35,3 +35,5 @@
 
 - Un efecto que no se ve no siempre esta roto. El contorno parecia no dibujarse: subiendo el grosor a 0.2 se vio un halo enorme, lo que probo que la pasada funcionaba y que solo era demasiado fino. Probar con un valor absurdo separa "no funciona" de "no se nota" en un solo intento.
 - En zsh una variable sin comillas NO se parte en palabras como en bash. `$EXTRA` con "-golpe 1" dentro llega al programa como un unico argumento y la bandera se ignora en silencio. Si una bandera no hace nada, imprimir los argumentos recibidos antes de tocar el codigo.
+
+- Suscribirse a un evento con una lambda que captura una variable local DENTRO de un `UnityTest` con `EnterPlayMode` revienta con NullReferenceException: el iterador y su cierre no sobreviven igual al cambio de dominio. Comprobar el comportamiento por sus efectos (vida, aturdimiento) en vez de por un flag capturado.
