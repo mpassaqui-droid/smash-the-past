@@ -33,6 +33,8 @@ namespace SmashThePast.Core
         public const float BlockStunSeconds = 0.12f;
         public const float LightHitStunSeconds = 0.25f;
         public const float HeavyHitStunSeconds = 0.38f;
+        /// <summary>La presa aturde mas que un golpe: es lenta y castigable si falla.</summary>
+        public const float GrabStunSeconds = 0.5f;
         private const int HeavyDamageThreshold = 10;
 
         public event Action OnLightAttackPerformed;
@@ -40,6 +42,7 @@ namespace SmashThePast.Core
         public event Action OnSpecialUsed;
         public event Action OnKnockedOut;
         public event Action<float> OnStunned;
+        public event Action OnGrabPerformed;
 
         private CharacterController _controller;
         private Vector3 _velocity;
@@ -105,6 +108,15 @@ namespace SmashThePast.Core
             OnHeavyAttackPerformed?.Invoke();
         }
 
+        /// <summary>Presa. Atraviesa la guardia, que es su razon de ser: es la respuesta
+        /// al que se queda tapado sin hacer nada.</summary>
+        public void PerformGrab()
+        {
+            if (IsStunned) return;
+            if (IsBlocking) return;
+            OnGrabPerformed?.Invoke();
+        }
+
         public void TryUseSpecial()
         {
             if (IsStunned) return;
@@ -144,6 +156,12 @@ namespace SmashThePast.Core
             if (!keepGuard) IsBlocking = false;
             OnStunned?.Invoke(StunRemaining);
         }
+
+        /// <summary>Quita el aturdimiento. Lo usa el reinicio de combate: un luchador que
+        /// cae aturdido no debe empezar la revancha sin poder moverse.</summary>
+        public void ClearStun() => StunRemaining = 0f;
+
+        public int GrabDamage => characterData != null ? Math.Max(4, characterData.lightAttackDamage + 2) : 7;
 
         public int LightAttackDamage => characterData != null ? characterData.lightAttackDamage : 5;
         public int HeavyAttackDamage => characterData != null ? characterData.heavyAttackDamage : 10;
