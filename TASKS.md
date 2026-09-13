@@ -27,6 +27,9 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 
 ## Hecho
 
+- [x] Claude: adversario de la maquina en el puesto de P2, tres niveles, F1 lo apaga y F2 cambia de dificultad. La decision es una funcion pura probada con sorteo fijado. Probado en el player: 12 s sin tocar una tecla y P1 baja de 100 a 35.
+- [x] Claude: presa que atraviesa la guardia y castigo al fallarla. Aturdimiento unificado en Fighter.
+
 - [x] Claude: contorno negro por casco invertido sobre los luchadores, shader propio en `Stages/Resources`. PR #8.
 - [x] Claude: empujon de camara al impacto, en tiempo sin escalar para que se vea durante la parada de fotograma. Sin Cinemachine: el encuadre de grupo y la sacudida ya existian. PR #9.
 - [x] Claude: parada de fotograma al impacto (50 ms ligero, 90 ms fuerte), destello blanco sobre el que encaja, y una atmosfera propia por arena (sol, ambiente, niebla y fondo). PR #6.

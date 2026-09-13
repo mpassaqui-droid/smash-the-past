@@ -14,6 +14,7 @@ namespace SmashThePast.Diagnostics
         private const string Bandera = "-humo";
         private const string BanderaEscenario = "-escenario";
         private const string BanderaGolpe = "-golpe";
+        private const string BanderaPelea = "-pelea";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Arrancar()
@@ -35,6 +36,7 @@ namespace SmashThePast.Diagnostics
             prueba.Destino = destino;
             prueba.Escenario = LeerEntero(BanderaEscenario);
             prueba.Golpe = LeerEntero(BanderaGolpe) > 0;
+            prueba.SegundosDePelea = LeerEntero(BanderaPelea);
         }
 
         private static string LeerArgumento()
@@ -59,6 +61,7 @@ namespace SmashThePast.Diagnostics
         public string Destino;
         public int Escenario = -1;
         public bool Golpe;
+        public int SegundosDePelea = -1;
 
         private IEnumerator Start()
         {
@@ -78,6 +81,27 @@ namespace SmashThePast.Diagnostics
             }
 
             for (int i = 0; i < 90; i++) yield return null;
+
+            // Con -pelea N se arranca un combate y se deja correr N segundos sin tocar
+            // ninguna tecla. P1 no hace nada, asi que si pierde vida es que la maquina
+            // esta peleando de verdad.
+            if (SegundosDePelea > 0)
+            {
+                var combate = UnityEngine.Object.FindFirstObjectByType<SmashThePast.Stages.MatchController>();
+                if (combate != null)
+                {
+                    combate.BeginMatch(0, 1);
+                    float limite = Time.realtimeSinceStartup + SegundosDePelea;
+                    while (Time.realtimeSinceStartup < limite) yield return null;
+
+                    var uno = combate.PlayerOne;
+                    var dos = combate.PlayerTwo;
+                    Debug.Log($"HUMO_PELEA: P1 {(uno != null && uno.Health != null ? uno.Health.CurrentHealth : -1)} " +
+                              $"P2 {(dos != null && dos.Health != null ? dos.Health.CurrentHealth : -1)} " +
+                              $"fase {combate.Phase}");
+                }
+                else Debug.LogWarning("HUMO_PELEA: no hay MatchController");
+            }
 
             // Con -golpe 1 se dispara el empujon de camara sin necesidad de pelear,
             // para poder comprobar en una captura que el zoom de impacto existe.

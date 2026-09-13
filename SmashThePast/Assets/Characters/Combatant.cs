@@ -84,11 +84,15 @@ namespace SmashThePast.Characters
             if (!CanAct) Fighter.SetBlocking(false);
         }
 
+        /// <summary>Cuando lo lleva la maquina, el teclado y el mando dejan de mandar
+        /// sobre este luchador. Lo pone y lo quita el director de IA.</summary>
+        public bool ControlledByAi { get; set; }
+
         private void Update()
         {
             if (!Alive && specialRunning) CancelRuntime();
             UpdateInput();
-            if (CanAct) ReadInput();
+            if (CanAct && !ControlledByAi) ReadInput();
         }
 
         private void ReadInput()
