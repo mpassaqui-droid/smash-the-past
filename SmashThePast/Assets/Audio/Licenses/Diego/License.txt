@@ -8,6 +8,11 @@ Archivos:
       Comprobado que enlaza: no hay silencio ni en los primeros ni en los
       ultimos 200 ms.
 
+  Resources/Musica/combate.ogg
+      PROVISIONAL: es una copia del mismo bucle, puesto como respaldo para que
+      las nueve arenas no suenen mudas. En cuanto Diego mande un tema de
+      combate se sustituye este archivo y ya esta.
+
   Resources/CombatAudio/knifeSlice.ogg
       Sonido de atacar. Sustituye a la muestra de Kenney del mismo nombre.
 

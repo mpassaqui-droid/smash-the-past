@@ -84,3 +84,11 @@
 - Los nueve personajes de cajas nunca tuvieron Animator ni `AnimadorDeLuchador`: se movian a mano desde `FighterVisual`. Al darles un esqueleto no basta con cambiar la malla, hay que anadirles las dos piezas. El error de Unity lo dijo claro (`There is no Animator attached to the "Modelo" game object`) pero solo salio al llegar al primer personaje que no era Tupac, tres pasadas despues.
 
 - Cambiar algo en los nueve prefabs se hace reversible ANTES de tocarlos, no despues. `CambiarModelo` guarda una copia intacta en `Prefabs/Anteriores/` la primera vez que toca cada prefab, y `Volver` las restituye. La copia se hace solo si no existe ya: si no, la segunda pasada guardaria lo nuevo encima de lo viejo y no habria vuelta atras.
+
+- Colgar una malla de un hueso obliga a anular las TRES cosas que hereda, no dos. Posicion y rotacion no bastan: los FBX de Quaternius llevan un factor 100 en la raiz, y el poncho aparecio a y = -5,50 hasta que se compenso tambien la escala con `1 / destino.lossyScale`.
+
+- Y la rotacion no se pone a identidad, se copia la del modelo importado. Un FBX exportado de Blender llega con su rotacion de conversion de ejes (Z arriba a Y arriba) en la raiz; ponerla a identidad la anula y la pieza queda tumbada, con el centro en z en vez de en y. Se vio en una sola cifra: centro (0, -0,05, 1,24) en vez de (0, 1,24, 0,05).
+
+- `personaje.py` se ejecuta solo si ve `--salida` en `sys.argv`, y `vestuario.py` lo importa con exec. Como vestuario.py usaba el mismo nombre de argumento, personaje.py arrancaba su propio main y trataba de exportar a una carpeta. Un script que se auto-ejecuta segun argv contamina a cualquiera que lo importe: el argumento del que importa tiene que llamarse distinto.
+
+- Una escena de prueba vacia no tiene el pipeline URP, asi que todos los materiales salen blancos. Dos planchas seguidas parecieron decir que el color no se habia aplicado, y estaba aplicado: se veia en la captura del player. Para juzgar color hay que mirar el juego, no el banco de pruebas.
