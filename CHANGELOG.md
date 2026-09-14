@@ -34,7 +34,7 @@ Los nueve luchadores dejan de ser cajas, y las animaciones por fin llegan al jue
   eleccion con indices escritos a mano. Arreglado: se puede mirar cualquiera de los
   nueve desde la linea de ordenes.
 
-## v0.1.0-alpha — 13/09/2026
+## v0.1.0-alpha - 13/09/2026
 
 Primera version jugable, distribuida para Windows y macOS.
 
