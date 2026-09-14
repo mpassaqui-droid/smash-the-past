@@ -58,6 +58,32 @@ El plan gratuito de Suno y de Udio no los cede, y el juego se va a vender. Cada 
 necesita su nota en `Assets/Audio/Licenses/` diciendo de donde sale y con que licencia.
 Si no sabes como, mandasela a Munay por escrito y el la anade.
 
+## Por que ningun archivo abre el juego de un click
+
+Esto sale cada vez que aparece una extension nueva, asi que queda escrito.
+
+Un `.unity` no es el juego, y un `.uproject` tampoco. Son archivos de **texto** que solo
+guardan **referencias**. Nuestro `PrototypeArena.unity` pesa **75 KB** y lleva dentro
+**222 identificadores** que apuntan a archivos que estan en otro sitio: modelos, sonidos,
+materiales, scripts. Todo eso junto pesa **26 MB**. El archivo de escena es el plano de
+montaje, no las piezas. Fuera de su proyecto no abre nada, porque los 222 identificadores
+no encuentran a que apuntar.
+
+La linea "Tipo de archivo" de las propiedades de Windows es solo el nombre que Windows le
+pone a la extension. No dice nada de lo que hay dentro. Un `.docx` pone "Documento de
+Word" y tampoco lleva el Word adentro.
+
+**No existe ningun archivo suelto que abra un proyecto de juego.** Ni en Unity, ni en
+Unreal, ni en ningun motor. Un proyecto siempre es una carpeta con su arbol entero.
+
+Lo que si existe, segun lo que quieras hacer:
+
+| Quiero... | Uso |
+|---|---|
+| Ver el juego funcionando | El build. Un `.exe`, doble click y arranca. Es la release `v0.1.0-alpha` de Windows. |
+| Meter musica | La subida por navegador de arriba. No hace falta ningun archivo del proyecto. |
+| Oir mi musica dentro del juego antes de mandarla | El proyecto entero, clonado. No hay atajo. |
+
 ## Si quieres oirla en el juego antes de subirla
 
 Hace falta Unity, y esta explicado en `docs/AUDIO.md`. Pero no es obligatorio: puedes
