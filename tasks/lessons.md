@@ -104,3 +104,9 @@
 - Lo que mide menos de unos 8 cm no se lee a esta distancia de camara. Las gafas de Gandhi salian como una venda blanca cruzada en la cara. Se quitaron: a esta escala manda la silueta, no el detalle.
 
 - Y hay que verlo, no deducirlo. Puse catorce piezas con medidas correctas del esqueleto, comprobe dos personajes en el juego y di por buenos los otros siete. Estaban mal los siete. Solo se vio cuando se arreglo `-escenario`, que decia en su propio comentario que elegia el luchador y no lo hacia: `-pelea` llamaba despues a `BeginMatch(0, 1)` con los indices escritos a mano y pisaba la eleccion.
+
+- Quitar un zoom de un video obliga a quedarse con el encuadre MAS CERRADO, porque los fotogramas ampliados ya no tienen los bordes. Al aplicarlo sobre los 8 s enteros (21 % de zoom) el titulo salia cortado, porque al final ya lo estaba. Se arregla usando una ventana mas corta: con 4 s el zoom es del 10 % y el titulo entra completo. Medir el zoom antes: una busqueda de escala sobre una ventana central dio escala(t) = 0,998 + 0,0264 t.
+
+- Para que un video enlace, el fundido va al PRINCIPIO, no al final: la salida empieza con la cola del original fundiendose hacia su propia cabeza, y asi el ultimo fotograma coincide con el primero. Puesto al reves el bucle saltaba un segundo. Medido: la costura paso de 12,8 a 5,9 sobre 255.
+
+- Dos componentes en el mismo objeto no tienen orden de Awake garantizado. `TituloDelMenu` creaba su RenderTexture en Awake y `PrototypeUI` se la pedia antes: la encontraba vacia y caia al titulo escrito, sin error ninguno. La inicializacion tiene que ser perezosa, en la propiedad.

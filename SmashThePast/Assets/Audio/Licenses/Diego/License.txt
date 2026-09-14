@@ -20,6 +20,11 @@ Archivos:
       Sonido de encajar un golpe. Sustituye a la muestra de Kenney del mismo
       nombre.
 
+  Resources/Musica/titulo.ogg
+      Tema de 2 min 02 para la pantalla de titulo. Llevaba -15,0 LUFS, se dejo
+      en -16. Entra y sale en fundido, asi que al enlazar tiene un momento
+      flojo; para un menu no molesta.
+
   Pendientes/intro.ogg
       Tema de 2 min 37 para la introduccion del juego, que todavia no existe.
       Esta fuera de Resources a proposito: lo que vive en Resources entra en

@@ -1923,6 +1923,8 @@ GameObject:
   - component: {fileID: 1593165471}
   - component: {fileID: 1593165470}
   - component: {fileID: 1593165469}
+  - component: {fileID: 1593165473}
+  - component: {fileID: 1593165472}
   m_Layer: 0
   m_Name: Interfaz
   m_TagString: Untagged
@@ -1988,6 +1990,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1593165472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593165468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 525e2f6a0597c434d9ee6c6abd0f8e87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumen: 0.5
+--- !u!114 &1593165473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593165468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce067a61f74684bb4bc6ca062f1fc864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 0}
+  volumenMusica: 0.55
 --- !u!1 &1613508097
 GameObject:
   m_ObjectHideFlags: 0

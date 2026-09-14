@@ -26,6 +26,7 @@ namespace SmashThePast.UI
         private readonly VisualElement[] healthFill = new VisualElement[2], specialFill = new VisualElement[2];
         private MatchController boundMatch;
         private VisualElement root, selection, grid, hud, overlay;
+        private TituloDelMenu titulo;
         private Label anuncio;
         private VisualElement menu, opciones;
         private Slider volumen;
@@ -155,9 +156,17 @@ namespace SmashThePast.UI
         private void ConstruirMenu()
         {
             menu = Box(root, "menu-principal");
-            Text(menu, "SMASH THE PAST", "menu-titulo");
-            Text(menu, "Nueve figuras que nunca se cruzaron", "menu-subtitulo");
+            // Si hay video de titulo, el fondo lo pone el y el titulo escrito sobra:
+            // el clip ya lleva "SMASH THE PAST" ardiendo.
+            titulo = GetComponent<TituloDelMenu>();
+            if (titulo != null && titulo.Textura != null)
+                menu.style.backgroundImage = new StyleBackground(Background.FromRenderTexture((RenderTexture)titulo.Textura));
+            else
+                Text(menu, "SMASH THE PAST", "menu-titulo");
             var botones = Box(menu, "menu-botones");
+            // El subtitulo va DENTRO del panel: fuera quedaba a caballo del borde,
+            // medio encima del video y medio encima del fondo oscuro.
+            Text(botones, "Nueve figuras que nunca se cruzaron", "menu-subtitulo");
             ActionButton(botones, "CONTRA LA MAQUINA", () => Empezar(true), "menu-button primary");
             ActionButton(botones, "MODO ARCADE", EmpezarArcade, "menu-button");
             ActionButton(botones, "DOS JUGADORES", () => Empezar(false), "menu-button");
@@ -458,6 +467,7 @@ namespace SmashThePast.UI
             if (enMenu && shownPhase != MatchPhase.Selection) enMenu = false;
 
             Show(menu, enMenu && !enOpciones);
+            if (titulo != null) titulo.Mostrar(enMenu && !enOpciones);
             Show(opciones, enMenu && enOpciones);
             if (enMenu)
             {
@@ -603,7 +613,11 @@ namespace SmashThePast.UI
 
         private static Button ActionButton(VisualElement parent, string value, Action action, string classes)
         {
-            var button = new Button(action) { text = value, focusable = false };
+            // El sonido se engancha aqui porque es el unico sitio donde se crean los
+            // botones: uno al pasar por encima y otro al pulsar, sin tocar cada llamada.
+            var button = new Button(() => { SonidoDeMenu.Aceptar(); action?.Invoke(); })
+                { text = value, focusable = false };
+            button.RegisterCallback<PointerEnterEvent>(_ => SonidoDeMenu.Mover());
             foreach (string c in classes.Split(' ')) button.AddToClassList(c);
             parent.Add(button);
             return button;

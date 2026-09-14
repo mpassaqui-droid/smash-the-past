@@ -1,0 +1,10 @@
+Sonidos de interfaz: menu_mover.ogg y menu_aceptar.ogg
+
+Sintetizados con ffmpeg a partir de senos con caida exponencial, sin ninguna
+muestra de origen. No dependen de ninguna licencia de terceros.
+
+  menu_mover.ogg    0,09 s  al pasar por encima de un boton
+  menu_aceptar.ogg  0,22 s  al pulsarlo
+
+Nivel medido: media -16,1 y -14,9 dB, pico -3,2 y -4,4 dB, en la misma franja
+que las muestras de combate.
