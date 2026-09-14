@@ -15,37 +15,66 @@ import os
 
 # accion -> (fotogramas, ciclica, {fotograma: {hueso: (x, y, z) en grados}})
 ANIMACIONES = {
+    # Desde la T-pose los brazos bajan girando sobre X del propio hueso, los dos con el
+    # mismo signo: -78 deja las manos en (+-0.296, 0, 0.941), junto al cuerpo, que es el
+    # reposo real del luchador. Sobre Y no se mueven: en Blender el eje Y del hueso corre
+    # a lo largo del hueso, asi que girar sobre Y es torcer el brazo sin desplazarlo.
     "idle": (40, True, {
-        1:  {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (0, 0, 6), "mixamorig:RightArm": (0, 0, -6)},
-        20: {"mixamorig:Spine": (5, 0, 0), "mixamorig:LeftArm": (0, 0, 10), "mixamorig:RightArm": (0, 0, -10)},
-        40: {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (0, 0, 6), "mixamorig:RightArm": (0, 0, -6)},
+        1:  {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (-78, 0, 0), "mixamorig:RightArm": (-78, 0, 0)},
+        20: {"mixamorig:Spine": (5, 0, 0), "mixamorig:LeftArm": (-74, 0, 0), "mixamorig:RightArm": (-74, 0, 0)},
+        40: {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (-78, 0, 0), "mixamorig:RightArm": (-78, 0, 0)},
     }),
+    # Los brazos van sobre Z del hueso, no sobre X: desde la T-pose, X sube y baja el
+    # brazo y Z lo lleva adelante y atras. Con el mismo valor de Z en los dos brazos
+    # salen opuestos, porque el derecho es el espejo del izquierdo.
+    # Medido en Blender: Z=-70 pone la mano izquierda en (0,26, -0,20, 0,98), adelante.
     "andar": (24, True, {
         1:  {"mixamorig:LeftUpLeg": (25, 0, 0), "mixamorig:RightUpLeg": (-25, 0, 0),
-             "mixamorig:LeftLeg": (-10, 0, 0), "mixamorig:RightArm": (20, 0, -5), "mixamorig:LeftArm": (-20, 0, 5)},
+             "mixamorig:LeftLeg": (-10, 0, 0),
+             "mixamorig:LeftArm": (-65, 0, 70), "mixamorig:RightArm": (-65, 0, 70)},
         12: {"mixamorig:LeftUpLeg": (-25, 0, 0), "mixamorig:RightUpLeg": (25, 0, 0),
-             "mixamorig:RightLeg": (-10, 0, 0), "mixamorig:RightArm": (-20, 0, -5), "mixamorig:LeftArm": (20, 0, 5)},
+             "mixamorig:RightLeg": (-10, 0, 0),
+             "mixamorig:LeftArm": (-65, 0, -70), "mixamorig:RightArm": (-65, 0, -70)},
         24: {"mixamorig:LeftUpLeg": (25, 0, 0), "mixamorig:RightUpLeg": (-25, 0, 0),
-             "mixamorig:LeftLeg": (-10, 0, 0), "mixamorig:RightArm": (20, 0, -5), "mixamorig:LeftArm": (-20, 0, 5)},
+             "mixamorig:LeftLeg": (-10, 0, 0),
+             "mixamorig:LeftArm": (-65, 0, 70), "mixamorig:RightArm": (-65, 0, 70)},
     }),
+    # Golpe: carga atras (-35, 0, +-70, la mano vuelve a las costillas) y extension
+    # (0, 0, -+95, la mano sale a (0,15, -0,51, 1,44), delante y a la altura del hombro).
+    # La torsion del tronco va en el sentido que lleva el puno hacia el centro sin
+    # perder alcance: Spine1 NEGATIVO para el golpe izquierdo, POSITIVO para el
+    # derecho. Al reves el tronco tira del brazo hacia atras (de -0,51 a -0,37).
+    # El brazo que no golpea se queda en guardia, y hay que repetir sus angulos en cada
+    # clave: crear_accion pone a cero todos los huesos antes de aplicar la pose.
     "golpe_ligero": (18, False, {
-        1:  {"mixamorig:RightArm": (0, 0, -6)},
-        5:  {"mixamorig:RightArm": (28, 0, -14), "mixamorig:RightForeArm": (-46, 0, 0), "mixamorig:Spine1": (0, 14, 0)},
-        9:  {"mixamorig:RightArm": (-86, 0, -6), "mixamorig:RightForeArm": (-4, 0, 0), "mixamorig:Spine1": (0, -20, 0)},
-        18: {"mixamorig:RightArm": (0, 0, -6), "mixamorig:RightForeArm": (0, 0, 0)},
+        1:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90)},
+        5:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (-35, 0, -70), "mixamorig:Spine1": (0, -14, 0)},
+        9:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (0, 0, 95), "mixamorig:Spine1": (0, 20, 0)},
+        18: {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90)},
     }),
     "golpe_fuerte": (30, False, {
-        1:  {"mixamorig:LeftArm": (0, 0, 6)},
-        8:  {"mixamorig:LeftArm": (40, 0, 20), "mixamorig:LeftForeArm": (-70, 0, 0),
-             "mixamorig:Spine1": (0, -26, 0), "mixamorig:Hips": (0, -12, 0)},
-        14: {"mixamorig:LeftArm": (-98, 0, 6), "mixamorig:LeftForeArm": (-2, 0, 0),
-             "mixamorig:Spine1": (0, 30, 0), "mixamorig:Hips": (0, 16, 0)},
-        30: {"mixamorig:LeftArm": (0, 0, 6), "mixamorig:LeftForeArm": (0, 0, 0)},
+        1:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90)},
+        8:  {"mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
+             "mixamorig:LeftArm": (-35, 0, 70),
+             "mixamorig:Spine1": (0, 26, 0), "mixamorig:Hips": (0, 12, 0)},
+        14: {"mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
+             "mixamorig:LeftArm": (0, 0, -95),
+             "mixamorig:Spine1": (0, -30, 0), "mixamorig:Hips": (0, -16, 0)},
+        30: {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90)},
     }),
+    # Guardia: de los brazos caidos del idle a las manos delante de la cara,
+    # (+-0,15, -0,36, 1,39), con el codo doblado.
     "guardia": (12, False, {
-        1:  {"mixamorig:LeftArm": (0, 0, 6), "mixamorig:RightArm": (0, 0, -6)},
-        12: {"mixamorig:LeftArm": (-64, 0, 26), "mixamorig:LeftForeArm": (-72, 0, 0),
-             "mixamorig:RightArm": (-64, 0, -26), "mixamorig:RightForeArm": (-72, 0, 0), "mixamorig:Spine1": (6, 0, 0)},
+        1:  {"mixamorig:LeftArm": (-78, 0, 0), "mixamorig:RightArm": (-78, 0, 0)},
+        12: {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
+             "mixamorig:Spine1": (6, 0, 0)},
     }),
     "encajar": (16, False, {
         1:  {"mixamorig:Spine1": (0, 0, 0), "mixamorig:Head": (0, 0, 0)},
@@ -99,16 +128,23 @@ def crear_accion(armadura, nombre, largo, ciclica, claves):
 
 def main():
     argumentos = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-    fbx, carpeta, exportar = None, "/tmp/anim", None
+    carpeta, exportar, base, personaje = "/tmp/anim", None, None, "TupacAmaruII"
     for i, a in enumerate(argumentos):
-        if a == "--fbx" and i + 1 < len(argumentos): fbx = argumentos[i + 1]
         if a == "--carpeta" and i + 1 < len(argumentos): carpeta = argumentos[i + 1]
         if a == "--exportar" and i + 1 < len(argumentos): exportar = argumentos[i + 1]
+        if a == "--base" and i + 1 < len(argumentos): base = argumentos[i + 1]
+        if a == "--personaje" and i + 1 < len(argumentos): personaje = argumentos[i + 1]
 
-    bpy.ops.object.select_all(action="SELECT")
-    bpy.ops.object.delete(use_global=False)
-    bpy.ops.import_scene.fbx(filepath=fbx)
-    armadura = armadura_de_la_escena()
+    # Se construye el personaje aqui mismo en vez de importar su FBX: reimportar y
+    # volver a exportar reaplica la conversion de ejes de Blender.
+    ruta_constructor = os.path.join(os.path.dirname(os.path.abspath(__file__)), "personaje.py")
+    espacio = {}
+    exec(compile(open(ruta_constructor).read(), ruta_constructor, "exec"), espacio)
+    cuerpo, armadura = espacio["construir"](personaje)
+
+    if base:
+        espacio["exportar"](base, armadura, cuerpo)
+        print(f"BASE_OK {base}")
 
     os.makedirs(carpeta, exist_ok=True)
     if exportar: os.makedirs(exportar, exist_ok=True)
@@ -129,10 +165,10 @@ def main():
                     objeto.select_set(True)
             bpy.context.view_layer.objects.active = armadura
             bpy.ops.export_scene.fbx(
-                filepath=os.path.join(exportar, f"TupacAmaruII@{nombre}.fbx"),
-                use_selection=True, add_leaf_bones=False, bake_anim=True,
+                filepath=os.path.join(exportar, f"{personaje}@{nombre}.fbx"),
+                use_selection=True, bake_anim=True,
                 bake_anim_use_all_actions=False, bake_anim_use_nla_strips=False,
-                object_types={"ARMATURE", "MESH"},
+                **espacio["OPCIONES_FBX"],
             )
         print(f"ANIMACION_OK {nombre} fotogramas={largo}")
 

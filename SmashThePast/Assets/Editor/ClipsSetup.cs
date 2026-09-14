@@ -31,6 +31,27 @@ namespace SmashThePast.EditorTools
                 importador.avatarSetup = ModelImporterAvatarSetup.CopyFromOther;
                 importador.sourceAvatar = AssetDatabase.LoadAssetAtPath<Avatar>("Assets/Characters/Modelos/TupacAmaruII.fbx");
                 importador.importAnimation = true;
+
+                // La raiz se ancla a su sitio: estos clips no llevan desplazamiento
+                // propio, el movimiento por el escenario lo hace el CharacterController.
+                // (Los siete metros de altura no venian de aqui sino de la unidad
+                // declarada en el FBX; ver el commit que iguala OPCIONES_FBX.)
+                var ajustes = importador.defaultClipAnimations;
+                if (ajustes != null && ajustes.Length > 0)
+                {
+                    foreach (var clip in ajustes)
+                    {
+                        clip.lockRootRotation = true;
+                        clip.keepOriginalOrientation = true;
+                        clip.lockRootHeightY = true;
+                        clip.keepOriginalPositionY = true;
+                        clip.lockRootPositionXZ = true;
+                        clip.keepOriginalPositionXZ = true;
+                        clip.loopTime = clip.name == "idle" || clip.name == "andar";
+                    }
+                    importador.clipAnimations = ajustes;
+                }
+
                 importador.SaveAndReimport();
 
                 var clips = AssetDatabase.LoadAllAssetsAtPath(ruta).OfType<AnimationClip>()

@@ -96,6 +96,26 @@ namespace SmashThePast.Diagnostics
 
                     var uno = combate.PlayerOne;
                     var dos = combate.PlayerTwo;
+                    // Diagnostico: apagar el Animator separa "el modelo esta mal puesto"
+                    // de "la animacion lo esta moviendo".
+                    if (System.Environment.GetCommandLineArgs().Length > 0 && System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-sinanimator") >= 0)
+                    {
+                        foreach (var a in UnityEngine.Object.FindObjectsByType<Animator>(FindObjectsSortMode.None))
+                            a.enabled = false;
+                        yield return null;
+                        Debug.Log("HUMO_SIN_ANIMATOR");
+                    }
+
+                    if (uno != null)
+                    {
+                        Debug.Log($"HUMO_P1: hijos={uno.transform.childCount} activo={uno.gameObject.activeInHierarchy} pos={uno.transform.position}");
+                        foreach (var r in uno.GetComponentsInChildren<Renderer>(true))
+                            Debug.Log($"HUMO_R: {r.GetType().Name} {r.name} activo={r.gameObject.activeInHierarchy} " +
+                                      $"enabled={r.enabled} visible={r.isVisible} limites={r.bounds.center:F2}/{r.bounds.size:F2}");
+                        foreach (var t in uno.GetComponentsInChildren<Transform>(true))
+                            if (t.name == "Modelo") Debug.Log($"HUMO_MODELO: escala={t.localScale} pos={t.position} activo={t.gameObject.activeInHierarchy}");
+                    }
+
                     Debug.Log($"HUMO_PELEA: P1 {(uno != null && uno.Health != null ? uno.Health.CurrentHealth : -1)} " +
                               $"P2 {(dos != null && dos.Health != null ? dos.Health.CurrentHealth : -1)} " +
                               $"fase {combate.Phase}");

@@ -9,20 +9,23 @@ namespace SmashThePast.Audio.Tests
 {
     public class CombatAudioAssetTests
     {
-        [TestCase("knifeSlice", "4cd96dc630bed9840c15f1dd2306da2cc56a4da26a5d3f1a03c5a7265ac5e54f")]
-        [TestCase("knifeSlice2", "6c2064d0ef988d1ec3d56868e823ea8823a5cac00f2742560052633529407def")]
-        [TestCase("impactPunch_medium_000", "486988aa2d6440ffc4c62a0e8ccf3c23673ba84424bd4723378d451b7255eb5c")]
-        [TestCase("impactPunch_heavy_000", "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8")]
-        [TestCase("impactBell_heavy_000", "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f")]
-        [TestCase("impactPunch_heavy_002", "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3")]
-        public void ResourceIsOriginalKenneyClipAndDecodesAudibleSamples(string name, string expectedHash)
+        // El hash fija QUE archivo exacto se publica. Si alguien lo sustituye sin querer,
+        // esta prueba lo dice. El autor va en el caso para que el fallo nombre a quien
+        // corresponde: dos efectos son de Diego y el resto siguen siendo de Kenney.
+        [TestCase("knifeSlice", "f5d564b246b1e81e8d593f6e82cab8f3c97373e29e83665184c12361825c1712", "Diego")]
+        [TestCase("knifeSlice2", "6c2064d0ef988d1ec3d56868e823ea8823a5cac00f2742560052633529407def", "Kenney")]
+        [TestCase("impactPunch_medium_000", "f1cd9932ac68610b5e3c8beea71807be1b7a58c4808f4d6ba53d615df5ce5de2", "Diego")]
+        [TestCase("impactPunch_heavy_000", "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8", "Kenney")]
+        [TestCase("impactBell_heavy_000", "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f", "Kenney")]
+        [TestCase("impactPunch_heavy_002", "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3", "Kenney")]
+        public void ResourceIsTheExpectedClipAndDecodesAudibleSamples(string name, string expectedHash, string autor)
         {
             string path = "Assets/Audio/Resources/CombatAudio/" + name + ".ogg";
             using (var sha = SHA256.Create())
             {
                 string actual = BitConverter.ToString(sha.ComputeHash(File.ReadAllBytes(path)))
                     .Replace("-", "").ToLowerInvariant();
-                Assert.That(actual, Is.EqualTo(expectedHash), "El original de Kenney ha cambiado.");
+                Assert.That(actual, Is.EqualTo(expectedHash), $"El clip de {autor} ha cambiado: {name}.ogg");
             }
 
             var clip = Resources.Load<AudioClip>("CombatAudio/" + name);

@@ -23,6 +23,7 @@ namespace SmashThePast.EditorTools
 
             importador.animationType = ModelImporterAnimationType.Human;
             importador.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+            importador.skinWeights = ModelImporterSkinWeights.Standard;
             importador.importAnimation = false;
             importador.materialImportMode = ModelImporterMaterialImportMode.ImportStandard;
             importador.SaveAndReimport();

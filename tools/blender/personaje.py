@@ -34,14 +34,14 @@ HUESOS = {
     "mixamorig:Head":          ((0, 0, ALTURA_CUELLO), (0, 0, 1.86)),
 
     "mixamorig:LeftShoulder":  ((0.05, 0, 1.44), (ANCHO_HOMBRO, 0, 1.44)),
-    "mixamorig:LeftArm":       ((ANCHO_HOMBRO, 0, 1.44), (ANCHO_HOMBRO + 0.02, 0, 1.16)),
-    "mixamorig:LeftForeArm":   ((ANCHO_HOMBRO + 0.02, 0, 1.16), (ANCHO_HOMBRO + 0.03, 0, 0.92)),
-    "mixamorig:LeftHand":      ((ANCHO_HOMBRO + 0.03, 0, 0.92), (ANCHO_HOMBRO + 0.03, 0, 0.82)),
+    "mixamorig:LeftArm":       ((ANCHO_HOMBRO, 0, 1.44), (0.46, 0, 1.44)),
+    "mixamorig:LeftForeArm":   ((0.46, 0, 1.44), (0.70, 0, 1.44)),
+    "mixamorig:LeftHand":      ((0.70, 0, 1.44), (0.80, 0, 1.44)),
 
     "mixamorig:RightShoulder": ((-0.05, 0, 1.44), (-ANCHO_HOMBRO, 0, 1.44)),
-    "mixamorig:RightArm":      ((-ANCHO_HOMBRO, 0, 1.44), (-(ANCHO_HOMBRO + 0.02), 0, 1.16)),
-    "mixamorig:RightForeArm":  ((-(ANCHO_HOMBRO + 0.02), 0, 1.16), (-(ANCHO_HOMBRO + 0.03), 0, 0.92)),
-    "mixamorig:RightHand":     ((-(ANCHO_HOMBRO + 0.03), 0, 0.92), (-(ANCHO_HOMBRO + 0.03), 0, 0.82)),
+    "mixamorig:RightArm":      ((-ANCHO_HOMBRO, 0, 1.44), (-0.46, 0, 1.44)),
+    "mixamorig:RightForeArm":  ((-0.46, 0, 1.44), (-0.70, 0, 1.44)),
+    "mixamorig:RightHand":     ((-0.70, 0, 1.44), (-0.80, 0, 1.44)),
 
     "mixamorig:LeftUpLeg":     ((ANCHO_CADERA, 0, ALTURA_CADERA), (ANCHO_CADERA, 0, 0.55)),
     "mixamorig:LeftLeg":       ((ANCHO_CADERA, 0, 0.55), (ANCHO_CADERA, 0, 0.10)),
@@ -92,12 +92,12 @@ PARTES_BASE = [
     ("cuello",        "mixamorig:Neck",         (0, 0, 1.53),  (0.11, 0.11, 0.12), "piel"),
     ("cabeza",        "mixamorig:Head",         (0, 0, 1.69),  (0.23, 0.22, 0.26), "piel"),
 
-    ("brazoIzq",      "mixamorig:LeftArm",      (0.21, 0, 1.31),  (0.11, 0.11, 0.32), "ropa"),
-    ("antebrazoIzq",  "mixamorig:LeftForeArm",  (0.22, 0, 1.05),  (0.10, 0.10, 0.28), "piel"),
-    ("manoIzq",       "mixamorig:LeftHand",     (0.22, 0, 0.87),  (0.12, 0.12, 0.14), "piel"),
-    ("brazoDer",      "mixamorig:RightArm",     (-0.21, 0, 1.31), (0.11, 0.11, 0.32), "ropa"),
-    ("antebrazoDer",  "mixamorig:RightForeArm", (-0.22, 0, 1.05), (0.10, 0.10, 0.28), "piel"),
-    ("manoDer",       "mixamorig:RightHand",    (-0.22, 0, 0.87), (0.12, 0.12, 0.14), "piel"),
+    ("brazoIzq",      "mixamorig:LeftArm",      (0.32, 0, 1.44),  (0.30, 0.11, 0.11), "ropa"),
+    ("antebrazoIzq",  "mixamorig:LeftForeArm",  (0.58, 0, 1.44),  (0.26, 0.10, 0.10), "piel"),
+    ("manoIzq",       "mixamorig:LeftHand",     (0.76, 0, 1.44),  (0.14, 0.12, 0.12), "piel"),
+    ("brazoDer",      "mixamorig:RightArm",     (-0.32, 0, 1.44), (0.30, 0.11, 0.11), "ropa"),
+    ("antebrazoDer",  "mixamorig:RightForeArm", (-0.58, 0, 1.44), (0.26, 0.10, 0.10), "piel"),
+    ("manoDer",       "mixamorig:RightHand",    (-0.76, 0, 1.44), (0.14, 0.12, 0.12), "piel"),
 ]
 
 # Lo que distingue a cada personaje va aparte: el cuerpo es el mismo para todos.
@@ -121,6 +121,18 @@ COLORES = {
         "bota": (0.10, 0.09, 0.08, 1),
     },
 }
+
+
+# Las mismas opciones de exportacion para el cuerpo y para sus animaciones.
+# apply_scale_options manda: decide que unidad declara el FBX. El personaje salia con
+# "1 unidad = 1 metro" y los clips con "1 unidad = 1 centimetro", asi que Unity dividia
+# entre 100 cada hueso animado y el luchador se encogia a dos centimetros en cuanto
+# empezaba a moverse. Una sola copia de la regla, que animaciones.py importa de aqui.
+OPCIONES_FBX = dict(
+    apply_scale_options="FBX_SCALE_ALL",
+    add_leaf_bones=False,
+    object_types={"ARMATURE", "MESH"},
+)
 
 
 def limpiar():
@@ -238,11 +250,9 @@ def exportar(ruta, armadura, cuerpo):
     bpy.ops.export_scene.fbx(
         filepath=ruta,
         use_selection=True,
-        apply_scale_options="FBX_SCALE_ALL",
-        add_leaf_bones=False,
         bake_anim=False,
-        object_types={"ARMATURE", "MESH"},
         mesh_smooth_type="FACE",
+        **OPCIONES_FBX,
     )
 
 
@@ -262,4 +272,9 @@ def main():
           f"vertices={len(cuerpo.data.vertices)} caras={len(cuerpo.data.polygons)} -> {salida}")
 
 
-main()
+# Solo construye y exporta cuando se le pide una salida. Asi animaciones.py puede
+# reutilizar construir() dentro de su propia sesion en vez de reimportar el FBX: ese
+# viaje de ida y vuelta reaplicaba la conversion de ejes de Blender y dejaba al
+# personaje siete metros por encima del suelo.
+if "--salida" in sys.argv:
+    main()

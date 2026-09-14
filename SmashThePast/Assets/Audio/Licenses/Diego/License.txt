@@ -1,0 +1,33 @@
+Musica y efectos compuestos por Diego (diegoqueso3030), septiembre de 2026.
+Obra original, cedida para este juego, incluido su uso comercial.
+
+Archivos:
+
+  Resources/Musica/menu.ogg
+      Bucle de 26 s. Suena en la pantalla de seleccion de personaje.
+      Comprobado que enlaza: no hay silencio ni en los primeros ni en los
+      ultimos 200 ms.
+
+  Resources/CombatAudio/knifeSlice.ogg
+      Sonido de atacar. Sustituye a la muestra de Kenney del mismo nombre.
+
+  Resources/CombatAudio/impactPunch_medium_000.ogg
+      Sonido de encajar un golpe. Sustituye a la muestra de Kenney del mismo
+      nombre.
+
+  Pendientes/intro.ogg
+      Tema de 2 min 37 para la introduccion del juego, que todavia no existe.
+      Esta fuera de Resources a proposito: lo que vive en Resources entra en
+      la build aunque nadie lo use.
+
+Los nombres de archivo siguen siendo los de Kenney porque el codigo los busca
+por ese nombre exacto. Las muestras de Kenney que quedan (golpe fuerte,
+impacto fuerte, special, K.O.) siguen bajo CC0, ver las otras carpetas de
+Licenses.
+
+Retoques hechos al importar, sobre los originales de Diego:
+  - quitados 0,40 s y 0,30 s de silencio al principio de los dos efectos,
+    que hacian llegar el sonido tarde respecto al golpe
+  - nivel ajustado al de las muestras que ya estaban, para que ninguno
+    destaque sobre los demas
+  - la musica bajada a -16 LUFS; el original venia a -5 LUFS y saturaba

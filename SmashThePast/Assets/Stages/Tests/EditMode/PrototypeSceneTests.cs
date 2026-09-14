@@ -122,7 +122,12 @@ namespace SmashThePast.Stages.Tests
                     var prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Characters/Prefabs/{name}_P{slot}.prefab");
                     Assert.That(prefab, Is.Not.Null, name + " P" + slot);
                     Assert.That(prefab.GetComponent<FighterVisual>(), Is.Not.Null, name + " visual");
-                    Assert.That(prefab.GetComponent<FighterAnimation>(), Is.Not.Null, name + " animation");
+                    // Cada personaje tiene que estar animado por algo. Tupac ya usa el
+                    // Animator con los clips de Blender; los otros ocho siguen con el
+                    // movimiento a mano hasta que les toque. Lo que no vale es ninguno.
+                    bool animado = prefab.GetComponent<FighterAnimation>() != null
+                                   || prefab.GetComponent<AnimadorDeLuchador>() != null;
+                    Assert.That(animado, Is.True, name + " sin ninguna animacion");
                     Assert.That(prefab.GetComponent<Combatant>(), Is.Not.Null, name + " special");
                     Assert.That(prefab.GetComponent<SpecialVisual>(), Is.Not.Null, name + " effect");
                 }
