@@ -21,6 +21,13 @@ namespace SmashThePast.Audio
         private AudioSource fuente;
         private string sonando = "";
 
+        /// <summary>
+        /// Mientras la pantalla de titulo esta a la vista, esta musica se calla: el
+        /// titulo tiene la suya. El menu principal se muestra estando ya en fase
+        /// Selection, asi que sin esto sonaban las dos pistas a la vez.
+        /// </summary>
+        public static bool TituloEnPantalla { get; set; }
+
         /// <summary>Nombres a probar, en orden, para un estado del juego. El primero que
         /// exista en Resources/Musica es el que suena.</summary>
         public static string[] Candidatas(MatchPhase fase, int arena)
@@ -44,6 +51,12 @@ namespace SmashThePast.Audio
         private void Update()
         {
             if (match == null) return;
+
+            if (TituloEnPantalla)
+            {
+                if (fuente.isPlaying) { fuente.Stop(); sonando = ""; }
+                return;
+            }
 
             int arena = -1;
             if (match.PlayerOne != null && match.PlayerOne.Data != null && match.Roster != null)

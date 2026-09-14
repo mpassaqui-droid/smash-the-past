@@ -110,3 +110,7 @@
 - Para que un video enlace, el fundido va al PRINCIPIO, no al final: la salida empieza con la cola del original fundiendose hacia su propia cabeza, y asi el ultimo fotograma coincide con el primero. Puesto al reves el bucle saltaba un segundo. Medido: la costura paso de 12,8 a 5,9 sobre 255.
 
 - Dos componentes en el mismo objeto no tienen orden de Awake garantizado. `TituloDelMenu` creaba su RenderTexture en Awake y `PrototypeUI` se la pedia antes: la encontraba vacia y caia al titulo escrito, sin error ninguno. La inicializacion tiene que ser perezosa, en la propiedad.
+
+- El menu principal se muestra estando ya en fase `Selection`, asi que al darle musica propia al titulo sonaban DOS pistas a la vez: la del titulo y la que `MusicaDelJuego` pone para la seleccion. No se ve en ninguna captura, solo se oye, y lo canto Munay. `MusicaDelJuego.TituloEnPantalla` la calla mientras el titulo esta a la vista.
+
+- Para comprobarlo hay que sacar por escrito que suena: `PruebaDeHumo` ahora lista los AudioSource activos con su clip, una vez en el menu y otra con el combate corriendo. La primera version del sondeo estaba colocada ANTES de que empezara el combate, asi que las dos medidas daban lo mismo y parecia que el arreglo no funcionaba. Un sondeo mal situado miente igual que no tenerlo.

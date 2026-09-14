@@ -63,6 +63,22 @@ namespace SmashThePast.Diagnostics
         public bool Golpe;
         public int SegundosDePelea = -1;
 
+        /// <summary>
+        /// Que pistas suenan de verdad en este momento. Dos musicas a la vez no se ven
+        /// en una captura, solo se oyen, asi que hay que sacarlas por escrito.
+        /// </summary>
+        private static void Sonando(string momento)
+        {
+            int n = 0;
+            foreach (var voz in UnityEngine.Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None))
+                if (voz.isPlaying && voz.clip != null)
+                {
+                    n++;
+                    Debug.Log($"HUMO_SONANDO [{momento}]: '{voz.clip.name}' en '{voz.gameObject.name}' vol={voz.volume:F2} bucle={voz.loop}");
+                }
+            if (n == 0) Debug.Log($"HUMO_SONANDO [{momento}]: ninguna pista");
+        }
+
         private IEnumerator Start()
         {
             for (int i = 0; i < 30; i++) yield return null;
@@ -79,6 +95,8 @@ namespace SmashThePast.Diagnostics
                 }
                 else Debug.LogWarning("HUMO_ESCENARIO: no se pudo cambiar de arena");
             }
+
+            Sonando("menu");
 
             for (int i = 0; i < 90; i++) yield return null;
 
@@ -100,7 +118,14 @@ namespace SmashThePast.Diagnostics
                     Debug.Log($"HUMO_COMBATIENTES: {uno_} contra {dos_}");
                     combate.BeginMatch(uno_, dos_);
                     float limite = Time.realtimeSinceStartup + SegundosDePelea;
-                    while (Time.realtimeSinceStartup < limite) yield return null;
+                    bool medido = false;
+                    while (Time.realtimeSinceStartup < limite)
+                    {
+                        // A mitad del combate, cuando la musica de arena ya arranco.
+                        if (!medido && Time.realtimeSinceStartup > limite - SegundosDePelea * 0.5f)
+                        { medido = true; Sonando("combate"); }
+                        yield return null;
+                    }
 
                     var uno = combate.PlayerOne;
                     var dos = combate.PlayerTwo;

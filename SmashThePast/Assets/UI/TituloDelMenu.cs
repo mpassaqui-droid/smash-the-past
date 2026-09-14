@@ -78,11 +78,16 @@ namespace SmashThePast.UI
         /// <summary>Se llama desde la interfaz cada vez que refresca, con si el menu se ve.</summary>
         public void Mostrar(bool visible)
         {
+            // Se avisa siempre, no solo al cambiar: MusicaDelJuego decide en cada
+            // Update y tiene que encontrar la bandera puesta.
+            SmashThePast.Audio.MusicaDelJuego.TituloEnPantalla = visible;
             if (visible == encendido) return;
             encendido = visible;
             if (reproductor != null) { if (visible) reproductor.Play(); else reproductor.Pause(); }
             if (musica != null) { if (visible) musica.Play(); else musica.Stop(); }
         }
+
+        private void OnDisable() => SmashThePast.Audio.MusicaDelJuego.TituloEnPantalla = false;
 
         private void OnDestroy()
         {
