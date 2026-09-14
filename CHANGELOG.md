@@ -1,5 +1,39 @@
 # Historial
 
+## v0.2.0-alpha - 14/09/2026
+
+Los nueve luchadores dejan de ser cajas, y las animaciones por fin llegan al juego.
+
+### Personajes
+- Los nueve pasan a modelos humanoides de Quaternius (CC0, uso comercial libre), cada
+  uno con su paleta: 146 materiales, para que dos personajes puedan compartir modelo sin
+  parecerse.
+- Catorce piezas de vestuario modeladas en Blender y colgadas del hueso que les toca:
+  el poncho de Tupac, el casco de Genghis, el bicornio de Napoleon, la chistera de
+  Lincoln, el nemes de Cleopatra, las barbas de Rasputin y Socrates, la toga, la sotana,
+  el chal de Gandhi, el monyo y el obi de Musashi.
+- Es reversible: `CambiarModelo.Volver` restituye los prefabs anteriores.
+
+### Animacion
+- Arreglado el fallo que lo bloqueaba todo: el FBX del cuerpo declaraba una unidad y los
+  clips otra, con las mismas coordenadas, asi que Unity dividia entre 100 cada hueso en
+  cuanto empezaba una animacion.
+- Los siete clips pasan a Humanoid, asi que valen sobre cualquier esqueleto que Unity
+  acepte como humano.
+- Reescritos `andar`, `guardia` y los dos golpes para la T-pose: los punetazos salian
+  hacia la cadera en vez de hacia delante.
+- `FighterVisual` no se ejecutaba. Ahora los luchadores se giran hacia su rival y vuelve
+  el destello blanco al encajar.
+
+### Sonido
+- Musica y dos efectos de Diego: su bucle en la pantalla de seleccion y en las arenas,
+  su sonido de atacar y el de encajar.
+
+### Herramientas
+- `-escenario N` elegia el luchador segun su propio comentario, pero `-pelea` pisaba la
+  eleccion con indices escritos a mano. Arreglado: se puede mirar cualquiera de los
+  nueve desde la linea de ordenes.
+
 ## v0.1.0-alpha — 13/09/2026
 
 Primera version jugable, distribuida para Windows y macOS.
