@@ -66,3 +66,7 @@
 - El buscador puntuaba SOLO la mano y saco poses con el codo en cualquier sitio: dos soluciones con la misma mano y el brazo completamente distinto, y encima asimetricas entre izquierda y derecha. Se arregla puntuando mano Y codo a la vez, y forzando el espejo (la derecha es la izquierda con la Z cambiada de signo) en vez de buscar cada lado por separado.
 
 - Al reescribir los clips reutilice los angulos de tronco del clip viejo sin volver a comprobarlos, y la torsion tiraba del brazo hacia atras: el puno perdia alcance (-0,51 a -0,37) en vez de ganarlo. El sentido correcto es Spine1 NEGATIVO para el golpe izquierdo y POSITIVO para el derecho. Cambiar de esqueleto invalida TODOS los angulos del clip, tambien los que parecen no tener que ver con el brazo.
+
+- Cambiar la malla de un luchador no toca su logica: el prefab tiene un hijo "Modelo" con el Animator y el controlador, y basta con reemplazar lo que cuelga de el y poner el avatar nuevo. Funciona porque los clips son Humanoid. Dos cosas que hay que acordarse: el FBX importado trae su PROPIO Animator, que hay que quitar para que no haya dos, y `FighterVisual` busca los Renderer en tiempo de ejecucion, asi que se adapta solo. `CambiarModelo.cs` guarda el mapa personaje -> modelo, una linea por luchador.
+
+- `Camera.fieldOfView` es el VERTICAL. Calcular la distancia de encuadre con el sin pasar por el aspecto deja la camara lejisimos: en una plancha de 1800x620 salieron once hormigas. dist = (ancho/2) / (tan(fov/2) * aspecto).
