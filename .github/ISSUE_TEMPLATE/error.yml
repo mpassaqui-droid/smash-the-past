@@ -1,0 +1,36 @@
+name: Error
+description: Algo no funciona como deberia
+labels: ["error"]
+body:
+  - type: textarea
+    id: que-pasa
+    attributes:
+      label: Que pasa
+      description: Que hace el juego y que esperabas que hiciera.
+    validations:
+      required: true
+  - type: textarea
+    id: como-repetirlo
+    attributes:
+      label: Como repetirlo
+      description: Los pasos minimos. Si depende del personaje o de la arena, dilo.
+      placeholder: |
+        1. Elegir a Rasputin como P1
+        2. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: donde
+    attributes:
+      label: Donde
+      options:
+        - Player de Windows
+        - Player de macOS
+        - Editor de Unity
+    validations:
+      required: true
+  - type: textarea
+    id: pruebas
+    attributes:
+      label: Captura o log
+      description: Arrastra la imagen aqui. El log del player esta en %USERPROFILE%\AppData\LocalLow\DefaultCompany\SmashThePast\Player.log en Windows y en ~/Library/Logs/DefaultCompany/SmashThePast/Player.log en Mac.

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: El plan
+    url: https://github.com/mpassaqui-droid/smash-the-past/blob/main/PLAN.md
+    about: Los hitos hasta la venta y lo que bloquea cada uno
+  - name: El tablero
+    url: https://github.com/mpassaqui-droid/smash-the-past/blob/main/TASKS.md
+    about: Que se esta haciendo ahora mismo
