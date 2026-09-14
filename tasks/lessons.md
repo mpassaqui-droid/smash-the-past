@@ -70,3 +70,7 @@
 - Cambiar la malla de un luchador no toca su logica: el prefab tiene un hijo "Modelo" con el Animator y el controlador, y basta con reemplazar lo que cuelga de el y poner el avatar nuevo. Funciona porque los clips son Humanoid. Dos cosas que hay que acordarse: el FBX importado trae su PROPIO Animator, que hay que quitar para que no haya dos, y `FighterVisual` busca los Renderer en tiempo de ejecucion, asi que se adapta solo. `CambiarModelo.cs` guarda el mapa personaje -> modelo, una linea por luchador.
 
 - `Camera.fieldOfView` es el VERTICAL. Calcular la distancia de encuadre con el sin pasar por el aspecto deja la camara lejisimos: en una plancha de 1800x620 salieron once hormigas. dist = (ancho/2) / (tan(fov/2) * aspecto).
+
+- Un modelo simetrico esconde los errores de orientacion. Los luchadores llevaban desde siempre la espalda vuelta a la camara y NUNCA se giraban el uno hacia el otro; con un personaje de cajas casi simetrico no se notaba, y se vio en cuanto el modelo tuvo cara. El giro estaba en `FighterVisual`, que ademas no se ejecutaba: su primera linea era `if (model == null ...) return;` y las cinco referencias del prefab estaban vacias, asi que tambien se perdia el destello blanco al encajar un golpe. Un componente que sale por la primera linea no falla, no avisa, y parece que funciona.
+
+- El modelo nace mirando a +Z y la camara del combate tambien mira a +Z: dejarlo a 0 grados es ensenarle la espalda al jugador. De perfil (+-90) ademas los punetazos salen hacia el rival y no hacia el fondo.

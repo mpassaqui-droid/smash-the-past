@@ -59,6 +59,16 @@ namespace SmashThePast.EditorTools
                 var animador = contenedor.GetComponent<Animator>();
                 animador.avatar = avatar;
 
+                // FighterVisual gira el modelo hacia el rival; sin esta referencia se
+                // quedaba de espaldas a la camara.
+                var visual = raiz.GetComponent<SmashThePast.Characters.FighterVisual>();
+                if (visual != null)
+                {
+                    var so = new SerializedObject(visual);
+                    so.FindProperty("model").objectReferenceValue = contenedor;
+                    so.ApplyModifiedPropertiesWithoutUndo();
+                }
+
                 var piel = contenedor.GetComponentInChildren<SkinnedMeshRenderer>();
                 Debug.Log($"[cambio] {System.IO.Path.GetFileName(rutaPrefab)} <- {System.IO.Path.GetFileName(rutaFbx)} " +
                           $"alto={(piel != null ? piel.bounds.size.y.ToString("F3") : "?")} " +

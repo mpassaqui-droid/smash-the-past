@@ -43,19 +43,36 @@ namespace SmashThePast.Characters
 
         private void LateUpdate()
         {
-            if (model == null || fighter.Health == null) return;
+            // Antes salia aqui si model estaba vacio, y con el modelo con esqueleto lo
+            // estaba: ni el giro ni el destello de encajar llegaban a ejecutarse nunca.
+            if (fighter.Health == null) return;
             if (health > fighter.Health.CurrentHealth) hitUntil = Time.time + 0.12f;
             health = fighter.Health.CurrentHealth;
             float direction = detector.Opponent == null ? 1 : Mathf.Sign(detector.Opponent.transform.position.x - transform.position.x);
-            model.localRotation = Quaternion.Euler(0, direction < 0 ? 180 : 0, fighter.Health.IsDead ? -80 : 0);
             float speed = Mathf.Abs(transform.position.x - previousPosition.x) / Mathf.Max(Time.deltaTime, 0.001f);
             previousPosition = transform.position;
-            float stride = Mathf.Sin(Time.time * 13) * Mathf.Clamp01(speed / 3) * 25;
-            bool attacking = Time.time < attackUntil;
-            leftLeg.localRotation = Quaternion.Euler(0, 0, attacking && heavyAttack ? 65 : stride);
-            rightLeg.localRotation = Quaternion.Euler(0, 0, -stride);
-            leftArm.localRotation = Quaternion.Euler(0, 0, fighter.IsBlocking ? 115 : -stride);
-            rightArm.localRotation = Quaternion.Euler(0, 0, fighter.IsBlocking ? 100 : attacking && !heavyAttack ? 95 : stride);
+
+            if (model != null)
+            {
+                // El luchador mira a su rival, no a la camara. El modelo nace mirando a
+                // +Z y la camara del combate tambien mira a +Z, asi que dejarlo a 0 le
+                // daba la espalda al jugador. Un cuarto de vuelta lo pone de perfil, que
+                // ademas es lo que manda los punetazos hacia el otro.
+                model.localRotation = Quaternion.Euler(0, direction < 0 ? -90f : 90f, 0f);
+            }
+
+            // Los miembros sueltos son del prototipo de cajas. Con un modelo con
+            // esqueleto los mueve el Animator y estas referencias van vacias.
+            if (leftLeg != null && rightLeg != null && leftArm != null && rightArm != null)
+            {
+                float stride = Mathf.Sin(Time.time * 13) * Mathf.Clamp01(speed / 3) * 25;
+                bool attacking = Time.time < attackUntil;
+                leftLeg.localRotation = Quaternion.Euler(0, 0, attacking && heavyAttack ? 65 : stride);
+                rightLeg.localRotation = Quaternion.Euler(0, 0, -stride);
+                leftArm.localRotation = Quaternion.Euler(0, 0, fighter.IsBlocking ? 115 : -stride);
+                rightArm.localRotation = Quaternion.Euler(0, 0, fighter.IsBlocking ? 100 : attacking && !heavyAttack ? 95 : stride);
+            }
+
             properties.SetColor("_EmissionColor", Time.time < hitUntil ? Color.white * 0.7f : Color.black);
             foreach (var renderer in renderers) renderer.SetPropertyBlock(properties);
         }
