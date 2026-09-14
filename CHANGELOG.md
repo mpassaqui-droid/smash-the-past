@@ -1,0 +1,44 @@
+# Historial
+
+## v0.1.0-alpha — 13/09/2026
+
+Primera version jugable, distribuida para Windows y macOS.
+
+### Combate
+- Aturdimiento tras encajar un golpe (0,25 s, 0,38 s en golpe fuerte) y block stun corto
+  (0,12 s). Es lo que da consecuencia a acertar.
+- Presa que atraviesa la guardia, con castigo de 0,85 s si se falla.
+- Asaltos al mejor de tres, con anuncio y marcador.
+- Parada de fotograma al impacto (80 ms, 150 ms en fuerte), destello sobre quien encaja,
+  sacudida y empujon de camara.
+
+### Adversario
+- Maquina en el puesto del jugador 2, con tres niveles que cambian tiempo de reaccion,
+  ganas de taparse y mezcla de golpes. Agarra a quien se queda tapado.
+
+### Imagen
+- Paso a Universal Render Pipeline 17.0.4. Los 74 materiales reescritos.
+- Contorno negro por casco invertido sobre los luchadores.
+- Luz de tres puntos con acento de color por jugador, post proceso (ACES, contraste,
+  saturacion, bloom, vineta) y encuadre cerrado.
+- Atmosfera propia para cada una de las nueve arenas: sol, ambiente, niebla y fondo.
+- Seis retratos de seleccion generados. Faltan Cleopatra, Lincoln y Socrates.
+
+### Sonido
+- Cuatro voces en rotacion con variacion de tono y capa grave bajo el golpe fuerte.
+  Muestras CC0 de Kenney.
+
+### Herramientas
+- Prueba de humo: el player arranca, se fotografia a si mismo y se cierra. La CI la corre
+  despues de cada build y falla si el juego no abre.
+- Build de Windows ademas del de macOS.
+- 88 pruebas EditMode.
+
+### Arreglos que merecen mencion
+- El player moria al arrancar con `level0 is corrupted`: `DlcEntitlementService` vivia en
+  un archivo con otro nombre y Unity no podia resolver su script. La CI daba verde porque
+  solo comprobaba que compilase.
+- `activeInputHandler` estaba en 0 en el repo desde el primer commit: cualquier build hecho
+  fuera del Mac de Munay salia sin teclado ni mando.
+- La prueba que vigilaba el servicio DLC buscaba en el YAML una cadena que solo existe
+  cuando el script esta roto. Verde significaba exactamente lo contrario de lo que parecia.

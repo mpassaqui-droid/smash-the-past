@@ -1,0 +1,25 @@
+name: Idea
+description: Una propuesta de diseno o de contenido
+labels: ["idea"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: La idea
+    validations:
+      required: true
+  - type: textarea
+    id: por-que
+    attributes:
+      label: Por que mejora el juego
+      description: Que problema resuelve o que hace mas divertido. Sin esto es una lista de deseos.
+    validations:
+      required: true
+  - type: dropdown
+    id: cuando
+    attributes:
+      label: Cuando
+      options:
+        - Antes de vender
+        - Despues de vender
+        - Algun dia

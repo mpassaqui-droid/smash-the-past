@@ -5,7 +5,7 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 ## Por hacer
 - [ ] Diego: instalar Unity Hub + Unity 6 LTS (6000.0.83f1, misma version que Munay) y activar licencia Personal
 - [ ] Diego: `git clone`, leer `AGENTS.md`, empezar Character pipeline (1 `CharacterData` de prueba + su special)
-- [ ] Munay: probar teclado y dos mandos fisicos en el player construido por CI desde un clon limpio: `~/Dev/Juego0-builds/ci-34683041174/SmashThePast/Builds/SmashThePast.app`. Es lo unico que la maquina no puede demostrar sola.
+- [ ] Munay: probar teclado y dos mandos fisicos en el player construido por CI desde un clon limpio: el player publicado en Releases. Es lo unico que la maquina no puede demostrar sola.
 - [ ] Generar los 3 retratos que faltan (Cleopatra, Abraham Lincoln, Socrates) cuando haya creditos en Higgsfield. Mismo prompt que los otros seis para que el estilo no se separe.
 - [ ] Munay: mirar el player URP construido por CI y decir si el aspecto va por buen camino. Es lo unico que falta para cerrar la PR #5 (en la captura headless hay que apagar el SRP Batcher o sale todo dorado; hace falta ver el player real para saber si eso pasa tambien ahi).
 - [ ] Musica: Suno o Udio con plan de pago (los derechos comerciales no vienen con el plan gratuito). Mejor cuando el combate este cerrado de punta a punta.
