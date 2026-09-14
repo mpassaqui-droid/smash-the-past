@@ -47,3 +47,6 @@
 - `[Retry(3)]` no sirve para `[UnityTest]`: compila y no reintenta nada. Si una prueba de corrutina es intermitente, hay que arreglar la causa.
 
 - Construir un personaje por script es medir tramos, no elegir numeros bonitos. La primera version salio desmontada: la cabeza flotaba sobre el cuello y el sombrero sobre la cabeza, porque cada pieza tenia su centro y su tamano sin comprobar que tocara la siguiente. Se arregla escribiendo los tramos de arriba abajo con un centimetro de solape. Renderizar a PNG antes de importar cuesta veinte segundos y lo enseña.
+
+- El exportador FBX de Blender hornea la plage de fotogramas de la ESCENA, no la de la accion. Sin fijar `scene.frame_start` y `frame_end` antes de cada exportacion, los siete clips salieron de 10,38 segundos cada uno: un golpe ligero de diez segundos no sirve para nada y Unity los importa sin quejarse. Comprobar siempre la duracion que reporta Unity, no solo que el clip exista.
+- En Blender el giro de un hueso va sobre sus ejes locales: para un hueso que apunta a lo largo del cuerpo, X es inclinarse adelante y atras, Y es girar sobre si mismo. Puse el giro del torso en Z y el punetazo salio como una reverencia. Renderizar una tira de seis fotogramas lo enseño de un vistazo.
