@@ -62,6 +62,27 @@ anadiendo las de cada arena y cada una sustituye al respaldo cuando aparece.
 Son archivos largos: **Streaming** y **Load in background**. Cargarlos enteros en memoria
 no tiene sentido. Formato `.ogg`, estereo, 44.1 kHz.
 
+## Trabajar la musica en tiempo real, con los personajes delante
+
+No hace falta compilar nada para oir como queda.
+
+1. En Unity, abre la escena `Assets/Stages/PrototypeArena.unity` haciendo doble click en
+   ella desde la ventana Project. **Si acabas de abrir el proyecto y ves una pantalla
+   vacia, es que no hay ninguna escena abierta: esto lo arregla.**
+2. Pulsa **Play**. El juego corre dentro del editor, con sonido.
+3. Deja tus archivos en `Assets/Audio/Resources/Musica/`. Unity los importa solo. Puedes
+   hacerlo **con el juego corriendo**: vuelve a Unity, suelta el archivo, y al cambiar de
+   pantalla o de arena la pista nueva entra sin reiniciar.
+4. Para ajustar el volumen mientras suena: selecciona el objeto `Musica` en la Hierarchy y
+   mueve el campo **Volumen** del componente. Los cambios hechos en Play se pierden al
+   parar, asi que cuando des con el valor bueno, paralo y ponlo otra vez.
+5. Para saltar rapido entre arenas sin pelear: en el menu elige DOS JUGADORES, y en la
+   seleccion cambia el personaje del jugador 1. Cada personaje trae su propia arena, asi
+   que oiras `arena1` a `arena9` una detras de otra.
+
+Atajo util: con el juego corriendo, la tecla `M` enciende y apaga a la maquina. Asi puedes
+dejar que pelee sola y concentrarte en escuchar.
+
 ## Licencias, esto no es opcional
 
 El juego se va a vender. Cada pista y cada efecto necesita una de estas tres:
