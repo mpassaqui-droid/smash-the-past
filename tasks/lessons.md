@@ -114,3 +114,9 @@
 - El menu principal se muestra estando ya en fase `Selection`, asi que al darle musica propia al titulo sonaban DOS pistas a la vez: la del titulo y la que `MusicaDelJuego` pone para la seleccion. No se ve en ninguna captura, solo se oye, y lo canto Munay. `MusicaDelJuego.TituloEnPantalla` la calla mientras el titulo esta a la vista.
 
 - Para comprobarlo hay que sacar por escrito que suena: `PruebaDeHumo` ahora lista los AudioSource activos con su clip, una vez en el menu y otra con el combate corriendo. La primera version del sondeo estaba colocada ANTES de que empezara el combate, asi que las dos medidas daban lo mismo y parecia que el arreglo no funcionaba. Un sondeo mal situado miente igual que no tenerlo.
+
+- Un `.fbx` recien copiado entra con los ajustes por defecto: sin avatar humano. `CambiarModelo` fallaba con "no es un humanoide valido" y la culpa no era del modelo sino de que nadie le habia puesto los ajustes. Ahora el propio script se los pone si hacen falta, asi que anadir un personaje nuevo es copiar el fichero y anadir su linea al mapa.
+
+- El pack de mujeres de Quaternius comparte Chest (1,377) y Head (1,587) con el de hombres, que es donde van casi todas las piezas de vestuario; solo cambia la cadera (1,002 contra 0,894). Conviene comprobarlo hueso a hueso antes de dar por bueno que una pieza vale para los dos packs.
+
+- Una pieza que ENVUELVE la cabeza en vez de posarse encima se lee como un casco cuadrado. El nemes de Cleopatra medida 0,41 de alto y se comia la cara; a 0,13 se apoya en la coronilla y el rostro se ve. La cifra que hay que mirar es el alto de la pieza contra el alto de la cabeza (1,45 a 1,86).

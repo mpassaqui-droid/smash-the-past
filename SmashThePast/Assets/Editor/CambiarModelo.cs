@@ -37,7 +37,7 @@ namespace SmashThePast.EditorTools
             ("Gandhi",            "Beach"),       // el de ropa mas escasa, por el dhoti
             ("Rasputin",          "Punk"),        // el pelo revuelto es lo que mas se le parece
             ("NapoleonBonaparte", "King"),        // por el manto de la coronacion
-            ("Cleopatra",         "Casual"),      // OJO: el pack es de hombres, aqui hace falta otra fuente
+            ("Cleopatra",         "MujerMedieval"), // del pack de mujeres de Quaternius, mismo estilo y misma licencia
             ("AbrahamLincoln",    "Suit"),
             ("Socrates",          "Casual2"),     // provisional, la tunica hay que modelarla
         };
@@ -50,6 +50,25 @@ namespace SmashThePast.EditorTools
             foreach (var (personaje, modelo) in MAPA)
             {
                 string rutaFbx = $"{MODELOS}/{modelo}.fbx";
+
+                // Un modelo recien copiado entra con los ajustes por defecto, sin avatar
+                // humano, y aqui fallaba. Se le ponen antes de mirarlo: asi anadir un
+                // modelo nuevo es copiar el .fbx y anadir su linea al mapa, nada mas.
+                var importador = AssetImporter.GetAtPath(rutaFbx) as ModelImporter;
+                if (importador == null)
+                {
+                    Debug.LogError($"[cambio] no existe {rutaFbx}");
+                    EditorApplication.Exit(1); return;
+                }
+                if (importador.animationType != ModelImporterAnimationType.Human)
+                {
+                    importador.animationType = ModelImporterAnimationType.Human;
+                    importador.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+                    importador.materialImportMode = ModelImporterMaterialImportMode.ImportStandard;
+                    importador.SaveAndReimport();
+                    Debug.Log($"[cambio] {modelo} importado como Humanoid");
+                }
+
                 var fuente = AssetDatabase.LoadAssetAtPath<GameObject>(rutaFbx);
                 var avatar = AssetDatabase.LoadAllAssetsAtPath(rutaFbx).OfType<Avatar>().FirstOrDefault();
                 if (fuente == null || avatar == null || !avatar.isHuman)

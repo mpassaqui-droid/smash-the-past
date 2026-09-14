@@ -82,10 +82,12 @@ PIEZAS = {
         ("espalda_blanco",(0,  0.045, 1.260), (0.42, 0.06, 0.34)),
     ]),
     # El nemes cae por detras de la cabeza: de perfil es esa masa la que se reconoce.
+    # El tocado se posa SOBRE la cabeza, no la envuelve: la primera version medida
+    # 0.41 de alto y se comia la cara entera como un casco cuadrado.
     "Cleopatra_nemes": ("Head", [
-        ("tocado_azul",   (0, -0.040, 1.790), (0.30, 0.34, 0.20)),
-        ("caida_azul",    (0,  0.105, 1.620), (0.27, 0.13, 0.28)),
-        ("banda_oro",     (0, -0.045, 1.700), (0.31, 0.36, 0.05)),
+        ("tocado_azul",   (0, -0.045, 1.815), (0.25, 0.27, 0.13)),
+        ("caida_azul",    (0,  0.080, 1.680), (0.21, 0.10, 0.20)),
+        ("banda_oro",     (0, -0.045, 1.745), (0.26, 0.28, 0.04)),
     ]),
     "Cleopatra_collar": ("Chest", [
         ("collar_oro",    (0, -0.055, 1.430), (0.34, 0.28, 0.07)),

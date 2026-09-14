@@ -9,9 +9,10 @@ Archivos:
       ultimos 200 ms.
 
   Resources/Musica/combate.ogg
-      PROVISIONAL: es una copia del mismo bucle, puesto como respaldo para que
-      las nueve arenas no suenen mudas. En cuanto Diego mande un tema de
-      combate se sustituye este archivo y ya esta.
+      PROVISIONAL: es una copia de titulo.ogg, el tema largo ya enlazado. Antes
+      era una copia del bucle de 26 s, que es el de la seleccion, asi que se
+      oia la misma musica en la seleccion y en el combate. En cuanto Diego
+      mande un tema de combate se sustituye este archivo y ya esta.
 
   Resources/CombatAudio/knifeSlice.ogg
       Sonido de atacar. Sustituye a la muestra de Kenney del mismo nombre.
