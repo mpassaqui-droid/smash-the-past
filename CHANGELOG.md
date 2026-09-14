@@ -1,5 +1,15 @@
 # Historial
 
+## v0.3.0-alpha - 15/09/2026
+
+Pantalla de titulo.
+
+- El menu principal lleva de fondo la carta de titulo animada, en bucle y sin
+  el zoom que traia el original.
+- Su musica, preparada para enlazar: 78 compases justos, sin el hueco que
+  dejaban los fundidos de entrada y salida.
+- Dos sonidos de interfaz, al pasar por encima de un boton y al pulsarlo.
+
 ## v0.2.0-alpha - 14/09/2026
 
 Los nueve luchadores dejan de ser cajas, y las animaciones por fin llegan al juego.
