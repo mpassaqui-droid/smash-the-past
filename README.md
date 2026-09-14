@@ -81,7 +81,11 @@ git lfs install          # ANTES de clonar: las imagenes y el audio van en LFS
 git clone https://github.com/mpassaqui-droid/smash-the-past.git
 ```
 
-Abrir la carpeta `SmashThePast/` desde Unity Hub.
+Abrir la carpeta `SmashThePast/` desde Unity Hub, no la raiz del repo.
+
+> El boton **Download ZIP** de GitHub no sirve: no trae los archivos de LFS, solo punteros
+> de texto, y los retratos y el audio llegan rotos. Hay que clonar. Los pasos completos,
+> incluida la via con GitHub Desktop, estan en [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 **Antes de tocar nada**, leer en este orden: [`AGENTS.md`](AGENTS.md) (reglas de trabajo y
 de quien es cada carpeta), [`GDD.md`](GDD.md) (el diseno cerrado), [`TASKS.md`](TASKS.md)
