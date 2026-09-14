@@ -55,6 +55,19 @@ namespace SmashThePast.Stages
             cerebro.Configurar(match.PlayerOne, nivel);
         }
 
+        /// <summary>Enciende o apaga la maquina desde el menu, sin alternar a ciegas.</summary>
+        public void Activar(bool encendida)
+        {
+            activa = encendida;
+            if (!activa && cerebro != null) cerebro.enabled = false;
+        }
+
+        public void FijarNivel(NivelIA nuevo)
+        {
+            nivel = nuevo;
+            if (cerebro != null) cerebro.Nivel = nivel;
+        }
+
         public void Alternar()
         {
             activa = !activa;

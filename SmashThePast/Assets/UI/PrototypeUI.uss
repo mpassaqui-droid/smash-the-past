@@ -129,3 +129,20 @@
   color: rgb(255, 236, 190);
 }
 .marcador { font-size: 15px; letter-spacing: 3px; color: rgb(223, 193, 111); margin-top: 2px; }
+
+.menu-principal {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(12, 14, 18, 0.94);
+}
+.menu-titulo { font-size: 58px; -unity-font-style: bold; color: rgb(245, 236, 220); }
+.menu-subtitulo { font-size: 15px; color: rgb(168, 172, 178); margin-bottom: 34px; }
+.menu-botones { align-items: center; }
+.prototype-ui .menu-botones .menu-button { width: 320px; min-height: 46px; margin-bottom: 10px; }
+.prototype-ui .menu-button.pequeno { width: 120px; min-height: 32px; }
+.fila-opcion { flex-direction: row; align-items: center; margin-bottom: 14px; width: 520px; }
+.etiqueta-opcion { width: 240px; font-size: 15px; color: rgb(225, 228, 232); }
+.valor-opcion { width: 90px; font-size: 15px; -unity-font-style: bold; color: rgb(223, 193, 111); }
+.control-opcion { width: 180px; }

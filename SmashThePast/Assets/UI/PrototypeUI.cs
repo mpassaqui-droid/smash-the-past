@@ -27,6 +27,14 @@ namespace SmashThePast.UI
         private MatchController boundMatch;
         private VisualElement root, selection, grid, hud, overlay;
         private Label anuncio;
+        private VisualElement menu, opciones;
+        private Slider volumen;
+        private Label etiquetaDificultad;
+        private bool enMenu = true;
+        private bool enOpciones;
+        private DirectorIA director;
+        private const string ClaveVolumen = "volumen";
+        private const string ClaveDificultad = "dificultad";
         private readonly Label[] marcador = new Label[2];
         private ScrollView resultScroll;
         private Label timer, resultTitle, winQuote, loseQuote;
@@ -67,6 +75,9 @@ namespace SmashThePast.UI
             BuildSelection();
             BuildHud();
             BuildOverlay();
+            ConstruirMenu();
+            ConstruirOpciones();
+            CargarAjustes();
             root.RegisterCallback<GeometryChangedEvent>(e => SetLayout(e.newRect.width));
             SetLayout(documentRoot.resolvedStyle.width);
             boundMatch = match;
@@ -136,6 +147,105 @@ namespace SmashThePast.UI
             anuncio.pickingMode = PickingMode.Ignore;
         }
 
+
+        // Menu principal. El juego abria directamente en la pantalla de seleccion, que es
+        // lo que hace que parezca una demo: no hay ni entrada ni salida.
+        private void ConstruirMenu()
+        {
+            menu = Box(root, "menu-principal");
+            Text(menu, "SMASH THE PAST", "menu-titulo");
+            Text(menu, "Nueve figuras que nunca se cruzaron", "menu-subtitulo");
+            var botones = Box(menu, "menu-botones");
+            ActionButton(botones, "CONTRA LA MAQUINA", () => Empezar(true), "menu-button primary");
+            ActionButton(botones, "DOS JUGADORES", () => Empezar(false), "menu-button");
+            ActionButton(botones, "OPCIONES", () => { enOpciones = true; Refresh(); }, "menu-button");
+            ActionButton(botones, "SALIR", Salir, "menu-button");
+        }
+
+        private void ConstruirOpciones()
+        {
+            opciones = Box(root, "menu-principal opciones");
+            Text(opciones, "OPCIONES", "menu-titulo");
+
+            var filaVolumen = Box(opciones, "fila-opcion");
+            Text(filaVolumen, "Volumen", "etiqueta-opcion");
+            volumen = new Slider(0f, 1f) { value = AudioListener.volume };
+            volumen.AddToClassList("control-opcion");
+            volumen.RegisterValueChangedCallback(e =>
+            {
+                AudioListener.volume = e.newValue;
+                PlayerPrefs.SetFloat(ClaveVolumen, e.newValue);
+            });
+            filaVolumen.Add(volumen);
+
+            var filaDificultad = Box(opciones, "fila-opcion");
+            Text(filaDificultad, "Dificultad de la maquina", "etiqueta-opcion");
+            etiquetaDificultad = Text(filaDificultad, "", "valor-opcion");
+            ActionButton(filaDificultad, "CAMBIAR", CambiarDificultad, "menu-button pequeno");
+
+            var salida = Box(opciones, "menu-botones");
+            ActionButton(salida, "VOLVER", () => { enOpciones = false; Refresh(); }, "menu-button primary");
+        }
+
+        private DirectorIA Director()
+        {
+            if (director == null) director = UnityEngine.Object.FindFirstObjectByType<DirectorIA>();
+            return director;
+        }
+
+        private void CargarAjustes()
+        {
+            AudioListener.volume = PlayerPrefs.GetFloat(ClaveVolumen, 1f);
+            if (volumen != null) volumen.SetValueWithoutNotify(AudioListener.volume);
+            var mando = Director();
+            if (mando != null) mando.FijarNivel((NivelIA)PlayerPrefs.GetInt(ClaveDificultad, (int)NivelIA.Normal));
+            ActualizarEtiquetaDificultad();
+        }
+
+        private void CambiarDificultad()
+        {
+            var mando = Director();
+            if (mando == null) return;
+            mando.SubirNivel();
+            PlayerPrefs.SetInt(ClaveDificultad, (int)mando.Nivel);
+            ActualizarEtiquetaDificultad();
+        }
+
+        private void ActualizarEtiquetaDificultad()
+        {
+            if (etiquetaDificultad == null) return;
+            var mando = Director();
+            var nivel = mando != null ? mando.Nivel : NivelIA.Normal;
+            etiquetaDificultad.text = nivel == NivelIA.Facil ? "Facil" : nivel == NivelIA.Dificil ? "Dificil" : "Normal";
+        }
+
+        private void Empezar(bool contraLaMaquina)
+        {
+            var mando = Director();
+            if (mando != null) mando.Activar(contraLaMaquina);
+            enMenu = false;
+            enOpciones = false;
+            match.ShowSelection();
+            Refresh();
+        }
+
+        public void VolverAlMenu()
+        {
+            enMenu = true;
+            enOpciones = false;
+            match.ShowSelection();
+            Refresh();
+        }
+
+        private static void Salir()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
         private void BuildOverlay()
         {
             overlay = Box(root, "overlay");
@@ -149,6 +259,7 @@ namespace SmashThePast.UI
             var actions = Box(panel, "result-actions");
             primary = ActionButton(actions, "", ActivatePrimary, "menu-button primary");
             secondary = ActionButton(actions, "ELEGIR PERSONAJES", () => match.ShowSelection(), "menu-button");
+            ActionButton(actions, "MENU PRINCIPAL", VolverAlMenu, "menu-button");
             primary.RegisterCallback<PointerEnterEvent>(_ => SetMenu(0));
             secondary.RegisterCallback<PointerEnterEvent>(_ => SetMenu(1));
         }
@@ -309,6 +420,20 @@ namespace SmashThePast.UI
             bool changedPhase = shownPhase != match.Phase;
             shownPhase = match.Phase;
             if (changedPhase) phaseFrame = Time.frameCount;
+            // Si hay combate en marcha, el menu no pinta nada delante: puede haberlo
+            // arrancado otra cosa (la escena, una prueba, el modo arcade).
+            if (enMenu && shownPhase != MatchPhase.Selection) enMenu = false;
+
+            Show(menu, enMenu && !enOpciones);
+            Show(opciones, enMenu && enOpciones);
+            if (enMenu)
+            {
+                Show(selection, false);
+                Show(hud, false);
+                Show(overlay, false);
+                ActualizarEtiquetaDificultad();
+                return;
+            }
             Show(selection, shownPhase == MatchPhase.Selection);
             // El HUD tambien se ve durante el anuncio del asalto: la vida y el marcador
             // ya cuentan antes de que suene el primer golpe.
