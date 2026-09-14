@@ -1,10 +1,14 @@
-# Subir musica sin instalar nada
+# Subir musica
 
-Escrito para Diego. No hace falta git, ni clonar el repo, ni GitHub Desktop, ni abrir
-Unity. Solo el navegador y tu cuenta de GitHub, que ya tiene permiso de escritura.
+Escrito para Diego. La musica es el unico trabajo del proyecto que no toca codigo: dejas
+el archivo con el nombre correcto y suena solo. No hace falta abrir Unity.
 
-La musica es el unico trabajo del proyecto que no toca codigo: dejas el archivo con el
-nombre correcto y suena solo.
+> **Aviso, corregido el 14/09/2026.** La primera version de esta guia decia que se podia
+> subir el `.ogg` desde la web de GitHub. **Es falso y lo comprobamos en la practica.**
+> GitHub responde: *"The following files are configured to be stored in Git LFS and must
+> be pushed using the Git command line with Git LFS installed"*. La subida por navegador
+> **no sabe** manejar Git LFS, y en este repo los `.ogg` estan en LFS. Abajo estan las
+> tres rutas que si funcionan.
 
 ## 1. Preparar el archivo
 
@@ -12,8 +16,8 @@ Tres cosas que importan, y ninguna es negociable:
 
 - **Formato `.ogg`**, estereo, 44.1 kHz. Si exportas en `.wav` el archivo pesa diez veces
   mas y GitHub lo rechaza por tamano.
-- **Menos de 25 MB.** Es el limite de la subida por navegador. Un tema de tres minutos en
-  `.ogg` pesa entre 3 y 5 MB, asi que hay margen de sobra.
+- **Cuanto mas ligero mejor.** Un tema de tres minutos en `.ogg` pesa entre 3 y 5 MB, y
+  con eso sobra.
 - **El nombre exacto**, en minusculas. El juego busca estos nombres y ninguno mas:
 
 | Nombre | Donde suena |
@@ -23,40 +27,40 @@ Tres cosas que importan, y ninguna es negociable:
 | `arena1.ogg` | Arena de Tupac Amaru II |
 | `arena2.ogg` ... `arena9.ogg` | Las demas arenas, en el orden del roster. `arena9` es la de Socrates. |
 
-## 2. Subirlo
+## 2. Como hacerlo llegar al repo
 
-1. Abre https://github.com/mpassaqui-droid/smash-the-past
-2. Navega hasta la carpeta `SmashThePast/Assets/Audio/Resources/Musica/`. Se hace
-   pinchando los nombres de carpeta uno detras de otro, como en el explorador.
-3. Boton **Add file**, arriba a la derecha, y elige **Upload files**.
-4. Arrastra tu `.ogg` a la zona grande.
-5. Abajo aparecen dos opciones. Elige la **segunda**:
-   *Create a new branch for this commit and start a pull request*.
-   Deja el nombre que propone.
-6. **Propose changes**, y en la pantalla siguiente **Create pull request**.
+Tres rutas. La 1 no necesita instalar nada.
 
-Ya esta. Munay lo ve, lo escucha en el juego y lo integra.
+### Ruta 1: mandarselo a Munay (la mas rapida)
 
-## Por que la segunda opcion y no la primera
+Mandas el `.ogg` por WhatsApp o Drive y el lo sube. Cero instalacion, cero configuracion.
+Si vas a mandar una o dos pistas, esta es la buena.
 
-La primera escribe directamente en `main`, que es la version buena del juego. La segunda
-deja tu archivo en una copia aparte hasta que alguien lo mire. Si algo sale mal solo hay
-que cerrar la propuesta, y `main` ni se entera.
+### Ruta 2: GitHub Desktop (te vuelve autonomo)
 
-## Lo que NO hay que hacer
+Vale la pena si vas a mandar muchas. Una sola vez:
 
-- **No uses el boton "Download ZIP"** de GitHub para bajarte el proyecto. En este repo las
-  imagenes y los sonidos estan en Git LFS, y ese ZIP trae archivos de texto de unos bytes
-  en lugar de los de verdad. Unity no avisa claramente y parece que el proyecto esta roto.
-- **No subas `.wav`.** Pasa del limite de 25 MB casi siempre.
-- **No cambies el nombre** por algo mas bonito. `arena1.ogg` es `arena1.ogg`.
+1. Instala **Git LFS** desde https://git-lfs.com (siguiente, siguiente).
+2. Instala **GitHub Desktop** desde https://desktop.github.com
+3. En GitHub Desktop: *File > Clone repository*, pestana URL, pega
+   `mpassaqui-droid/smash-the-past`.
 
-## Derechos
+Y despues, cada vez:
 
-Solo musica tuya, CC0, o generada con un plan **de pago** que ceda derechos comerciales.
-El plan gratuito de Suno y de Udio no los cede, y el juego se va a vender. Cada pista
-necesita su nota en `Assets/Audio/Licenses/` diciendo de donde sale y con que licencia.
-Si no sabes como, mandasela a Munay por escrito y el la anade.
+1. Copia tu `.ogg` dentro de `SmashThePast/Assets/Audio/Resources/Musica/`.
+2. GitHub Desktop lo detecta solo. Abajo a la izquierda escribe una linea de que es.
+3. **Commit to main**, y arriba **Push origin**.
+
+GitHub Desktop si sabe manejar LFS. Por eso funciona y la web no.
+
+### Ruta 3: la web de GitHub
+
+**Solo sirve para archivos que NO esten en LFS**, o sea texto: los `.md` como este o como
+`REFERENCIAS.md`. Para `.ogg` no funciona, GitHub lo rechaza.
+
+Para esos archivos de texto: boton **Add file > Upload files**, o el lapiz **Edit this
+file**. Abajo elige siempre **Create a new branch and start a pull request**, asi no
+escribes directo en la version buena.
 
 ## Por que ningun archivo abre el juego de un click
 

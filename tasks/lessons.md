@@ -74,3 +74,7 @@
 - Un modelo simetrico esconde los errores de orientacion. Los luchadores llevaban desde siempre la espalda vuelta a la camara y NUNCA se giraban el uno hacia el otro; con un personaje de cajas casi simetrico no se notaba, y se vio en cuanto el modelo tuvo cara. El giro estaba en `FighterVisual`, que ademas no se ejecutaba: su primera linea era `if (model == null ...) return;` y las cinco referencias del prefab estaban vacias, asi que tambien se perdia el destello blanco al encajar un golpe. Un componente que sale por la primera linea no falla, no avisa, y parece que funciona.
 
 - El modelo nace mirando a +Z y la camara del combate tambien mira a +Z: dejarlo a 0 grados es ensenarle la espalda al jugador. De perfil (+-90) ademas los punetazos salen hacia el rival y no hacia el fondo.
+
+- **La subida por navegador de GitHub no sabe manejar Git LFS.** No lo convierte, no lo avisa antes: rechaza el archivo con "must be pushed using the Git command line with Git LFS installed". La documentacion de GitHub no lo dice en ninguna parte, ni a favor ni en contra, y escribi una guia entera para Diego dando por hecho que funcionaria. Se descubrio cuando el lo intento. Para un repo con LFS, la web solo sirve para los archivos de texto que no estan en `.gitattributes`.
+
+- Una guia escrita para otra persona hay que probarla antes de mandarsela, o decir claramente que parte no esta probada. La mia le hizo perder un viaje.
