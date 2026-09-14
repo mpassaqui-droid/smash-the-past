@@ -22,7 +22,6 @@ namespace SmashThePast.EditorTools
             ("GenghisKhan",       "GenghisKhan_casco",           "Head"),
             ("MiyamotoMusashi",   "MiyamotoMusashi_monyo",       "Head"),
             ("MiyamotoMusashi",   "MiyamotoMusashi_obi",         "Hips"),
-            ("Gandhi",            "Gandhi_gafas",                "Head"),
             ("Gandhi",            "Gandhi_chal",                 "Chest"),
             ("Rasputin",          "Rasputin_barba",              "Head"),
             ("Rasputin",          "Rasputin_sotana",             "Chest"),
@@ -30,6 +29,7 @@ namespace SmashThePast.EditorTools
             ("Cleopatra",         "Cleopatra_nemes",             "Head"),
             ("Cleopatra",         "Cleopatra_collar",            "Chest"),
             ("AbrahamLincoln",    "AbrahamLincoln_chistera",     "Head"),
+            ("AbrahamLincoln",    "AbrahamLincoln_barba",        "Head"),
             ("Socrates",          "Socrates_barba",              "Head"),
             ("Socrates",          "Socrates_toga",               "Chest"),
         };
@@ -45,6 +45,7 @@ namespace SmashThePast.EditorTools
             ["gris"]   = new Color(0.45f, 0.44f, 0.42f),
             ["metal"]  = new Color(0.20f, 0.21f, 0.25f),
             ["azul"]   = new Color(0.12f, 0.28f, 0.45f),
+            ["marron"] = new Color(0.26f, 0.22f, 0.19f),
             // Los colores claros se los come la luz del escenario: el lado derecho de
             // la arena tiene luz calida y un gris claro se lee rosa. Conviene que las
             // piezas tengan color propio y no dependan de la iluminacion.

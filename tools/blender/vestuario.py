@@ -20,12 +20,21 @@ from mathutils import Vector
 
 # nombre -> (hueso, [(subnombre_color, centro, tamano)])
 # El sufijo despues del ultimo "_" es la etiqueta de color que lee VestuarioSetup.
-# Medidas tomadas del esqueleto real, identico en los nueve modelos del pack:
-# caderas 0.894, pecho 1.377, hombros 1.395 a +-0.098, cabeza 1.587, coronilla 1.86.
-# El torso mide +-0.20 en X y el personaje mira hacia -Y.
+#
+# REGLA QUE SALIO DE MIRAR EL JUEGO: esto se ve DE PERFIL. Una pieza plana en el eje
+# de profundidad (Y en Blender) se ve de canto y parece una tabla. La primera version
+# fallo en los nueve por eso: barbas como planchas, capas como hojas de papel.
+#   - capa, tunica o sotana: panyo delante + panyo detras + PUENTE sobre los hombros.
+#     Sin el puente se ven dos laminas separadas. El poncho ya funcionaba porque lo tenia.
+#   - sombrero: el ala ancha en X *y* en Y, para que se lea desde el lado.
+#   - barba: colgando BAJO la barbilla (z 1.45 a 1.61), no pegada delante de la cara.
+#   - lo que es mas pequenyo que unos 8 cm no se lee a esta distancia de camara: las
+#     gafas de Gandhi salian como una venda blanca, y se han quitado.
+#
+# Medidas del esqueleto, identico en los nueve: caderas 0.894, pecho 1.377,
+# hombros 1.395 a +-0.098, cabeza 1.587, coronilla 1.86. La malla de la cabeza ocupa
+# X +-0.18, Y -0.24 a 0.11, Z 1.45 a 1.86. El personaje mira hacia -Y.
 PIEZAS = {
-    # Poncho de verdad: dos panyos que cuelgan por delante y por detras, unidos por
-    # encima de los hombros. Antes era un solo bloque y se leia como una tabla.
     "TupacAmaruII_poncho": ("Chest", [
         ("hombros_rojo",  (0, -0.055, 1.430), (0.44, 0.25, 0.05)),
         ("frente_rojo",   (0, -0.165, 1.215), (0.50, 0.05, 0.45)),
@@ -33,61 +42,59 @@ PIEZAS = {
         ("franjaf_oro",   (0, -0.167, 1.030), (0.51, 0.05, 0.06)),
         ("franjae_oro",   (0,  0.057, 1.030), (0.51, 0.05, 0.06)),
     ]),
+    # Bicornio puesto de proa a popa: de perfil se ven las dos puntas, que es lo unico
+    # que lo distingue de un sombrero cualquiera. Cruzado no se leeria desde el lado.
     "NapoleonBonaparte_bicornio": ("Head", [
-        ("ala_negro",     (0, -0.040, 1.880), (0.52, 0.17, 0.05)),
-        ("copa_negro",    (0, -0.040, 1.915), (0.26, 0.15, 0.09)),
-        ("escarapela_oro",(0.10, -0.115, 1.895), (0.07, 0.04, 0.07)),
+        ("ala_negro",     (0, -0.050, 1.870), (0.21, 0.54, 0.045)),
+        ("copa_negro",    (0, -0.050, 1.905), (0.17, 0.26, 0.10)),
     ]),
     "AbrahamLincoln_chistera": ("Head", [
-        ("ala_negro",     (0, -0.040, 1.865), (0.42, 0.42, 0.03)),
-        ("copa_negro",    (0, -0.040, 1.995), (0.25, 0.25, 0.26)),
-        ("barba_gris",    (0, -0.160, 1.600), (0.17, 0.11, 0.15)),
+        ("ala_negro",     (0, -0.045, 1.865), (0.40, 0.44, 0.035)),
+        ("copa_negro",    (0, -0.045, 1.990), (0.26, 0.26, 0.25)),
+    ]),
+    "AbrahamLincoln_barba": ("Head", [
+        ("pelo_marron",   (0, -0.115, 1.545), (0.17, 0.20, 0.21)),
     ]),
     "Socrates_toga": ("Chest", [
-        ("frente_crema",  (0, -0.155, 1.200), (0.46, 0.06, 0.50)),
-        ("espalda_crema", (0,  0.045, 1.200), (0.46, 0.06, 0.50)),
-        ("banda_crema",   (0.10, -0.055, 1.440), (0.36, 0.25, 0.08)),
+        ("hombros_crema", (0, -0.058, 1.430), (0.46, 0.30, 0.06)),
+        ("frente_crema",  (0, -0.185, 1.195), (0.52, 0.07, 0.50)),
+        ("espalda_crema", (0,  0.070, 1.195), (0.52, 0.07, 0.50)),
     ]),
     "Socrates_barba": ("Head", [
-        ("pelo_blanco",   (0, -0.165, 1.565), (0.19, 0.12, 0.22)),
+        ("pelo_blanco",   (0, -0.115, 1.545), (0.18, 0.21, 0.24)),
     ]),
-    # El casco envuelve la cabeza, no se posa encima: la coronilla esta en 1.86 y la
-    # primera version quedaba centrada en 1.91, flotando como una caja.
     "GenghisKhan_casco": ("Head", [
-        ("borde_metal",   (0, -0.040, 1.745), (0.36, 0.36, 0.035)),
-        ("cuerpo_metal",  (0, -0.040, 1.835), (0.28, 0.28, 0.17)),
-        ("punta_oro",     (0, -0.040, 1.945), (0.05, 0.05, 0.10)),
+        ("borde_metal",   (0, -0.045, 1.745), (0.36, 0.40, 0.04)),
+        ("cuerpo_metal",  (0, -0.045, 1.835), (0.28, 0.30, 0.17)),
+        ("punta_oro",     (0, -0.045, 1.945), (0.05, 0.05, 0.10)),
     ]),
     "Rasputin_sotana": ("Chest", [
-        ("frente_negro",  (0, -0.150, 1.180), (0.44, 0.06, 0.54)),
-        ("espalda_negro", (0,  0.040, 1.180), (0.44, 0.06, 0.54)),
-        ("cruz_oro",      (0, -0.180, 1.300), (0.06, 0.03, 0.16)),
+        ("hombros_negro", (0, -0.055, 1.430), (0.42, 0.26, 0.05)),
+        ("frente_negro",  (0, -0.155, 1.175), (0.45, 0.06, 0.53)),
+        ("espalda_negro", (0,  0.045, 1.175), (0.45, 0.06, 0.53)),
     ]),
     "Rasputin_barba": ("Head", [
-        ("pelo_negro",    (0, -0.160, 1.500), (0.20, 0.13, 0.30)),
-    ]),
-    "Gandhi_gafas": ("Head", [
-        ("izq_metal",     (0.070, -0.190, 1.700), (0.09, 0.03, 0.09)),
-        ("der_metal",     (-0.070, -0.190, 1.700), (0.09, 0.03, 0.09)),
-        ("puente_metal",  (0, -0.190, 1.700), (0.06, 0.02, 0.02)),
+        ("pelo_negro",    (0, -0.115, 1.535), (0.18, 0.21, 0.26)),
     ]),
     "Gandhi_chal": ("Chest", [
-        ("banda_blanco",  (0.095, -0.055, 1.380), (0.36, 0.26, 0.10)),
+        ("hombros_blanco",(0, -0.055, 1.425), (0.40, 0.27, 0.05)),
+        ("frente_blanco", (0, -0.150, 1.260), (0.42, 0.06, 0.34)),
+        ("espalda_blanco",(0,  0.045, 1.260), (0.42, 0.06, 0.34)),
     ]),
+    # El nemes cae por detras de la cabeza: de perfil es esa masa la que se reconoce.
     "Cleopatra_nemes": ("Head", [
-        ("tocado_azul",   (0, -0.030, 1.805), (0.31, 0.31, 0.22)),
-        ("panelizq_oro",  (0.160, -0.100, 1.620), (0.08, 0.21, 0.27)),
-        ("panelder_oro",  (-0.160, -0.100, 1.620), (0.08, 0.21, 0.27)),
+        ("tocado_azul",   (0, -0.040, 1.790), (0.30, 0.34, 0.20)),
+        ("caida_azul",    (0,  0.105, 1.620), (0.27, 0.13, 0.28)),
+        ("banda_oro",     (0, -0.045, 1.700), (0.31, 0.36, 0.05)),
     ]),
     "Cleopatra_collar": ("Chest", [
-        ("collar_oro",    (0, -0.060, 1.435), (0.35, 0.27, 0.07)),
+        ("collar_oro",    (0, -0.055, 1.430), (0.34, 0.28, 0.07)),
     ]),
     "MiyamotoMusashi_monyo": ("Head", [
-        ("nudo_negro",    (0, 0.020, 1.900), (0.09, 0.15, 0.10)),
+        ("nudo_negro",    (0, -0.010, 1.840), (0.10, 0.14, 0.12)),
     ]),
     "MiyamotoMusashi_obi": ("Hips", [
-        ("cinturon_negro",(0, -0.055, 1.020), (0.43, 0.31, 0.10)),
-        ("nudo_gris",     (0, 0.095, 1.020), (0.12, 0.10, 0.12)),
+        ("cinturon_negro",(0, -0.055, 1.020), (0.42, 0.32, 0.11)),
     ]),
 }
 

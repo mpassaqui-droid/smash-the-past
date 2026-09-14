@@ -90,7 +90,15 @@ namespace SmashThePast.Diagnostics
                 var combate = UnityEngine.Object.FindFirstObjectByType<SmashThePast.Stages.MatchController>();
                 if (combate != null)
                 {
-                    combate.BeginMatch(0, 1);
+                    // Respetar el personaje pedido con -escenario. Antes empezaba
+                    // siempre con 0 contra 1, asi que -escenario no servia de nada en
+                    // cuanto se pedia tambien -pelea: la captura mostraba siempre los
+                    // dos mismos luchadores.
+                    int uno_ = Escenario >= 0 ? Escenario : 0;
+                    int dos_ = combate.Roster != null && combate.Roster.Length > 0
+                             ? (uno_ + 1) % combate.Roster.Length : 1;
+                    Debug.Log($"HUMO_COMBATIENTES: {uno_} contra {dos_}");
+                    combate.BeginMatch(uno_, dos_);
                     float limite = Time.realtimeSinceStartup + SegundosDePelea;
                     while (Time.realtimeSinceStartup < limite) yield return null;
 

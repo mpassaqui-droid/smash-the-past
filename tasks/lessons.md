@@ -96,3 +96,11 @@
 - Un gris claro no tiene color propio: toma el de la luz. El casco de Genghis salia rosa y lo achaque a "shader que URP no sabe dibujar", que es el rosa tipico. Era falso: al abrir el .mat, el shader era el MISMO que el de las piezas que si se veian bien y el valor era el gris pedido (0,42 0,44 0,48). Lo que pasa es que el lado derecho de la arena tiene luz calida, y se ve hasta en el suelo, que tambien sale rosado. Se arregla dando a la pieza un color propio y oscuro, no tocando el pipeline. Leer el archivo antes de acusar al motor.
 
 - Las piezas de vestuario no clonan el material que trae su FBX sino uno del propio personaje, que ya sabemos que se dibuja. Asi no hay que adivinar el nombre del shader ni depender de `Shader.Find`, que en batch puede no encontrarlo.
+
+- Esto se ve DE PERFIL, y lo primero que hice fueron piezas planas en el eje de profundidad: se veian de canto y parecian tablas. La barba de Rasputin era una plancha delante de la cara, la sotana dos hojas de papel separadas, el bicornio un monton de cubos. El poncho funcionaba desde el principio y ninguno de los otros, por una sola razon: tenia un PUENTE sobre los hombros que cierra la silueta entre los dos panyos. Toda capa, tunica o sotana necesita ese puente.
+
+- Un sombrero de un juego de perfil lleva el ala ancha tambien en profundidad, no solo a los lados. El bicornio de Napoleon puesto cruzado (como se llevaba) no se leia; puesto de proa a popa se ven las dos puntas y se reconoce al instante.
+
+- Lo que mide menos de unos 8 cm no se lee a esta distancia de camara. Las gafas de Gandhi salian como una venda blanca cruzada en la cara. Se quitaron: a esta escala manda la silueta, no el detalle.
+
+- Y hay que verlo, no deducirlo. Puse catorce piezas con medidas correctas del esqueleto, comprobe dos personajes en el juego y di por buenos los otros siete. Estaban mal los siete. Solo se vio cuando se arreglo `-escenario`, que decia en su propio comentario que elegia el luchador y no lo hacia: `-pelea` llamaba despues a `BeginMatch(0, 1)` con los indices escritos a mano y pisaba la eleccion.
