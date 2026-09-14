@@ -21,9 +21,13 @@ Archivos:
       nombre.
 
   Resources/Musica/titulo.ogg
-      Tema de 2 min 02 para la pantalla de titulo. Llevaba -15,0 LUFS, se dejo
-      en -16. Entra y sale en fundido, asi que al enlazar tiene un momento
-      flojo; para un menu no molesta.
+      Tema para la pantalla de titulo, preparado para enlazar. El original
+      duraba 2 min 02 y entraba y salia en fundido, asi que al repetirse dejaba
+      un hueco. Se le quitaron los fundidos (el cuerpo va de 18 s a 120,4 s) y
+      se corto en un numero entero de compases: el pulso medido es de 0,320 s
+      (187,5 bpm), el compas 1,28 s, y quedan 78 compases justos, 99,9 s. La
+      union es un fundido de dos compases entre la cola y la cabeza.
+      Ahora empieza a -18,9 dB y acaba a -20,0 dB, contra -34,8 y -36,7 antes.
 
   Pendientes/intro.ogg
       Tema de 2 min 37 para la introduccion del juego, que todavia no existe.
