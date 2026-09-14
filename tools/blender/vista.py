@@ -28,12 +28,14 @@ def luz(nombre, energia, color, posicion, objetivo=(0, 0, 1)):
 
 def main():
     argumentos = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-    fbx, salida = None, "/tmp/vista.png"
+    fbx, salida, fotogramas = None, "/tmp/vista.png", 0
     for i, argumento in enumerate(argumentos):
         if argumento == "--fbx" and i + 1 < len(argumentos):
             fbx = argumentos[i + 1]
         if argumento == "--salida" and i + 1 < len(argumentos):
             salida = argumentos[i + 1]
+        if argumento == "--fotogramas" and i + 1 < len(argumentos):
+            fotogramas = int(argumentos[i + 1])
 
     limpiar()
     bpy.ops.import_scene.fbx(filepath=fbx)
@@ -58,10 +60,20 @@ def main():
 
     escena = bpy.context.scene
     escena.render.engine = "BLENDER_EEVEE"
-    escena.render.resolution_x = 900
-    escena.render.resolution_y = 1100
-    escena.render.filepath = salida
+    escena.render.resolution_x = 420
+    escena.render.resolution_y = 520
     escena.render.image_settings.file_format = "PNG"
+
+    if fotogramas > 0:
+        # Una tira de fotogramas para poder mirar la animacion sin abrir nada.
+        escena.render.filepath = salida
+        escena.frame_start = 1
+        escena.frame_end = fotogramas
+        bpy.ops.render.render(animation=True)
+        print(f"VISTA_OK animacion {fotogramas} fotogramas -> {salida}")
+        return
+
+    escena.render.filepath = salida
     bpy.ops.render.render(write_still=True)
     print(f"VISTA_OK {salida}")
 
