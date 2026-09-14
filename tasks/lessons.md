@@ -92,3 +92,7 @@
 - `personaje.py` se ejecuta solo si ve `--salida` en `sys.argv`, y `vestuario.py` lo importa con exec. Como vestuario.py usaba el mismo nombre de argumento, personaje.py arrancaba su propio main y trataba de exportar a una carpeta. Un script que se auto-ejecuta segun argv contamina a cualquiera que lo importe: el argumento del que importa tiene que llamarse distinto.
 
 - Una escena de prueba vacia no tiene el pipeline URP, asi que todos los materiales salen blancos. Dos planchas seguidas parecieron decir que el color no se habia aplicado, y estaba aplicado: se veia en la captura del player. Para juzgar color hay que mirar el juego, no el banco de pruebas.
+
+- Un gris claro no tiene color propio: toma el de la luz. El casco de Genghis salia rosa y lo achaque a "shader que URP no sabe dibujar", que es el rosa tipico. Era falso: al abrir el .mat, el shader era el MISMO que el de las piezas que si se veian bien y el valor era el gris pedido (0,42 0,44 0,48). Lo que pasa es que el lado derecho de la arena tiene luz calida, y se ve hasta en el suelo, que tambien sale rosado. Se arregla dando a la pieza un color propio y oscuro, no tocando el pipeline. Leer el archivo antes de acusar al motor.
+
+- Las piezas de vestuario no clonan el material que trae su FBX sino uno del propio personaje, que ya sabemos que se dibuja. Asi no hay que adivinar el nombre del shader ni depender de `Shader.Find`, que en batch puede no encontrarlo.

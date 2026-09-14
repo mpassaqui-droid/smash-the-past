@@ -15,10 +15,39 @@ namespace SmashThePast.EditorTools
     /// </summary>
     public static class VestuarioSetup
     {
-        // personaje -> (pieza, hueso, colores por submalla)
+        // personaje -> pieza -> hueso. Los nombres salen de tools/blender/vestuario.py.
         static readonly (string personaje, string pieza, string hueso)[] PIEZAS =
         {
-            ("TupacAmaruII", "TupacAmaruII_poncho", "Chest"),
+            ("TupacAmaruII",      "TupacAmaruII_poncho",         "Chest"),
+            ("GenghisKhan",       "GenghisKhan_casco",           "Head"),
+            ("MiyamotoMusashi",   "MiyamotoMusashi_monyo",       "Head"),
+            ("MiyamotoMusashi",   "MiyamotoMusashi_obi",         "Hips"),
+            ("Gandhi",            "Gandhi_gafas",                "Head"),
+            ("Gandhi",            "Gandhi_chal",                 "Chest"),
+            ("Rasputin",          "Rasputin_barba",              "Head"),
+            ("Rasputin",          "Rasputin_sotana",             "Chest"),
+            ("NapoleonBonaparte", "NapoleonBonaparte_bicornio",  "Head"),
+            ("Cleopatra",         "Cleopatra_nemes",             "Head"),
+            ("Cleopatra",         "Cleopatra_collar",            "Chest"),
+            ("AbrahamLincoln",    "AbrahamLincoln_chistera",     "Head"),
+            ("Socrates",          "Socrates_barba",              "Head"),
+            ("Socrates",          "Socrates_toga",               "Chest"),
+        };
+
+        // La etiqueta es lo que va detras del ultimo "_" en el nombre del material.
+        static readonly System.Collections.Generic.Dictionary<string, Color> COLORES = new()
+        {
+            ["rojo"]   = new Color(0.62f, 0.09f, 0.10f),
+            ["oro"]    = new Color(0.88f, 0.62f, 0.14f),
+            ["negro"]  = new Color(0.10f, 0.09f, 0.11f),
+            ["blanco"] = new Color(0.92f, 0.91f, 0.87f),
+            ["crema"]  = new Color(0.88f, 0.85f, 0.75f),
+            ["gris"]   = new Color(0.45f, 0.44f, 0.42f),
+            ["metal"]  = new Color(0.20f, 0.21f, 0.25f),
+            ["azul"]   = new Color(0.12f, 0.28f, 0.45f),
+            // Los colores claros se los come la luz del escenario: el lado derecho de
+            // la arena tiene luz calida y un gris claro se lee rosa. Conviene que las
+            // piezas tengan color propio y no dependan de la iluminacion.
         };
 
         public static void Poner()
@@ -39,6 +68,21 @@ namespace SmashThePast.EditorTools
                     foreach (var viejo in raiz.GetComponentsInChildren<Transform>(true)
                                               .Where(t => t.name.StartsWith(pieza)).ToArray())
                         Object.DestroyImmediate(viejo.gameObject);
+
+                    // Plantilla de material: uno del propio personaje, que sabemos que
+                    // se dibuja. Clonar el que trae el FBX de Blender daba piezas rosas,
+                    // el color de "shader que URP no sabe dibujar", y Shader.Find no lo
+                    // arregla en batch. Copiando uno que ya funciona no hay que adivinar
+                    // el nombre del shader.
+                    var plantilla = raiz.GetComponentsInChildren<SkinnedMeshRenderer>()
+                                        .SelectMany(r => r.sharedMaterials)
+                                        .FirstOrDefault(m => m != null);
+                    if (plantilla == null)
+                    {
+                        Debug.LogError($"[vestuario] {ruta} no tiene ningun material del que copiar el shader");
+                        PrefabUtility.UnloadPrefabContents(raiz);
+                        EditorApplication.Exit(1); return;
+                    }
 
                     var destino = raiz.GetComponentsInChildren<Transform>(true)
                                       .FirstOrDefault(t => t.name == hueso);
@@ -68,9 +112,9 @@ namespace SmashThePast.EditorTools
                         escalaPadre.y != 0f ? 1f / escalaPadre.y : 1f,
                         escalaPadre.z != 0f ? 1f / escalaPadre.z : 1f);
 
-                    // Color por nombre de submalla, no por indice: si manana cambia el
-                    // orden en el script de Blender, esto sigue poniendo el rojo en la
-                    // tela y el oro en la franja.
+                    // Color por etiqueta en el nombre del material, no por indice: si
+                    // manana cambia el orden en el script de Blender, el oro sigue
+                    // yendo a la franja y no al panyo.
                     var rend = nueva.GetComponentInChildren<MeshRenderer>();
                     if (rend != null)
                     {
@@ -78,17 +122,22 @@ namespace SmashThePast.EditorTools
                         for (int i = 0; i < mats.Length; i++)
                         {
                             if (mats[i] == null) continue;
-                            string sub = mats[i].name;
-                            Color color = sub.Contains("franja") ? new Color(0.88f, 0.62f, 0.14f)
-                                        : sub.Contains("cuello") ? new Color(0.10f, 0.09f, 0.08f)
-                                        : new Color(0.62f, 0.09f, 0.10f);
-                            string destinoMat = $"Assets/Characters/Materiales/{personaje}/{sub}.mat";
+                            string nombreMat = mats[i].name;
+                            string etiqueta = nombreMat.Substring(nombreMat.LastIndexOf('_') + 1);
+                            if (!COLORES.TryGetValue(etiqueta, out var color))
+                            {
+                                Debug.LogError($"[vestuario] etiqueta de color desconocida '{etiqueta}' en {nombreMat}");
+                                PrefabUtility.UnloadPrefabContents(raiz);
+                                EditorApplication.Exit(1); return;
+                            }
+                            string destinoMat = $"Assets/Characters/Materiales/{personaje}/{nombreMat}.mat";
                             var mat = AssetDatabase.LoadAssetAtPath<Material>(destinoMat);
                             if (mat == null)
                             {
-                                mat = new Material(mats[i]);
+                                mat = new Material(plantilla);
                                 AssetDatabase.CreateAsset(mat, destinoMat);
                             }
+                            if (mat.shader != plantilla.shader) mat.shader = plantilla.shader;
                             mat.color = color;
                             if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
                             EditorUtility.SetDirty(mat);
