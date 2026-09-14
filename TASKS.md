@@ -27,6 +27,9 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 
 ## Hecho
 
+- [x] Claude: menu principal (contra la maquina, dos jugadores, opciones, salir) y opciones con volumen y dificultad guardados entre partidas. La pantalla de victoria con las frases ya existia.
+- [x] Claude: asaltos al mejor de tres con anuncio y marcador.
+
 - [x] Claude: adversario de la maquina en el puesto de P2, tres niveles, F1 lo apaga y F2 cambia de dificultad. La decision es una funcion pura probada con sorteo fijado. Probado en el player: 12 s sin tocar una tecla y P1 baja de 100 a 35.
 - [x] Claude: presa que atraviesa la guardia y castigo al fallarla. Aturdimiento unificado en Fighter.
 
