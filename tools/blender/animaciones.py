@@ -15,12 +15,14 @@ import os
 
 # accion -> (fotogramas, ciclica, {fotograma: {hueso: (x, y, z) en grados}})
 ANIMACIONES = {
-    # Desde la T-pose los brazos bajan girando sobre Y del propio hueso: -78 y 78
-    # dejan las manos junto al cuerpo, que es el reposo real del luchador.
+    # Desde la T-pose los brazos bajan girando sobre X del propio hueso, los dos con el
+    # mismo signo: -78 deja las manos en (+-0.296, 0, 0.941), junto al cuerpo, que es el
+    # reposo real del luchador. Sobre Y no se mueven: en Blender el eje Y del hueso corre
+    # a lo largo del hueso, asi que girar sobre Y es torcer el brazo sin desplazarlo.
     "idle": (40, True, {
-        1:  {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (0, -78, 0), "mixamorig:RightArm": (0, 78, 0)},
-        20: {"mixamorig:Spine": (5, 0, 0), "mixamorig:LeftArm": (0, -74, 0), "mixamorig:RightArm": (0, 74, 0)},
-        40: {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (0, -78, 0), "mixamorig:RightArm": (0, 78, 0)},
+        1:  {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (-78, 0, 0), "mixamorig:RightArm": (-78, 0, 0)},
+        20: {"mixamorig:Spine": (5, 0, 0), "mixamorig:LeftArm": (-74, 0, 0), "mixamorig:RightArm": (-74, 0, 0)},
+        40: {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (-78, 0, 0), "mixamorig:RightArm": (-78, 0, 0)},
     }),
     "andar": (24, True, {
         1:  {"mixamorig:LeftUpLeg": (25, 0, 0), "mixamorig:RightUpLeg": (-25, 0, 0),
@@ -139,9 +141,9 @@ def main():
             bpy.context.view_layer.objects.active = armadura
             bpy.ops.export_scene.fbx(
                 filepath=os.path.join(exportar, f"{personaje}@{nombre}.fbx"),
-                use_selection=True, add_leaf_bones=False, bake_anim=True,
+                use_selection=True, bake_anim=True,
                 bake_anim_use_all_actions=False, bake_anim_use_nla_strips=False,
-                object_types={"ARMATURE", "MESH"},
+                **espacio["OPCIONES_FBX"],
             )
         print(f"ANIMACION_OK {nombre} fotogramas={largo}")
 

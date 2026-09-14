@@ -123,6 +123,18 @@ COLORES = {
 }
 
 
+# Las mismas opciones de exportacion para el cuerpo y para sus animaciones.
+# apply_scale_options manda: decide que unidad declara el FBX. El personaje salia con
+# "1 unidad = 1 metro" y los clips con "1 unidad = 1 centimetro", asi que Unity dividia
+# entre 100 cada hueso animado y el luchador se encogia a dos centimetros en cuanto
+# empezaba a moverse. Una sola copia de la regla, que animaciones.py importa de aqui.
+OPCIONES_FBX = dict(
+    apply_scale_options="FBX_SCALE_ALL",
+    add_leaf_bones=False,
+    object_types={"ARMATURE", "MESH"},
+)
+
+
 def limpiar():
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
@@ -238,11 +250,9 @@ def exportar(ruta, armadura, cuerpo):
     bpy.ops.export_scene.fbx(
         filepath=ruta,
         use_selection=True,
-        apply_scale_options="FBX_SCALE_ALL",
-        add_leaf_bones=False,
         bake_anim=False,
-        object_types={"ARMATURE", "MESH"},
         mesh_smooth_type="FACE",
+        **OPCIONES_FBX,
     )
 
 
