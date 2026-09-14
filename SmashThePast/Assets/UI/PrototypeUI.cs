@@ -33,6 +33,8 @@ namespace SmashThePast.UI
         private bool enMenu = true;
         private bool enOpciones;
         private DirectorIA director;
+        private ModoArcade arcade;
+        private bool enArcade;
         private const string ClaveVolumen = "volumen";
         private const string ClaveDificultad = "dificultad";
         private readonly Label[] marcador = new Label[2];
@@ -157,6 +159,7 @@ namespace SmashThePast.UI
             Text(menu, "Nueve figuras que nunca se cruzaron", "menu-subtitulo");
             var botones = Box(menu, "menu-botones");
             ActionButton(botones, "CONTRA LA MAQUINA", () => Empezar(true), "menu-button primary");
+            ActionButton(botones, "MODO ARCADE", EmpezarArcade, "menu-button");
             ActionButton(botones, "DOS JUGADORES", () => Empezar(false), "menu-button");
             ActionButton(botones, "OPCIONES", () => { enOpciones = true; Refresh(); }, "menu-button");
             ActionButton(botones, "SALIR", Salir, "menu-button");
@@ -185,6 +188,24 @@ namespace SmashThePast.UI
 
             var salida = Box(opciones, "menu-botones");
             ActionButton(salida, "VOLVER", () => { enOpciones = false; Refresh(); }, "menu-button primary");
+        }
+
+        private ModoArcade Arcade()
+        {
+            if (arcade == null) arcade = UnityEngine.Object.FindFirstObjectByType<ModoArcade>();
+            return arcade;
+        }
+
+        // En arcade solo elige el jugador uno: el rival lo pone la escalera.
+        private void EmpezarArcade()
+        {
+            var mando = Director();
+            if (mando != null) mando.Activar(true);
+            enArcade = true;
+            enMenu = false;
+            enOpciones = false;
+            match.ShowSelection();
+            Refresh();
         }
 
         private DirectorIA Director()
@@ -233,6 +254,9 @@ namespace SmashThePast.UI
         {
             enMenu = true;
             enOpciones = false;
+            enArcade = false;
+            var escaleraViva = Arcade();
+            if (escaleraViva != null) escaleraViva.Abandonar();
             match.ShowSelection();
             Refresh();
         }
@@ -411,6 +435,15 @@ namespace SmashThePast.UI
             ready[player] = !ready[player];
             pointerPlayer = ready[player] ? 1 - player : player;
             RefreshPicks();
+
+            // En arcade solo confirma el jugador uno: al rival lo pone la escalera, y con
+            // el empieza el primer combate.
+            if (enArcade && player == 0 && ready[0])
+            {
+                var escalera = Arcade();
+                if (escalera != null) { escalera.Empezar(picks[0]); return; }
+            }
+
             if (ready[0] && ready[1]) match.BeginMatch(picks[0], picks[1]);
         }
 
@@ -457,9 +490,23 @@ namespace SmashThePast.UI
             else if (shownPhase == MatchPhase.Paused || shownPhase == MatchPhase.Finished)
             {
                 bool paused = shownPhase == MatchPhase.Paused;
-                primary.text = paused ? "CONTINUAR" : "REVANCHA";
+                var escalera = Arcade();
+                bool enEscalera = enArcade && escalera != null && escalera.Activo;
+                bool ganoElJugador = match.Winner == 0;
+
+                primary.text = paused ? "CONTINUAR"
+                    : enEscalera ? (ganoElJugador ? (escalera.Paso + 1 >= escalera.Total ? "TERMINAR" : "SIGUIENTE RIVAL") : "VOLVER AL MENU")
+                    : "REVANCHA";
+
                 resultTitle.text = paused ? "PAUSA" : match.Winner < 0 ? "EMPATE" :
                     "GANA P" + (match.Winner + 1) + "\n" + Name((match.Winner == 0 ? match.PlayerOne : match.PlayerTwo)?.Data);
+
+                if (!paused && enEscalera)
+                    resultTitle.text = ganoElJugador
+                        ? (escalera.Paso + 1 >= escalera.Total
+                            ? "ARCADE SUPERADO\nNadie queda en pie"
+                            : $"RIVAL {escalera.Paso + 1} DE {escalera.Total} VENCIDO")
+                        : $"CAIDO EN EL RIVAL {escalera.Paso + 1} DE {escalera.Total}";
                 winQuote.text = match.WinQuote ?? "";
                 loseQuote.text = match.LoseQuote ?? "";
                 Show(winQuote, !paused && !string.IsNullOrEmpty(winQuote.text));
@@ -516,8 +563,23 @@ namespace SmashThePast.UI
 
         private void ActivatePrimary()
         {
-            if (match.Phase == MatchPhase.Paused) match.TogglePause();
-            else if (match.Phase == MatchPhase.Finished) match.Rematch();
+            if (match.Phase == MatchPhase.Paused) { match.TogglePause(); return; }
+            if (match.Phase != MatchPhase.Finished) return;
+
+            var escalera = Arcade();
+            if (enArcade && escalera != null && escalera.Activo)
+            {
+                bool gano = match.Winner == 0;
+                escalera.ResolverCombate(gano);
+                if (!gano || escalera.Terminado)
+                {
+                    enArcade = false;
+                    VolverAlMenu();
+                }
+                return;
+            }
+
+            match.Rematch();
         }
 
         private static string Name(CharacterData data) => data != null ? data.characterName : "";
