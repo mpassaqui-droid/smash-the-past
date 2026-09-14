@@ -21,8 +21,9 @@ namespace SmashThePast.EditorTools
                 return;
             }
 
-            importador.animationType = ModelImporterAnimationType.Human;
+            importador.animationType = ModelImporterAnimationType.Generic;
             importador.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+            importador.skinWeights = ModelImporterSkinWeights.Standard;
             importador.importAnimation = false;
             importador.materialImportMode = ModelImporterMaterialImportMode.ImportStandard;
             importador.SaveAndReimport();
@@ -45,14 +46,14 @@ namespace SmashThePast.EditorTools
                           $"vertices={(renderizador != null && renderizador.sharedMesh != null ? renderizador.sharedMesh.vertexCount : 0)}");
             }
 
-            if (!avatar.isValid || !avatar.isHuman)
+            if (!avatar.isValid)
             {
-                Debug.LogError("[modelo] el avatar no es humano valido");
+                Debug.LogError("[modelo] el avatar no es valido");
                 EditorApplication.Exit(1);
                 return;
             }
 
-            Debug.Log("[modelo] MIXAMO_COMPATIBLE");
+            Debug.Log("[modelo] MODELO_LISTO");
             EditorApplication.Exit(0);
         }
     }

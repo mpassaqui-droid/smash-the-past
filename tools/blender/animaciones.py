@@ -15,10 +15,12 @@ import os
 
 # accion -> (fotogramas, ciclica, {fotograma: {hueso: (x, y, z) en grados}})
 ANIMACIONES = {
+    # Desde la T-pose los brazos bajan girando sobre Y del propio hueso: -78 y 78
+    # dejan las manos junto al cuerpo, que es el reposo real del luchador.
     "idle": (40, True, {
-        1:  {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (0, 0, 6), "mixamorig:RightArm": (0, 0, -6)},
-        20: {"mixamorig:Spine": (5, 0, 0), "mixamorig:LeftArm": (0, 0, 10), "mixamorig:RightArm": (0, 0, -10)},
-        40: {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (0, 0, 6), "mixamorig:RightArm": (0, 0, -6)},
+        1:  {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (0, -78, 0), "mixamorig:RightArm": (0, 78, 0)},
+        20: {"mixamorig:Spine": (5, 0, 0), "mixamorig:LeftArm": (0, -74, 0), "mixamorig:RightArm": (0, 74, 0)},
+        40: {"mixamorig:Spine": (2, 0, 0), "mixamorig:LeftArm": (0, -78, 0), "mixamorig:RightArm": (0, 78, 0)},
     }),
     "andar": (24, True, {
         1:  {"mixamorig:LeftUpLeg": (25, 0, 0), "mixamorig:RightUpLeg": (-25, 0, 0),
@@ -99,16 +101,23 @@ def crear_accion(armadura, nombre, largo, ciclica, claves):
 
 def main():
     argumentos = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-    fbx, carpeta, exportar = None, "/tmp/anim", None
+    carpeta, exportar, base, personaje = "/tmp/anim", None, None, "TupacAmaruII"
     for i, a in enumerate(argumentos):
-        if a == "--fbx" and i + 1 < len(argumentos): fbx = argumentos[i + 1]
         if a == "--carpeta" and i + 1 < len(argumentos): carpeta = argumentos[i + 1]
         if a == "--exportar" and i + 1 < len(argumentos): exportar = argumentos[i + 1]
+        if a == "--base" and i + 1 < len(argumentos): base = argumentos[i + 1]
+        if a == "--personaje" and i + 1 < len(argumentos): personaje = argumentos[i + 1]
 
-    bpy.ops.object.select_all(action="SELECT")
-    bpy.ops.object.delete(use_global=False)
-    bpy.ops.import_scene.fbx(filepath=fbx)
-    armadura = armadura_de_la_escena()
+    # Se construye el personaje aqui mismo en vez de importar su FBX: reimportar y
+    # volver a exportar reaplica la conversion de ejes de Blender.
+    ruta_constructor = os.path.join(os.path.dirname(os.path.abspath(__file__)), "personaje.py")
+    espacio = {}
+    exec(compile(open(ruta_constructor).read(), ruta_constructor, "exec"), espacio)
+    cuerpo, armadura = espacio["construir"](personaje)
+
+    if base:
+        espacio["exportar"](base, armadura, cuerpo)
+        print(f"BASE_OK {base}")
 
     os.makedirs(carpeta, exist_ok=True)
     if exportar: os.makedirs(exportar, exist_ok=True)
@@ -129,7 +138,7 @@ def main():
                     objeto.select_set(True)
             bpy.context.view_layer.objects.active = armadura
             bpy.ops.export_scene.fbx(
-                filepath=os.path.join(exportar, f"TupacAmaruII@{nombre}.fbx"),
+                filepath=os.path.join(exportar, f"{personaje}@{nombre}.fbx"),
                 use_selection=True, add_leaf_bones=False, bake_anim=True,
                 bake_anim_use_all_actions=False, bake_anim_use_nla_strips=False,
                 object_types={"ARMATURE", "MESH"},
