@@ -3,7 +3,6 @@
 Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qué se ve en el build). Actualizar antes/después de cada sesión de trabajo.
 
 ## Por hacer
-- [ ] Arreglar la intermitencia de `CombatInputTests`: fallan una de cada tres o cuatro corridas. Ver `tasks/lessons.md`.
 - [ ] Diego: instalar Unity Hub + Unity 6 LTS (6000.0.83f1, misma version que Munay) y activar licencia Personal
 - [ ] Diego: `git clone`, leer `AGENTS.md`, empezar Character pipeline (1 `CharacterData` de prueba + su special)
 - [ ] Munay: probar teclado y dos mandos fisicos en el player construido por CI desde un clon limpio: el player publicado en Releases. Es lo unico que la maquina no puede demostrar sola.
@@ -27,6 +26,9 @@ Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qu
 (nada en curso)
 
 ## Hecho
+
+- [x] Claude: musica que se anade dejando archivos en `Assets/Audio/Resources/Musica/`, sin tocar codigo. Guia completa en `docs/AUDIO.md`.
+- [x] Claude: arreglada la intermitencia de las pruebas de input. Tres corridas seguidas 100/100.
 
 - [x] Claude: modo arcade. Escalera de ocho rivales por personaje, dificultad que sube por tramos y final siempre en dificil, progreso guardado. 7 pruebas nuevas sobre la escalera.
 

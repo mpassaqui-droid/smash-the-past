@@ -87,6 +87,8 @@ Abrir la carpeta `SmashThePast/` desde Unity Hub, no la raiz del repo.
 > de texto, y los retratos y el audio llegan rotos. Hay que clonar. Los pasos completos,
 > incluida la via con GitHub Desktop, estan en [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
+Para anadir musica o sonidos hay una guia aparte: [`docs/AUDIO.md`](docs/AUDIO.md).
+
 **Antes de tocar nada**, leer en este orden: [`AGENTS.md`](AGENTS.md) (reglas de trabajo y
 de quien es cada carpeta), [`GDD.md`](GDD.md) (el diseno cerrado), [`TASKS.md`](TASKS.md)
 (el tablero), [`tasks/lessons.md`](tasks/lessons.md) (los errores ya cometidos aqui, leerlo
