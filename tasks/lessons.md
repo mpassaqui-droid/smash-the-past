@@ -78,3 +78,9 @@
 - **La subida por navegador de GitHub no sabe manejar Git LFS.** No lo convierte, no lo avisa antes: rechaza el archivo con "must be pushed using the Git command line with Git LFS installed". La documentacion de GitHub no lo dice en ninguna parte, ni a favor ni en contra, y escribi una guia entera para Diego dando por hecho que funcionaria. Se descubrio cuando el lo intento. Para un repo con LFS, la web solo sirve para los archivos de texto que no estan en `.gitattributes`.
 
 - Una guia escrita para otra persona hay que probarla antes de mandarsela, o decir claramente que parte no esta probada. La mia le hizo perder un viaje.
+
+- `UnityEngine.Object` sobrecarga `!=` para dar falso en objetos destruidos. Guardar la referencia, llamar a `PrefabUtility.UnloadPrefabContents` y comprobar `referencia != null` despues devuelve SIEMPRE falso, aunque todo haya salido bien. La funcion daba error en cada prefab sin decir por que. Calcular el booleano ANTES de descargar.
+
+- Los nueve personajes de cajas nunca tuvieron Animator ni `AnimadorDeLuchador`: se movian a mano desde `FighterVisual`. Al darles un esqueleto no basta con cambiar la malla, hay que anadirles las dos piezas. El error de Unity lo dijo claro (`There is no Animator attached to the "Modelo" game object`) pero solo salio al llegar al primer personaje que no era Tupac, tres pasadas despues.
+
+- Cambiar algo en los nueve prefabs se hace reversible ANTES de tocarlos, no despues. `CambiarModelo` guarda una copia intacta en `Prefabs/Anteriores/` la primera vez que toca cada prefab, y `Volver` las restituye. La copia se hace solo si no existe ya: si no, la segunda pasada guardaria lo nuevo encima de lo viejo y no habria vuelta atras.
