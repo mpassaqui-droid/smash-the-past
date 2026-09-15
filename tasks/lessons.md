@@ -134,3 +134,9 @@
 - Un medidor que busca huesos por nombre (`mixamorig:RightHand`) se rompe en cuanto cambia el modelo. Por la correspondencia humanoide del Animator (`GetBoneTransform(HumanBodyBones.RightHand)`) funciona con cualquier esqueleto que Unity acepte.
 
 - No habia evento de "golpe parado", pero si dos aturdimientos de duracion distinta: el de encajar dura LightHitStunSeconds y el de bloquear bastante menos. El corto sirve de aviso sin tocar la logica de combate.
+
+- **URP se salta TODO el post proceso si `postProcessData` del renderizador esta a nulo, y no avisa.** Ni un error ni un aviso: el volumen se ignora entero. Estuvo asi desde el principio del proyecto. Se encontro poniendo la vineta a 0,90 y la saturacion a -80 y viendo que la imagen seguia siendo identica bit a bit; con valores discretos se habria achacado a que "se nota poco". Cuando un ajuste no cambia NADA, el sospechoso es la tuberia, no el valor.
+
+- `VolumeProfile.Add<T>()` crea el componente en memoria pero no lo mete en el asset: al guardar se pierde y el perfil queda vacio. Hay que llamar ademas a `AssetDatabase.AddObjectToAsset`, que es lo que hace el inspector por dentro.
+
+- Comparar dos capturas por la diferencia media de pixeles dice en un numero si un cambio de render llego o no. 0,0 sobre 255 es imposible si algo cambio: son imagenes identicas y hay que buscar por que.
