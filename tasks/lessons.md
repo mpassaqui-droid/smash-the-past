@@ -140,3 +140,7 @@
 - `VolumeProfile.Add<T>()` crea el componente en memoria pero no lo mete en el asset: al guardar se pierde y el perfil queda vacio. Hay que llamar ademas a `AssetDatabase.AddObjectToAsset`, que es lo que hace el inspector por dentro.
 
 - Comparar dos capturas por la diferencia media de pixeles dice en un numero si un cambio de render llego o no. 0,0 sobre 255 es imposible si algo cambio: son imagenes identicas y hay que buscar por que.
+
+- Una textura de foto puesta tal cual sobre un escenario estilizado le roba la paleta: la arena entera se volvio parda y los personajes dejaron de destacar. La foto tiene que aportar el GRANO, no el color. Desaturada al 22 % y aclarada, el material sigue mandando en el tono y el detalle sube igual. Medido: detalle 3,21 sin textura, 7,24 con la foto cruda (y el brillo caia de 66,6 a 50,3), 8,57 con la desaturada (brillo 72,8).
+
+- El escenario son cubos primitivos escalados sin proporcion, y los UV de un cubo son fijos: la textura se estira tanto como el cubo. En las franjas largas se veian brochazos. Se corrige por objeto con un MaterialPropertyBlock que pone `_BaseMap_ST` segun la escala, sin duplicar un solo material. En un juego de perfil basta con ajustar la cara de delante (X por Y).
