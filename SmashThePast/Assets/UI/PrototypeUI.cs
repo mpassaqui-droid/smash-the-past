@@ -196,6 +196,26 @@ namespace SmashThePast.UI
             ActionButton(filaDificultad, "CAMBIAR", CambiarDificultad, "menu-button pequeno");
 
             var salida = Box(opciones, "menu-botones");
+            // Los controles, escritos. Existen desde siempre pero no se veian en ningun
+            // sitio: Diego pidio "boton de saltar y de cubrirse" y los dos ya estaban.
+            Text(opciones, "CONTROLES", "controles-titulo");
+            foreach (var (que, uno, dos) in new[]
+            {
+                ("Moverse",   "A / D",   "Flechas izq. y der."),
+                ("Saltar",    "W",       "Flecha arriba"),
+                ("Cubrirse",  "L",       "Pad 3"),
+                ("Golpe flojo", "J",     "Pad 1"),
+                ("Golpe fuerte", "K",    "Pad 2"),
+                ("Especial",  "I",       "Pad 0"),
+            })
+            {
+                var fila = Box(opciones, "fila-control");
+                Text(fila, que, "control-que");
+                Text(fila, uno, "control-tecla");
+                Text(fila, dos, "control-tecla");
+            }
+            Text(opciones, "Con mando: stick para moverse, boton de abajo para saltar y el de la izquierda para cubrirse.", "control-nota");
+
             ActionButton(salida, "VOLVER", () => { enOpciones = false; Refresh(); }, "menu-button primary");
         }
 
@@ -613,11 +633,8 @@ namespace SmashThePast.UI
 
         private static Button ActionButton(VisualElement parent, string value, Action action, string classes)
         {
-            // El sonido se engancha aqui porque es el unico sitio donde se crean los
-            // botones: uno al pasar por encima y otro al pulsar, sin tocar cada llamada.
-            var button = new Button(() => { SonidoDeMenu.Aceptar(); action?.Invoke(); })
-                { text = value, focusable = false };
-            button.RegisterCallback<PointerEnterEvent>(_ => SonidoDeMenu.Mover());
+            // Sin sonido al pasar por encima ni al pulsar: se probo y molestaba.
+            var button = new Button(action) { text = value, focusable = false };
             foreach (string c in classes.Split(' ')) button.AddToClassList(c);
             parent.Add(button);
             return button;

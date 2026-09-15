@@ -21,6 +21,19 @@ namespace SmashThePast.Core
         private SpecialMeter _special;
         public HealthSystem Health => _health ??= new HealthSystem(characterData != null ? characterData.maxHealth : 100);
         public SpecialMeter Special => _special ??= new SpecialMeter();
+        /// <summary>
+        /// Fuera del combate el luchador no obedece a nadie, ni al jugador ni a la
+        /// maquina. Sin esto la maquina se movia y atacaba durante la seleccion de
+        /// personaje, que solo deberia ensenar el campo de batalla quieto.
+        /// Lo pone MatchController en cada cambio de fase.
+        ///
+        /// Empieza ABIERTA a proposito. Un Fighter sin MatchController al lado (las
+        /// pruebas, por ejemplo) tiene que seguir funcionando como siempre; solo se
+        /// cierra cuando alguien dice expresamente que no se esta peleando. Al reves
+        /// rompia veinte pruebas que montan un luchador suelto.
+        /// </summary>
+        public static bool CombateEnCurso { get; set; } = true;
+
         public bool IsBlocking { get; private set; }
 
         /// <summary>Segundos que quedan de aturdimiento. Mientras corre, este fighter no actua.</summary>
@@ -73,6 +86,7 @@ namespace SmashThePast.Core
 
         public void Move(float horizontalInput)
         {
+            if (!CombateEnCurso) return;
             if (IsStunned) return; // aturdido no se mueve
             if (IsBlocking) return; // regla fija: bloqueando no te mueves
             float speed = characterData != null ? characterData.moveSpeed : 5f;
@@ -81,6 +95,7 @@ namespace SmashThePast.Core
 
         public void Jump()
         {
+            if (!CombateEnCurso) return;
             if (IsStunned) return;
             if (!_controller.isGrounded || IsBlocking) return;
             _velocity.y = characterData != null ? characterData.jumpForce : 8f;
@@ -88,6 +103,7 @@ namespace SmashThePast.Core
 
         public void SetBlocking(bool blocking)
         {
+            if (!CombateEnCurso) return;
             // Aturdido no se puede levantar la guardia: si no, encajar un golpe seria
             // gratis y bastaria con mantener el boton para no perder nunca.
             if (IsStunned && blocking) return;
@@ -96,6 +112,7 @@ namespace SmashThePast.Core
 
         public void PerformLightAttack()
         {
+            if (!CombateEnCurso) return;
             if (IsStunned) return;
             if (IsBlocking) return;
             OnLightAttackPerformed?.Invoke();
@@ -103,6 +120,7 @@ namespace SmashThePast.Core
 
         public void PerformHeavyAttack()
         {
+            if (!CombateEnCurso) return;
             if (IsStunned) return;
             if (IsBlocking) return;
             OnHeavyAttackPerformed?.Invoke();
@@ -112,6 +130,7 @@ namespace SmashThePast.Core
         /// al que se queda tapado sin hacer nada.</summary>
         public void PerformGrab()
         {
+            if (!CombateEnCurso) return;
             if (IsStunned) return;
             if (IsBlocking) return;
             OnGrabPerformed?.Invoke();
@@ -119,6 +138,7 @@ namespace SmashThePast.Core
 
         public void TryUseSpecial()
         {
+            if (!CombateEnCurso) return;
             if (IsStunned) return;
             if (!Special.TryConsume()) return;
             OnSpecialUsed?.Invoke();

@@ -120,3 +120,11 @@
 - El pack de mujeres de Quaternius comparte Chest (1,377) y Head (1,587) con el de hombres, que es donde van casi todas las piezas de vestuario; solo cambia la cadera (1,002 contra 0,894). Conviene comprobarlo hueso a hueso antes de dar por bueno que una pieza vale para los dos packs.
 
 - Una pieza que ENVUELVE la cabeza en vez de posarse encima se lee como un casco cuadrado. El nemes de Cleopatra medida 0,41 de alto y se comia la cara; a 0,13 se apoya en la coronilla y el rostro se ve. La cifra que hay que mirar es el alto de la pieza contra el alto de la cabeza (1,45 a 1,86).
+
+- Diego pidio "boton de saltar y para cubrirse" y los dos existian desde siempre: W y L para el jugador 1, flecha arriba y Pad 3 para el 2, o los botones de abajo y de la izquierda del mando. Lo que faltaba no era la funcion sino decirla en algun sitio. Antes de implementar lo que pide un tester, comprobar si ya esta y solo es invisible.
+
+- Ni `PlayerInputController` ni la IA miraban la fase del combate, asi que la maquina se movia y atacaba durante la seleccion de personaje. La guarda va en `Fighter`, que es por donde pasan todos: el jugador, la maquina y las pruebas.
+
+- Y esa guarda tiene que empezar ABIERTA. Puesta en falso por defecto tumbo veinte pruebas que montan un luchador suelto sin MatchController al lado. Una barrera nueva se cierra solo cuando alguien lo pide expresamente, no por omision.
+
+- La sombra larga no venia de las tres luces sino de una: solo `LuzClave` proyecta. La primera pasada subio las tres a 62 grados y se cargo el relleno y el contraluz, que tienen sus angulos por una razon. Mirar cual proyecta antes de tocar ninguna: a 48 grados un cuerpo de 2 m da 1,80 m de sombra, a 62 da 1,06.

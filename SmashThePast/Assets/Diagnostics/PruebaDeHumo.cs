@@ -98,6 +98,23 @@ namespace SmashThePast.Diagnostics
 
             Sonando("menu");
 
+            // El bug que canto Diego: la maquina se movia y atacaba durante la
+            // seleccion. Se mide, no se mira: dos posiciones separadas por segundo y
+            // medio, y la vida de los dos.
+            {
+                var m = UnityEngine.Object.FindFirstObjectByType<SmashThePast.Stages.MatchController>();
+                Vector3 a1 = m != null && m.PlayerOne != null ? m.PlayerOne.transform.position : Vector3.zero;
+                Vector3 b1 = m != null && m.PlayerTwo != null ? m.PlayerTwo.transform.position : Vector3.zero;
+                float t0 = Time.realtimeSinceStartup;
+                while (Time.realtimeSinceStartup - t0 < 1.5f) yield return null;
+                Vector3 a2 = m != null && m.PlayerOne != null ? m.PlayerOne.transform.position : Vector3.zero;
+                Vector3 b2 = m != null && m.PlayerTwo != null ? m.PlayerTwo.transform.position : Vector3.zero;
+                int v1 = m != null && m.PlayerOne != null && m.PlayerOne.Health != null ? m.PlayerOne.Health.CurrentHealth : -1;
+                int v2 = m != null && m.PlayerTwo != null && m.PlayerTwo.Health != null ? m.PlayerTwo.Health.CurrentHealth : -1;
+                Debug.Log($"HUMO_QUIETOS: fase={(m != null ? m.Phase.ToString() : "?")} " +
+                          $"P1 se movio {(a2 - a1).magnitude:F3} m, P2 {(b2 - b1).magnitude:F3} m, vidas {v1}/{v2}");
+            }
+
             for (int i = 0; i < 90; i++) yield return null;
 
             // Con -pelea N se arranca un combate y se deja correr N segundos sin tocar

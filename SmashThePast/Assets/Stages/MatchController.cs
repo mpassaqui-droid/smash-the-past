@@ -21,6 +21,17 @@ namespace SmashThePast.Stages
         public Fighter PlayerOne => playerOne;
         public Fighter PlayerTwo => playerTwo;
         public MatchPhase Phase { get; private set; }
+
+        /// <summary>
+        /// Unico sitio donde cambia la fase. Ademas de guardarla, abre o cierra el paso
+        /// a los luchadores: fuera del combate no obedecen ni al jugador ni a la maquina.
+        /// Antes la maquina se movia y atacaba durante la seleccion de personaje.
+        /// </summary>
+        private void SetPhase(MatchPhase nueva)
+        {
+            Phase = nueva;
+            SmashThePast.Core.Fighter.CombateEnCurso = nueva == MatchPhase.Fighting;
+        }
         public float SecondsRemaining { get; private set; } = 90;
         public int Winner { get; private set; } = -1;
 
@@ -91,14 +102,14 @@ namespace SmashThePast.Stages
             SecondsRemaining = 90;
             GanadorDelAsalto = -1;
             SegundosDeAnuncio = DuracionAnuncio;
-            Phase = MatchPhase.RoundIntro;
+            SetPhase(MatchPhase.RoundIntro);
             SetCombat(false);
             Changed?.Invoke();
         }
 
         private void EmpezarAsalto()
         {
-            Phase = MatchPhase.Fighting;
+            SetPhase(MatchPhase.Fighting);
             SetCombat(true);
             Changed?.Invoke();
         }
@@ -155,7 +166,7 @@ namespace SmashThePast.Stages
             else winner = -1;
 
             Winner = winner;
-            Phase = MatchPhase.Finished;
+            SetPhase(MatchPhase.Finished);
             SetCombat(false);
             if (winner >= 0)
             {
@@ -183,7 +194,7 @@ namespace SmashThePast.Stages
         public void ShowSelection()
         {
             Time.timeScale = 1;
-            Phase = MatchPhase.Selection;
+            SetPhase(MatchPhase.Selection);
             Preview(firstIndex, secondIndex);
         }
 
@@ -193,7 +204,7 @@ namespace SmashThePast.Stages
         {
             if (Phase != MatchPhase.Fighting && Phase != MatchPhase.Paused) return;
             bool paused = Phase == MatchPhase.Fighting;
-            Phase = paused ? MatchPhase.Paused : MatchPhase.Fighting;
+            SetPhase(paused ? MatchPhase.Paused : MatchPhase.Fighting);
             Time.timeScale = paused ? 0 : 1;
             // La pausa congela el tiempo; desactivar combate cancelaria los specials en curso.
             if (paused)

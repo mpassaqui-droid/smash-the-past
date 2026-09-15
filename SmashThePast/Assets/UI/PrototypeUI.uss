@@ -150,3 +150,11 @@
 .etiqueta-opcion { width: 240px; font-size: 15px; color: rgb(225, 228, 232); }
 .valor-opcion { width: 90px; font-size: 15px; -unity-font-style: bold; color: rgb(223, 193, 111); }
 .control-opcion { width: 180px; }
+
+/* Lista de controles dentro de Opciones. Las dos columnas de teclas son jugador 1
+   y jugador 2, en el mismo orden que las lee PlayerInputController. */
+.controles-titulo { font-size: 20px; -unity-font-style: bold; color: rgb(223, 193, 111); margin-top: 18px; margin-bottom: 8px; }
+.fila-control { flex-direction: row; align-items: center; width: 520px; margin-bottom: 4px; }
+.control-que { width: 200px; font-size: 14px; color: rgb(214, 218, 226); }
+.control-tecla { width: 160px; font-size: 14px; -unity-font-style: bold; color: rgb(236, 224, 196); }
+.control-nota { font-size: 12px; color: rgb(150, 155, 164); margin-top: 8px; margin-bottom: 14px; width: 520px; }
