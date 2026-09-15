@@ -1,5 +1,15 @@
 # Historial
 
+## v0.5.0-alpha - 15/09/2026
+
+Primera tanda de retornos de Diego.
+
+- La maquina ya no se mueve ni ataca durante la seleccion de personaje.
+- Fuera los sonidos al pasar por encima de los botones y al pulsarlos.
+- Sombra mas corta: un cuerpo de 2 m pasa de 1,80 m de sombra a 1,06.
+- La lista de CONTROLES esta en Opciones. Saltar y cubrirse existian desde
+  siempre, lo que faltaba era decirlo en algun sitio.
+
 ## v0.4.0-alpha - 15/09/2026
 
 - Cleopatra pasa a un modelo femenino (Ultimate Modular Women Pack de
