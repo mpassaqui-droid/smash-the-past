@@ -18,6 +18,8 @@ namespace SmashThePast.Audio.Tests
         [TestCase("impactPunch_heavy_000", "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8", "Kenney")]
         [TestCase("impactBell_heavy_000", "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f", "Kenney")]
         [TestCase("impactPunch_heavy_002", "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3", "Kenney")]
+        [TestCase("guardia_bloqueo", "89928231ecc2e3ff80af4ae5d228aadea329d4e710dc728b5fe4f727a0a1e4fe", "sintetizado")]
+        [TestCase("inicio_asalto", "ce5cb0a464d2e9d1bf5a82bb45d9c95b293d506c26e8a6eb27e8f715558f9e92", "sintetizado")]
         public void ResourceIsTheExpectedClipAndDecodesAudibleSamples(string name, string expectedHash, string autor)
         {
             string path = "Assets/Audio/Resources/CombatAudio/" + name + ".ogg";

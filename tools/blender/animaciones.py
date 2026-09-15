@@ -46,25 +46,46 @@ ANIMACIONES = {
     # derecho. Al reves el tronco tira del brazo hacia atras (de -0,51 a -0,37).
     # El brazo que no golpea se queda en guardia, y hay que repetir sus angulos en cada
     # clave: crear_accion pone a cero todos los huesos antes de aplicar la pose.
+    # Lo que hace que un golpe se lea no son las poses sino el REPARTO DEL TIEMPO:
+    # carga lenta, salida en dos fotogramas, y una retencion en la extension antes de
+    # volver. La primera version repartia los fotogramas por igual y el punetazo se
+    # deslizaba en vez de golpear.
+    #   1  guardia
+    #   5  carga (4 fotogramas, 0,17 s)
+    #   7  extension COMPLETA (2 fotogramas: el golpe sale de golpe)
+    #   10 sigue extendido (retencion: aqui es donde se ve que ha impactado)
+    #   18 vuelta a la guardia (8 fotogramas, la recuperacion es lo lento)
     "golpe_ligero": (18, False, {
         1:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
              "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90)},
         5:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
-             "mixamorig:RightArm": (-35, 0, -70), "mixamorig:Spine1": (0, -14, 0)},
-        9:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
-             "mixamorig:RightArm": (0, 0, 95), "mixamorig:Spine1": (0, 20, 0)},
+             "mixamorig:RightArm": (-35, 0, -70), "mixamorig:Spine1": (0, -16, 0),
+             "mixamorig:Hips": (0, -8, 0)},
+        7:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (0, 0, 95), "mixamorig:Spine1": (0, 22, 0),
+             "mixamorig:Hips": (0, 12, 0)},
+        10: {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
+             "mixamorig:RightArm": (0, 0, 92), "mixamorig:Spine1": (0, 20, 0),
+             "mixamorig:Hips": (0, 11, 0)},
         18: {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
              "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90)},
     }),
+    # El fuerte es el mismo reparto pero mas marcado: carga mas larga y mas profunda,
+    # retencion mas larga, y el cuerpo entero gira detras del brazo.
     "golpe_fuerte": (30, False, {
         1:  {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
              "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90)},
-        8:  {"mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
-             "mixamorig:LeftArm": (-35, 0, 70),
-             "mixamorig:Spine1": (0, 26, 0), "mixamorig:Hips": (0, 12, 0)},
-        14: {"mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
+        10: {"mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
+             "mixamorig:LeftArm": (-40, 0, 80), "mixamorig:LeftForeArm": (0, 0, -30),
+             "mixamorig:Spine1": (0, 30, 0), "mixamorig:Hips": (0, 16, 0),
+             "mixamorig:LeftUpLeg": (-12, 0, 0)},
+        13: {"mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
              "mixamorig:LeftArm": (0, 0, -95),
-             "mixamorig:Spine1": (0, -30, 0), "mixamorig:Hips": (0, -16, 0)},
+             "mixamorig:Spine1": (0, -32, 0), "mixamorig:Hips": (0, -18, 0),
+             "mixamorig:RightUpLeg": (-10, 0, 0)},
+        18: {"mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
+             "mixamorig:LeftArm": (0, 0, -90),
+             "mixamorig:Spine1": (0, -28, 0), "mixamorig:Hips": (0, -16, 0)},
         30: {"mixamorig:LeftArm": (-10, 0, -55), "mixamorig:LeftForeArm": (0, 0, -90),
              "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90)},
     }),
@@ -76,10 +97,16 @@ ANIMACIONES = {
              "mixamorig:RightArm": (-10, 0, 55), "mixamorig:RightForeArm": (0, 0, 90),
              "mixamorig:Spine1": (6, 0, 0)},
     }),
+    # Encajar: el retroceso en DOS fotogramas y la recuperacion en catorce. Antes
+    # subia y bajaba con el mismo tiempo y parecia que se agachaba, no que le pegaban.
     "encajar": (16, False, {
         1:  {"mixamorig:Spine1": (0, 0, 0), "mixamorig:Head": (0, 0, 0)},
-        4:  {"mixamorig:Spine1": (-24, 0, 0), "mixamorig:Head": (-20, 0, 0), "mixamorig:LeftArm": (16, 0, 18)},
-        16: {"mixamorig:Spine1": (0, 0, 0), "mixamorig:Head": (0, 0, 0), "mixamorig:LeftArm": (0, 0, 6)},
+        3:  {"mixamorig:Spine1": (-26, 0, 0), "mixamorig:Head": (-22, 0, 0),
+             "mixamorig:LeftArm": (16, 0, 18), "mixamorig:Hips": (-10, 0, 0)},
+        6:  {"mixamorig:Spine1": (-18, 0, 0), "mixamorig:Head": (-14, 0, 0),
+             "mixamorig:LeftArm": (10, 0, 12), "mixamorig:Hips": (-6, 0, 0)},
+        16: {"mixamorig:Spine1": (0, 0, 0), "mixamorig:Head": (0, 0, 0),
+             "mixamorig:LeftArm": (0, 0, 6)},
     }),
     "ko": (30, False, {
         1:  {"mixamorig:Spine1": (0, 0, 0), "mixamorig:Hips": (0, 0, 0)},

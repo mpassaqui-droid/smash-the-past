@@ -132,9 +132,14 @@ def construir(nombre, partes):
     for sub, centro, tamano in partes:
         o = caja(f"{nombre}_{sub}", centro, tamano)
         o.data.materials.append(bpy.data.materials.new(f"{nombre}_{sub}"))
+        # Un bisel ancho y en tres tramos quita el aspecto de caja sin subir el
+        # recuento a nada: a 0,01 y un solo tramo las aristas seguian siendo vivas y
+        # las piezas se leian como bloques pegados al cuerpo.
         bisel = o.modifiers.new("Bisel", "BEVEL")
-        bisel.width = 0.01
-        bisel.segments = 1
+        bisel.width = 0.022
+        bisel.segments = 3
+        bisel.limit_method = "ANGLE"
+        bisel.angle_limit = 1.4
         objetos.append(o)
 
     bpy.ops.object.select_all(action="DESELECT")

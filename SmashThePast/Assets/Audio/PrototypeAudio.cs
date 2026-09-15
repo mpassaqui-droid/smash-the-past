@@ -24,6 +24,9 @@ namespace SmashThePast.Audio
         private AudioClip heavyHitClip;
         private AudioClip specialClip;
         private AudioClip knockoutClip;
+        private AudioClip blockClip;
+        private AudioClip roundClip;
+        private MatchPhase faseAnterior = MatchPhase.Selection;
 
         private void Awake()
         {
@@ -46,6 +49,8 @@ namespace SmashThePast.Audio
             heavyHitClip = LoadClip("impactPunch_heavy_000");
             specialClip = LoadClip("impactBell_heavy_000");
             knockoutClip = LoadClip("impactPunch_heavy_002");
+            blockClip = LoadClip("guardia_bloqueo");
+            roundClip = LoadClip("inicio_asalto");
         }
 
         private void OnEnable() => BindCurrentFighters();
@@ -55,6 +60,13 @@ namespace SmashThePast.Audio
             if ((match == null ? null : match.PlayerOne) != boundOne
                 || (match == null ? null : match.PlayerTwo) != boundTwo)
                 BindCurrentFighters();
+
+            // Aviso de asalto al entrar en RoundIntro, una sola vez por asalto.
+            if (match != null && match.Phase != faseAnterior)
+            {
+                if (match.Phase == MatchPhase.RoundIntro && roundClip != null) Play(roundClip, 0.85f, 0f);
+                faseAnterior = match.Phase;
+            }
         }
 
         private void OnDisable()
@@ -79,6 +91,7 @@ namespace SmashThePast.Audio
         {
             if (fighter == null) return;
             fighter.OnKnockedOut += PlayKnockout;
+            fighter.OnStunned += PlayBlockIfShort;
             var detector = fighter.GetComponent<HitDetector>();
             if (detector != null)
             {
@@ -101,6 +114,7 @@ namespace SmashThePast.Audio
         {
             if (fighter == null) return;
             fighter.OnKnockedOut -= PlayKnockout;
+            fighter.OnStunned -= PlayBlockIfShort;
             var detector = fighter.GetComponent<HitDetector>();
             if (detector != null)
             {
@@ -113,6 +127,17 @@ namespace SmashThePast.Audio
 
         private void PlayAttack(bool heavy) => Play(heavy ? heavyClip : lightClip, heavy ? 0.8f : 0.6f, 0.09f);
         private void PlaySpecial(SpecialKind kind) => Play(specialClip, 0.7f, 0.03f);
+        /// <summary>
+        /// No hay un evento de "golpe parado", pero si dos aturdimientos de duracion
+        /// distinta: el de encajar dura LightHitStunSeconds y el de bloquear bastante
+        /// menos. El corto es el que suena a guardia.
+        /// </summary>
+        private void PlayBlockIfShort(float segundos)
+        {
+            if (blockClip == null) return;
+            if (segundos < Fighter.LightHitStunSeconds - 0.01f) Play(blockClip, 0.55f, 0.06f);
+        }
+
         private void PlayKnockout() => Play(knockoutClip, 1f, 0f);
 
         private void PlayHit(int damage)

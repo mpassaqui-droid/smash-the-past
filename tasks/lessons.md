@@ -128,3 +128,9 @@
 - Y esa guarda tiene que empezar ABIERTA. Puesta en falso por defecto tumbo veinte pruebas que montan un luchador suelto sin MatchController al lado. Una barrera nueva se cierra solo cuando alguien lo pide expresamente, no por omision.
 
 - La sombra larga no venia de las tres luces sino de una: solo `LuzClave` proyecta. La primera pasada subio las tres a 62 grados y se cargo el relleno y el contraluz, que tienen sus angulos por una razon. Mirar cual proyecta antes de tocar ninguna: a 48 grados un cuerpo de 2 m da 1,80 m de sombra, a 62 da 1,06.
+
+- Lo que hace que un golpe se lea no son las poses sino el REPARTO DEL TIEMPO. Con las claves repartidas por igual el brazo se desliza; con carga lenta, salida en dos fotogramas y una retencion en la extension, golpea. Se mide sin mirarlo: la distancia que recorre la mano entre fotogramas seguidos, y se compara el pico con la media. Ahora 4,2 veces en el ligero y 7,0 en el fuerte.
+
+- Un medidor que busca huesos por nombre (`mixamorig:RightHand`) se rompe en cuanto cambia el modelo. Por la correspondencia humanoide del Animator (`GetBoneTransform(HumanBodyBones.RightHand)`) funciona con cualquier esqueleto que Unity acepte.
+
+- No habia evento de "golpe parado", pero si dos aturdimientos de duracion distinta: el de encajar dura LightHitStunSeconds y el de bloquear bastante menos. El corto sirve de aviso sin tocar la logica de combate.

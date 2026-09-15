@@ -8,3 +8,13 @@ muestra de origen. No dependen de ninguna licencia de terceros.
 
 Nivel medido: media -16,1 y -14,9 dB, pico -3,2 y -4,4 dB, en la misma franja
 que las muestras de combate.
+
+Sonidos de combate sintetizados, tambien sin ninguna muestra de origen:
+
+  guardia_bloqueo.ogg  0,20 s  cuando un golpe se para con la guardia
+  inicio_asalto.ogg    1,10 s  al empezar cada asalto
+
+Nivel: media -20,5 y -21,8 dB, pico -5,1 y -8,1 dB, en la franja de las
+muestras de Kenney que siguen en el juego.
+
+Son provisionales: si Diego manda los suyos, se sustituyen por el mismo nombre.

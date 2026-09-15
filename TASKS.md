@@ -3,13 +3,18 @@
 Reglas: cada tarea tiene un dueño y un criterio de "hecho" (qué test pasa o qué se ve en el build). Actualizar antes/después de cada sesión de trabajo.
 
 ## Por hacer
-- [ ] Diego: instalar Unity Hub + Unity 6 LTS (6000.0.83f1, misma version que Munay) y activar licencia Personal
-- [ ] Diego: `git clone`, leer `AGENTS.md`, empezar Character pipeline (1 `CharacterData` de prueba + su special)
+- [ ] Diego: cuatro efectos de combate que siguen siendo de Kenney (golpe fuerte,
+      impacto fuerte, especial y K.O.) y un tema de combate propio. No necesita Unity
+      para nada de eso: manda los archivos y se sustituyen por el mismo nombre.
+- [ ] Mejores animaciones de golpe segun Diego. Se reparo el REPARTO DEL TIEMPO (pico
+      de movimiento 4,2 veces la media en el ligero y 7,0 en el fuerte), pero las poses
+      siguen siendo las mismas.
 - [ ] Munay: probar teclado y dos mandos fisicos en el player construido por CI desde un clon limpio: el player publicado en Releases. Es lo unico que la maquina no puede demostrar sola.
 - [ ] Generar los 3 retratos que faltan (Cleopatra, Abraham Lincoln, Socrates) cuando haya creditos en Higgsfield. Mismo prompt que los otros seis para que el estilo no se separe.
 - [ ] Munay: mirar el player URP construido por CI y decir si el aspecto va por buen camino. Es lo unico que falta para cerrar la PR #5 (en la captura headless hay que apagar el SRP Batcher o sale todo dorado; hace falta ver el player real para saber si eso pasa tambien ahi).
 - [ ] Musica: Suno o Udio con plan de pago (los derechos comerciales no vienen con el plan gratuito). Mejor cuando el combate este cerrado de punta a punta.
-- [ ] Bruitage: faltan sonidos de guardia, de seleccion de menu y de inicio de asalto. Fuentes CC0: Kenney (ya usado) y los bundles Sonniss GDC.
+- [ ] Las piezas de vestuario son cajas biseladas. Se leen a distancia de juego, no de
+      cerca. Pasar de ahi es modelar de verdad, no cambiar medidas.
 - [ ] Release: configurar Steamworks, SKU real, precios, compra y verificacion de edad con credenciales del publisher.
 - [x] Configurar UnityYAMLMerge como merge driver en este worktree (Unity 6000.0.83f1).
 - [x] Escena de prueba real: `Assets/Stages/PrototypeArena.unity`, 2 Fighters con CharacterController y PlayerInputController, teclado y 2 mandos, pausa, timer, KO y revancha.
