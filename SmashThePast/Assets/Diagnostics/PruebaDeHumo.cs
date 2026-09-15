@@ -133,6 +133,21 @@ namespace SmashThePast.Diagnostics
                     int dos_ = combate.Roster != null && combate.Roster.Length > 0
                              ? (uno_ + 1) % combate.Roster.Length : 1;
                     Debug.Log($"HUMO_COMBATIENTES: {uno_} contra {dos_}");
+
+                    // El parallax solo se ve si la camara se mueve: se empuja a un
+                    // luchador a un lado y se mira cuanto se desplaza cada capa.
+                    var cam = Camera.main;
+                    var cumbre = GameObject.Find("Cumbre");
+                    Vector3 c0 = cam != null ? cam.transform.position : Vector3.zero;
+                    Vector3 m0 = cumbre != null ? cumbre.transform.position : Vector3.zero;
+                    // Se mueve la CAMARA, no un luchador: un CharacterController ignora
+                    // que le escriban la posicion y el test no movia nada.
+                    if (cam != null) cam.transform.position += new Vector3(1.5f, 0f, 0f);
+                    float tp = Time.realtimeSinceStartup;
+                    while (Time.realtimeSinceStartup - tp < 1.2f) yield return null;
+                    Vector3 c1 = cam != null ? cam.transform.position : Vector3.zero;
+                    Vector3 m1 = cumbre != null ? cumbre.transform.position : Vector3.zero;
+                    Debug.Log($"HUMO_PARALLAX: la camara se movio {(c1 - c0).x:F3} m y la cumbre {(m1 - m0).x:F3} m");
                     combate.BeginMatch(uno_, dos_);
                     float limite = Time.realtimeSinceStartup + SegundosDePelea;
                     bool medido = false;

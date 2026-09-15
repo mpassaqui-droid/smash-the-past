@@ -150,3 +150,11 @@
 - Cambiar el valor por defecto de un `[SerializeField]` no cambia nada en una escena que ya tiene el componente: el valor viejo esta serializado. Se vio porque el publico seguia saliendo con 40 por grada despues de poner 24 en el codigo.
 
 - Un publico no molesta por ser grande sino por estar DELANTE. Puestos en la cara frontal de la grada formaban un muro que tapaba el combate; 0,75 m mas atras y a la mitad de tamano, la arena se llena sin robarle sitio a los luchadores.
+
+- La camara del combate es ORTOGRAFICA: sin perspectiva, el fondo se desplaza en pantalla exactamente igual que la arena y se lee pegado a ella. El parallax hay que hacerlo a mano, moviendo cada capa una fraccion de lo que se mueve la camara. Comprobado en el player: la camara se movio 0,011 m y una cumbre cercana 0,006 m, o sea el 0,55 pedido.
+
+- Un `CharacterController` ignora que le escriban `transform.position`, asi que un sondeo que empuja a un luchador para mover la camara no mueve nada. Hay que empujar la camara.
+
+- Reparentar objetos en una escena ya construida fallo en silencio: los nuevos padres quedaron con cero hijos y no hubo ningun error. Cuando basta con tocar cada objeto por separado, es mas seguro no reparentar.
+
+- Un material creado POR CODIGO en URP se queda en opaco aunque se le ponga `_Surface` a 1: no reconfigura la mezcla. Cada particula de polvo salia como un cuadrado blanco, y dar `_SrcBlend`, `_DstBlend`, `_ZWrite` y las palabras clave a mano tampoco basto en la build. Tras cuatro intentos se quito el efecto: un detalle que se supone invisible y acaba siendo lo primero que se ve, sobra. Si se retoma, el material tiene que crearse como asset desde el editor de materiales.
