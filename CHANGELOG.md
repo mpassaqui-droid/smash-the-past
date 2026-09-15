@@ -1,5 +1,12 @@
 # Historial
 
+## v0.4.0-alpha - 15/09/2026
+
+- Cleopatra pasa a un modelo femenino (Ultimate Modular Women Pack de
+  Quaternius, tambien CC0). Era el unico personaje claramente equivocado.
+- Su nemes se posa sobre la cabeza en vez de envolverla.
+- Las arenas dejan de sonar con la musica de la seleccion de personaje.
+
 ## v0.3.0-alpha - 15/09/2026
 
 Pantalla de titulo.
