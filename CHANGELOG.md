@@ -1,5 +1,16 @@
 # Historial
 
+## v0.7.0-alpha - 15/09/2026
+
+Las arenas dejan de parecer un prototipo.
+
+- Post proceso y oclusion ambiental encendidos: llevaban apagados desde el
+  principio porque `postProcessData` del renderizador estaba a nulo, y URP se
+  salta todo el post proceso sin avisar.
+- Texturas en los nueve materiales del escenario, que eran color plano.
+- 120 espectadores en las gradas.
+- Parallax en el fondo. La camara es ortografica, asi que no habia ninguno.
+
 ## v0.6.0-alpha - 15/09/2026
 
 - Los golpes golpean: carga lenta, salida en dos fotogramas y retencion en la
