@@ -1,5 +1,14 @@
 # Historial
 
+## v0.6.0-alpha - 15/09/2026
+
+- Los golpes golpean: carga lenta, salida en dos fotogramas y retencion en la
+  extension. El pico de movimiento de la mano es 4,2 veces la media en el
+  ligero y 7,0 en el fuerte.
+- Encajar un golpe tira la cabeza atras en dos fotogramas, no en ocho.
+- Las piezas de vestuario dejan de ser cajas de aristas vivas.
+- Sonido al parar un golpe con la guardia y al empezar cada asalto.
+
 ## v0.5.0-alpha - 15/09/2026
 
 Primera tanda de retornos de Diego.
