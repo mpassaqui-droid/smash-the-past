@@ -19,6 +19,8 @@ namespace SmashThePast.EditorTools
             int mallas = raiz.GetComponentsInChildren<MeshRenderer>(true).Length;
             if (raiz.GetComponent<SmashThePast.Stages.EscalaDeTextura>() == null)
                 raiz.gameObject.AddComponent<SmashThePast.Stages.EscalaDeTextura>();
+            if (raiz.GetComponent<SmashThePast.Stages.Publico>() == null)
+                raiz.gameObject.AddComponent<SmashThePast.Stages.Publico>();
 
             Debug.Log($"[textura] EscalaDeTextura en '{raiz.name}', {mallas} mallas debajo");
             EditorUtility.SetDirty(raiz.gameObject);

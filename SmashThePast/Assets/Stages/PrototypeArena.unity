@@ -324,6 +324,7 @@ GameObject:
   - component: {fileID: 214070357}
   - component: {fileID: 214070356}
   - component: {fileID: 214070358}
+  - component: {fileID: 214070359}
   m_Layer: 0
   m_Name: Escenografia
   m_TagString: Untagged
@@ -391,6 +392,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   repeticionesPorMetro: 0.4
+--- !u!114 &214070359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214070355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97258617a953044ea9ad0408b2d620e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  porGrada: 40
+  ancho: 24
+  plantilla: {fileID: 0}
 --- !u!1001 &626470718
 PrefabInstance:
   m_ObjectHideFlags: 0

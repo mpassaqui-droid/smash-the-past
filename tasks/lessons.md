@@ -144,3 +144,9 @@
 - Una textura de foto puesta tal cual sobre un escenario estilizado le roba la paleta: la arena entera se volvio parda y los personajes dejaron de destacar. La foto tiene que aportar el GRANO, no el color. Desaturada al 22 % y aclarada, el material sigue mandando en el tono y el detalle sube igual. Medido: detalle 3,21 sin textura, 7,24 con la foto cruda (y el brillo caia de 66,6 a 50,3), 8,57 con la desaturada (brillo 72,8).
 
 - El escenario son cubos primitivos escalados sin proporcion, y los UV de un cubo son fijos: la textura se estira tanto como el cubo. En las franjas largas se veian brochazos. Se corrige por objeto con un MaterialPropertyBlock que pone `_BaseMap_ST` segun la escala, sin duplicar un solo material. En un juego de perfil basta con ajustar la cara de delante (X por Y).
+
+- `Graphics.RenderMeshInstanced` puede dibujar NADA en una build aunque en el editor todo parezca correcto: instancing soportado, shader URP/Lit, material con enableInstancing y 120 matrices validas. La variante instanciada del shader se queda fuera al compilar y la llamada no falla, simplemente no pinta. Antes de eso hay otra trampa: `RenderParams.worldBounds` vale cero por defecto y descarta todas las instancias en el culling. Para un puñado de objetos, GameObjects de verdad cuestan menos tiempo que pelearse con esto.
+
+- Cambiar el valor por defecto de un `[SerializeField]` no cambia nada en una escena que ya tiene el componente: el valor viejo esta serializado. Se vio porque el publico seguia saliendo con 40 por grada despues de poner 24 en el codigo.
+
+- Un publico no molesta por ser grande sino por estar DELANTE. Puestos en la cara frontal de la grada formaban un muro que tapaba el combate; 0,75 m mas atras y a la mitad de tamano, la arena se llena sin robarle sitio a los luchadores.
