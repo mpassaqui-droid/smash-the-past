@@ -1,13 +1,34 @@
-Copyright (c) 2026 Munay Passaqui. Todos los derechos reservados.
+MIT License
 
-"Smash the Past", su codigo fuente, sus assets, sus personajes, sus textos y sus
-marcas son propiedad de sus autores. Este repositorio es privado y su contenido no
-puede copiarse, distribuirse, modificarse ni publicarse, total o parcialmente, sin
-permiso escrito.
+Copyright (c) 2026 Munay Passaqui
 
-No se concede ninguna licencia sobre el software, ni expresa ni implicita.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Excepciones: los efectos de sonido incluidos en Assets/Audio provienen de
-bibliotecas de dominio publico (CC0) y conservan su propia licencia; los avisos
-correspondientes estan en Assets/Audio/Licenses/. El motor Unity y sus paquetes se
-usan bajo los terminos de Unity Technologies.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+Excepcion: audio de Diego
+
+La licencia MIT de arriba cubre el codigo y los recursos propios de Munay
+Passaqui. NO cubre la musica ni los efectos compuestos por Diego (diegoqueso3030),
+listados en SmashThePast/Assets/Audio/Licenses/Diego/License.txt. Esos archivos
+siguen siendo obra de Diego, todos los derechos reservados, y se usan en este
+juego con su permiso. No pueden reutilizarse fuera de Smash the Past sin el
+permiso de su autor.
+
+Los modelos de Quaternius y las muestras de Kenney estan bajo CC0, ver
+SmashThePast/Assets/Audio/Licenses/.
