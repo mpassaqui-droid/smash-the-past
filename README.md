@@ -143,4 +143,4 @@ Munay Passaqui y Diego. Ver [`CONTRIBUTING.md`](CONTRIBUTING.md) para el flujo d
 
 ---
 
-Codigo bajo licencia MIT. La musica y los efectos de Diego quedan fuera de esa licencia: son suyos y se usan con su permiso. Ver [`LICENSE`](LICENSE).
+Codigo bajo licencia MIT. La musica y los efectos de Diego quedan fuera de esa licencia: son suyos y se usan con su permiso. Ver [`LICENSE`](LICENSE) y [`ASSETS-LICENSE.md`](ASSETS-LICENSE.md).
