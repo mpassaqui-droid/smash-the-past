@@ -1,7 +1,6 @@
 Excepcion a la licencia MIT: audio de Diego
 
-
-La licencia MIT de arriba cubre el codigo y los recursos propios de Munay
+La licencia MIT (archivo LICENSE) cubre el codigo y los recursos propios de Munay
 Passaqui. NO cubre la musica ni los efectos compuestos por Diego (diegoqueso3030),
 listados en SmashThePast/Assets/Audio/Licenses/Diego/License.txt. Esos archivos
 siguen siendo obra de Diego, todos los derechos reservados, y se usan en este
